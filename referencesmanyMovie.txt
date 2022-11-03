@@ -1,0 +1,84 @@
+Loopback
+
+A highly extensible Node.js and TypeScript framework for building APIs and microservices.
+
+
+
+Step 1
+------
+
+Installation 
+npm install -g @loopback/cli
+
+Step 2 
+------
+
+Create a new project
+lb4 backend
+
+Project name: backend
+
+cd backend
+npm start 
+
+Step 3 
+------
+Model
+lb4 model 
+1 User -id, fullName, email, isActive, permission - done
+
+2 Actor - id, firstName, lastName, gender, age, imageURL, - done
+3 Movie - id, title, year, cost, imageURL, - done
+4 Review - id, description, rating, userId, movieId -
+
+
+
+
+
+
+Datasource (mongoDb)
+lb4 datasource - only one datasource
+
+
+Repositories
+
+lb4 repository
+1 User - done-  
+2 Movie -done
+3 Actor - done
+4 Review -done
+
+
+
+
+Controller
+lb4 controller - REST
+1 User - done
+2 Actor - done
+3 Movie - done
+4 Review -
+
+
+Relation
+lb4 relation
+
+
+1 Movie -> referencemany() Actor, - done
+  Movie -> hasMany() Review - done
+ 
+  Source -> (hasMany) -> Target
+  
+2 Actor -> 
+
+3 Review -> belongsTo() -> User
+        Source: User
+        Target: Review
+
+4 User 
+
+For reference - https://loopback.io/getting-started.html
+
+
+Loopback4 Authentication
+Loopback4 Authorization
+https://github.com/HrithikMittal/Loopback4-authorization

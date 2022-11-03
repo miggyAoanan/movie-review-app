@@ -1,0 +1,70 @@
+$h100: 100vh;
+$fontBold : 600;
+$btnRadius: 8px;
+$btnBorder: 2px solid #000;
+$color: #fff;
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: $h100;
+    align-items: center;
+    align-content: center;
+    text-align: center;
+    color: $color;
+}
+
+.wrapper h2,
+.success h2 {
+    font-size: 22px;
+    font-weight: $fontBold;
+}
+
+
+.form {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+   
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 30px;
+    text-align: right;
+    position: relative;
+    right: 30px;
+
+}
+.formlabel {
+    margin-right: 20px;
+    position: relative;
+    font-size: 12px;
+    font-weight: $fontBold;
+    padding: 5px 0;
+    white-space: nowrap;
+}
+
+.formGroup label,
+.formGroup input {
+    flex: 1;
+}
+
+.right50 {
+    right: 50px;
+}
+.btn {
+    padding: 5px 20px;
+    min-width: 120px;
+    border: $btnBorder;
+    border-radius: $btnRadius;
+    cursor: pointer;
+    align-items: center;
+    font-weight: $fontBold;
+    font-size: 12px;
+}
+.btnDiv {
+    position: relative;
+}
