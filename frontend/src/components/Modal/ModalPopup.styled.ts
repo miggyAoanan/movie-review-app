@@ -104,6 +104,16 @@ export const MobileCloseButton = styled(CloseButton)`
   left: calc(100% - ${CLOSE_BUTTON_SIZE * 1.5 + 10}px);
 `;
 
+export const RegisterContainer = styled.div`
+
+padding-top: 10%;
+display: flex;
+flex-direction: column;
+align-content: center
+text-align: center;
+
+`
+
 export const ButtonContainer = styled.div`
   padding-top: 10%;
   display: flex;

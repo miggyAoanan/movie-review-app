@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import './register.scss'
 
 import { registerUser } from "../../redux/userSlice"
-import { Rootstate, useAppDispatch, useAppSelector } from "../../store/store"
+import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
 import { Alert } from "@mui/material";
 import { styled } from '@mui/material/styles'
 import { Navigate } from "react-router-dom";
@@ -13,7 +13,7 @@ const CustomAlert = styled(Alert)({
 
 const Register = () => {
   const dispatch = useAppDispatch();
-  const userState = useAppSelector((state: Rootstate) => state.users)
+  const userState = useAppSelector((state: RootState) => state.users)
   const [redirect, setRedirect] = useState(false);
   const [input, setInput] = useState({
     fullName: "",

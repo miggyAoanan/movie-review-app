@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector, Rootstate } from '../../store/store'
+import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { getMovies, addMovie } from "../../redux/movieSlice";
 
 
@@ -9,8 +9,8 @@ import { Movie } from "../../interfaces/movie"
 
 const MovieDashboard = () => {
 
-  const movies = useAppSelector((state: Rootstate) => state.movies.movies)
-  const moviesState = useAppSelector((state: Rootstate) => state.movies)
+  const movies = useAppSelector((state: RootState) => state.movies.movies)
+  const moviesState = useAppSelector((state: RootState) => state.movies)
   const dispatch = useAppDispatch();
   const initApp = useCallback(async () => {
     await dispatch(getMovies());

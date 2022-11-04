@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {useAppDispatch, useAppSelector} from '../../store/store'
 import { getMovie, getMovieActors } from "../../redux/movieSlice";
-import { Rootstate } from "../../store/store"
+import { RootState } from "../../store/store"
 
 import ActorCard from "../ActorCard/ActorCard";
 import {Actor, Review} from "../../interfaces/index";
@@ -33,11 +33,11 @@ function MovieDetail() {
 
 
 
-  const movie= useAppSelector( (state:Rootstate) => state.movies.movie)
-  const moviesState = useAppSelector( (state:Rootstate) => state.movies)
+  const movie= useAppSelector( (state:RootState) => state.movies.movie)
+  const moviesState = useAppSelector( (state:RootState) => state.movies)
 
-  const actors = useAppSelector( (state:Rootstate) => state.movies.movie?.actors)
-  const reviews = useAppSelector( (state:Rootstate) => state.movies.movie?.reviews)
+  const actors = useAppSelector( (state:RootState) => state.movies.movie?.actors)
+  const reviews = useAppSelector( (state:RootState) => state.movies.movie?.reviews)
   let ratings : number[] = [];
 
   reviews?.map((review)=>{

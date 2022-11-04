@@ -192,7 +192,9 @@ export class UserController {
   })
   async login(
     @requestBody(CredentialsRequestBody) credentials: Credentials,
-  ): Promise<{ token: string }> {
+  ): Promise<{ data: Object }> {
+
+    // Promise<{ token: string }>
     // ensure the user exists, and the password is correct
     const user = await this.userService.verifyCredentials(credentials);
 
@@ -202,7 +204,9 @@ export class UserController {
     // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
 
-    return { token };
+    let data = {...user, token}
+
+    return { data};
   }
 
   @authenticate('jwt')

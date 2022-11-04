@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import MovieCard from "../MovieCard/MovieCard";
 import "./MovieList.scss";
 
-import {useAppDispatch, useAppSelector, Rootstate} from '../../store/store'
+import {useAppDispatch, useAppSelector, RootState} from '../../store/store'
 import { getMovies } from "../../redux/movieSlice";
 
 
@@ -22,8 +22,8 @@ const MovieList = () => {
     initApp()
   }, [initApp])
 
-  const movies = useAppSelector( (state:Rootstate) => state.movies.movies)
-  const moviesState = useAppSelector( (state:Rootstate) => state.movies)
+  const movies = useAppSelector( (state:RootState) => state.movies.movies)
+  const moviesState = useAppSelector( (state:RootState) => state.movies)
   
  let renderMovies
 
