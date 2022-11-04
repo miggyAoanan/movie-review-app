@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { RootState } from '../store/store';
 import { ACTORS_URL} from '../API'
 
 import {Actor, ActorDetails, ErrorI}  from '../interfaces/index'
@@ -102,5 +103,6 @@ export const actorSlice = createSlice({
 
 
 export default actorSlice.reducer;
-
+export const actorDetails = (state: RootState) => state.actors.actors;
+export const actorState = (state: RootState) => state.actors;
 export const {setActors, setActor} = actorSlice.actions

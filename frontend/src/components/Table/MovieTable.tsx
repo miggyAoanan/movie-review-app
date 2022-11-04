@@ -1,7 +1,7 @@
 import React from 'react'
 import { Movie} from '../../interfaces/movie'
 
-const Table = (props : Movie, index:number ) => {
+const MovieTable = (props : Movie) => {
 
     const data = props
   return (
@@ -25,4 +25,4 @@ const Table = (props : Movie, index:number ) => {
   )
 }
 
-export default Table
+export default MovieTable

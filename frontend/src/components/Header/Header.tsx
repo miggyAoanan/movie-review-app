@@ -54,6 +54,7 @@ function Header() {
 
   const handleLogout = () => {
     dispatch(logout())
+    window.location.reload()
   }
 
   return (
@@ -62,13 +63,22 @@ function Header() {
       <Link to="/">
         <div className="logo">Movie App</div>
       </Link>
-      {permissions ==="admin" ? 
-      <Link to="/admin/movie/dash">
-      <div >Admin Movie List</div>
-    </Link> :
-    ""
-    }
-      
+      {permissions === "admin" ?
+        <>
+          <Link to="/admin/movie/dash">
+            <div > Movies</div>
+          </Link>
+
+          <Link to="/admin/actor/dash">
+            <div >Actors</div>
+          </Link>
+        </>
+
+
+        :
+        ""
+      }
+
       <div className="user">
         {
           fullName ?

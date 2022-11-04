@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { getMovies, addMovie } from "../../redux/movieSlice";
 
 
-import Table from "../../components/Table/Table";
+import MovieTable from "../../components/Table/MovieTable";
 import AddMovieModal, { AddMovieFunction } from "../../components/Modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
 
@@ -23,7 +23,7 @@ const MovieDashboard = () => {
   let renderMovieDetails
   renderMovieDetails =
     moviesState.getMovieStatus == "fullfilled" ?
-      movies?.map((movie, index) => (<Table key={index} {...movie} />)) :
+      movies?.map((movie, index) => (<MovieTable key={index} {...movie} />)) :
       (
         <div className="movies-error">
           <h3>{moviesState.errors}</h3>
