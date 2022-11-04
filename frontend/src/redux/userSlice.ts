@@ -1,8 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-
-
 import { USERS_URL, ADMIN_URL } from '../API/index'
 import { User } from '../interfaces/user';
 
@@ -120,12 +118,6 @@ export const deleteUser = createAsyncThunk<Object, User>(
         }
     }
 )
-
-
-
-
-
-
 
 
 //reducers -> reduce to a specific state -> changes state 

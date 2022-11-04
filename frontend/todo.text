@@ -1,4 +1,8 @@
-1.Implement auth 
+1.Implement auth done
 https://www.youtube.com/watch?v=Icd-_K7KFrs
 
 React JWT Authentication App using RTK Query | RTK Query Auth | Redux-Toolkit | React TypeScript
+
+
+2. Autocomplete
+https://stackblitz.com/edit/multiselect-autocomplete?file=src%2Fapp%2Fchips-autocomplete-example.ts

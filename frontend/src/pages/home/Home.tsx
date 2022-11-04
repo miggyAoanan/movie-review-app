@@ -1,8 +1,6 @@
 
 import "./home.scss";
 import MovieList from "../../components/MovieList/MovieList";
-
-
 const Home = () => {
 
   return (

@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { getMovies, addMovie } from "../../redux/movieSlice";
+import './Dash.scss'
 
-
-import MovieTable from "../../components/Table/MovieTable";
 import AddMovieModal, { AddMovieFunction } from "../../components/Modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
 
@@ -20,20 +19,8 @@ const MovieDashboard = () => {
     initApp()
   }, [initApp])
 
-  let renderMovieDetails
-  renderMovieDetails =
-    moviesState.getMovieStatus == "fullfilled" ?
-      movies?.map((movie, index) => (<MovieTable key={index} {...movie} />)) :
-      (
-        <div className="movies-error">
-          <h3>{moviesState.errors}</h3>
-        </div>
-      );
-
-
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [error, setError] = useState("")
-
   const toggleModal = () => {
     setIsModalVisible(wasModalVisible => !wasModalVisible)
   }
@@ -47,7 +34,7 @@ const MovieDashboard = () => {
     const movieData = { ...args }
 
     const title = movieData.title
-    const cost = Number( movieData.cost)
+    const cost = Number(movieData.cost)
     const year = movieData.year
     const imageURL = movieData.imageURL
 
@@ -55,26 +42,26 @@ const MovieDashboard = () => {
 
     actorIds.push(movieData.actorIds)
 
-    const saveMoviedata = {title, cost, year, imageURL, actorIds}
-    
-  
+    const saveMoviedata = { title, cost, year, imageURL, actorIds }
+
+
     if (title === "") {
       setError("title is required");
     } else if (year === "") {
       setError("Year is required");
     } else if (cost === null) {
       setError("Cost is required");
-    }else if (imageURL === "") {
+    } else if (imageURL === "") {
       setError("Year is required");
     }
     else if (actorIds.length === 0) {
       setError("Actor is required");
     }
-    
-    
-    
+
+
+
     else {
-      dispatch(addMovie({...saveMoviedata})).then((res) => {
+      dispatch(addMovie({ ...saveMoviedata })).then((res) => {
 
       })
       setError("")
@@ -92,11 +79,40 @@ const MovieDashboard = () => {
             <th scope="col">Title</th>
             <th scope="col">Year</th>
             <th scope="col">Cost</th>
+            <th scope="col">Image</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
         <tbody>
-          {renderMovieDetails}
+
+          {
+            movies ? (
+              movies.map((movie, index) => {
+                return (
+
+                  <tr key={movie.id}>
+                    <td>{index + 1}</td>
+                    <td>{movie.title}</td>
+                    <td>{movie.year}</td>
+                    <td>{movie.cost}</td>
+                    <td><img src={movie.imageURL} alt={movie.title} className='imageDash' /></td>
+                    <td>
+
+                      <button type="button" className="btn btn-secondary">Edit</button>
+                      <button type="button" className="btn btn-danger">Delete</button>
+
+                    </td>
+                  </tr>
+
+
+                )
+              })
+
+            ) : (
+              ""
+            )
+          }
+
         </tbody>
       </table>
 
