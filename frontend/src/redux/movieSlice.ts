@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { MOVIES_URL , MOVIE_ACTORS_URL} from '../API'
 
-import {Movie, MovieDetails}  from '../interfaces/index'
+import {Movie, MovieDetails , ErrorI}  from '../interfaces/index'
 
 
 interface MovieState {
@@ -25,17 +25,6 @@ const initialState: MovieState = {
     addMovieStatus:""
 }
 
-type ErrorI = {
-    response?: {
-        data?: {
-            error?: {
-                message: string,
-                statusCode: number,
-                name: string,
-            }
-        }
-    }
-}
 
 export const getMovies = createAsyncThunk<MovieDetails[]>(
     "movies/getMovies",
