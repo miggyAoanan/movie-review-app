@@ -13,20 +13,15 @@ function MovieDetail() {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   
-  // const initApp = useCallback(async () => {
-
-  //   await dispatch(getMovie(id))
-  //   await dispatch(getMovieActors(id))
-  // }, [dispatch, id])
-
+ 
   useEffect(() => {
-    // initApp()
-    const test = async() => {
+
+    const initGetMovies = async() => {
     await  dispatch(getMovie(id))
     await  dispatch(getMovieActors(id))
     }
 
-    test()
+    initGetMovies()
      
   },[])
 
@@ -34,6 +29,7 @@ function MovieDetail() {
 
 
   const movie= useAppSelector( (state:RootState) => state.movies.movie)
+
   const moviesState = useAppSelector( (state:RootState) => state.movies)
 
   const actors = useAppSelector( (state:RootState) => state.movies.movie?.actors)

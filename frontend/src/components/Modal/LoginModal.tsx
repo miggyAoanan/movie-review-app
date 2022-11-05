@@ -14,6 +14,7 @@ interface LoginModalProps {
   isModalVisible: boolean;
   loginErrorInput?: string
   onLoginRequested: LoginFunction;
+  
 
 }
 

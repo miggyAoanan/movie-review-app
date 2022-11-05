@@ -7,7 +7,6 @@ import LoginModal, { LoginFunction } from "../Modal/LoginModal";
 import { useAppDispatch, useAppSelector } from "../../store/store"
 import { logout, selectAuth, setUser } from "../../redux/authSlice";
 import { useLoginUserMutation } from '../../authServices/authApi'
-import { ErrorI } from '../../interfaces/index'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

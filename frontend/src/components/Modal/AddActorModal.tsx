@@ -1,47 +1,95 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, MouseEventHandler } from 'react'
 
 import ModalRWD from './ModalRWD';
 
-import { Actor } from '../../interfaces'
+import { RootState, useAppDispatch, useAppSelector } from "../../store/store"
+import { addActor, getActor, updateActor, deleteActor } from '../../redux/actorSlice';
+import { Actor } from "../../interfaces"
 
-import { useAppDispatch } from "../../store/store"
-import { addActor } from '../../redux/actorSlice';
-// export type AddActorFunction = (args: Actor) => Promise<void>;
+//tested
+export type DeleteActorFunction = (id: string) => Promise<void>;
+//test update
+
+export type UpdateActorFunction = (args: Actor) => Promise<void>;
 
 interface AddActorModalProps {
   onClose: () => void;
   isModalVisible: boolean;
-  // onAddActor: AddActorFunction;
+  forUpdateId?: string;
+  forDeleteId?: string;
+  onDeleteActor: DeleteActorFunction;
+  onUpdateActor: UpdateActorFunction;
+  actorForUpdate?: Actor;
 }
 
-const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible }) => {
+const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, forUpdateId, forDeleteId, onDeleteActor, onUpdateActor, actorForUpdate }) => {
   const dispatch = useAppDispatch();
-  const [input, setInput] = useState({
-    firstName: "",
-    lastName: "",
-    gender: "",
-    age: 0,
-    imageURL: ""
+  const [firstName, setFirstName] =  useState<string | undefined>("")
+  const [lastName, setLastName] =  useState<string | undefined>("")
+  const [gender, setGender] = useState<string | undefined>("")
+  const [age, setAge] =  useState<number | undefined>(0)
+  const [imageURL, setImageURL] =  useState<string | undefined>("")
 
-  });
-  const { firstName, lastName, gender, age, imageURL } = input;
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  useEffect(() => {
+    const initGetActor = async () => {
+      await dispatch(getActor(forUpdateId))
+    }
+    initGetActor()
+    const actor = { ...actorForUpdate } 
+  
+    setFirstName(actor.firstName)
+    setLastName(actor.lastName)
+    setGender(actor.gender)
+    setAge(actor.age)
+    setImageURL(actor.imageURL)
 
-    setInput((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
 
-    console.log(event.target.value);
+  }, [forUpdateId])
 
+  const actor = useAppSelector((state: RootState) => state.actors.actor)
+
+
+  useEffect(() => {
+
+    console.log(actorForUpdate);
+    console.log("hello");
+  }, [])
+
+  const handleFirstNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
+    setFirstName(event.target.value)
+  }
+  
+  const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
+    setLastName(event.target.value)
   }
 
+  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
+    setAge(Number(event.target.value))
+  }
+  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
+    setGender(event.target.value)
+  }
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
+    setImageURL(event.target.value)
+  }
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault()
-    let age = Number(input.age)
+
     const actordData = { firstName, lastName, gender, age, imageURL }
-    dispatch(addActor(actordData))
+
+    if (forUpdateId) {
+      let data = {id:forUpdateId, ...actordData}
+      onUpdateActor(data)
+    } else {
+      dispatch(addActor(actordData))
+    }
 
     // if (firstName === "") {
     //   alert("Firstname is required")
@@ -58,97 +106,135 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible }
     //   const actordData = { firstName, lastName, gender, age, imageURL }
     //   dispatch(addActor(actordData))
     // }
-   
+
   }
+
+
+
+
 
   return (
     <ModalRWD
       onBackdropClick={onClose}
       isModalVisible={isModalVisible}
+      forUpdateId={forUpdateId}
+      forDeleteId={forDeleteId}
       content={
         <>
-          <h2 className='fw-bold mb-2 text-uppercase text-white'>Add Actor</h2>
-          <div className='form-outline form-white mb-4'>
-            <input
-              type="text"
-              placeholder="firstname"
-              id="firstName"
-              name="firstName"
-              className="form-control form-control-lg"
-              value={input.firstName}
-              onChange={handleChange}
-            />
-          </div>
 
-          <div className='form-outline form-white mb-4'>
-            <input
-              type="text"
-              placeholder="lastname"
-              id="lastName"
-              name="lastName"
-              className="form-control form-control-lg"
-              value={input.lastName}
-              onChange={handleChange}
-            />
-          </div>
-          <div className='d-flex flex-row'>
+          <h2 className='fw-bold mb-2 text-uppercase text-white'>
+            {!forUpdateId && !forDeleteId ?
+              "Add Actor" : ""
+            }
+            {forUpdateId && !forDeleteId ? "Edit Actor" : ""}
+          </h2>
+          {!forDeleteId ?
 
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio" name="gender"
-                id="inlineRadio1"
-                value="male"
-                onChange={handleChange}
-              />
-              <label className="form-check-label">Male</label>
+            <>
+              <div className='form-outline form-white mb-4'>
+                <input
+                  type="text"
+                  placeholder="firstname"
+                  id="firstName"
+                  name="firstName"
+                  className="form-control form-control-lg"
+                  value={firstName}
+                  onChange={handleFirstNameChange}
+                />
+              </div>
 
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="radio"
-                name="gender"
-                id="inlineRadio2"
-                value="female"
-                onChange={handleChange}
-              />
-              <label className="form-check-label" >Female</label>
-            </div>
-          </div>
-          <div className='form-outline form-white mb-4'>
-            <input
-              type="number"
-              placeholder="Age"
-              id="age"
-              name="age"
-              value={input.age}
-              onChange={handleChange}
-              className="form-control form-control-lg"
-            />
-          </div>
+              <div className='form-outline form-white mb-4'>
+                <input
+                  type="text"
+                  placeholder="lastname"
+                  id="lastName"
+                  name="lastName"
+                  className="form-control form-control-lg"
+                  value={lastName}
+                  onChange={handleLastNameChange}
+                />
+              </div>
+              <div className='d-flex flex-row'>
 
-          <div className='form-outline form-white mb-4'>
-            <input
-              type="text"
-              placeholder="Image URL"
-              id="imageURL"
-              name="imageURL"
-              value={input.imageURL}
-              className="form-control form-control-lg"
-              onChange={handleChange}
-            />
-          </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio" name="gender"
+                    id="inlineRadio1"
+                    value="male"
+                    onChange={handleGenderChange}
+                  />
+                  <label className="form-check-label">Male</label>
 
-          <button
-            className="btn btn-light btn-lg px-5"
-            type='button'
-            onClick={handleSubmit}
-          >
-            Save
-          </button>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    name="gender"
+                    id="inlineRadio2"
+                    value="female"
+                    onChange={handleGenderChange}
+                  />
+                  <label className="form-check-label" >Female</label>
+                </div>
+              </div>
+              <div className='form-outline form-white mb-4'>
+                <input
+                  type="number"
+                  placeholder="Age"
+                  id="age"
+                  name="age"
+                  value={age}
+                  onChange={handleAgeChange}
+                  className="form-control form-control-lg"
+                />
+              </div>
+
+              <div className='form-outline form-white mb-4'>
+                <input
+                  type="text"
+                  placeholder="Image URL"
+                  id="imageURL"
+                  name="imageURL"
+                  value={imageURL}
+                  className="form-control form-control-lg"
+                  onChange={handleImageChange}
+                />
+              </div>
+
+              <button
+                className="btn btn-light btn-lg px-5"
+                type='button'
+                onClick={handleSubmit}
+              >
+                Save
+              </button>
+            </>
+            : ""
+          }
+
+        
+
+          {forDeleteId && !forUpdateId ? (
+            <>
+              <h2 className='fw-bold mb-2 text-uppercase text-white'>Are you sure you want to delete?</h2>
+
+              <button onClick={onClose}
+                className="btn btn-light btn-lg px-5"
+                type='button'
+              > Cancel</button>
 
 
+
+
+              <button onClick={() => { onDeleteActor(forDeleteId) }}
+                className="btn btn-danger btn-lg px-5"
+                type='button'
+              > Delete</button>
+
+            </>
+          ) : ""}
         </>
       }
     />

@@ -1,22 +1,23 @@
 import { Movie } from "./movie";
 
 export interface Actor {
-    id?: string;
+   
+    id?: string | undefined;
     firstName: string | undefined;
-    lastName: string ;
-    gender: string;
-    age: number;
-    imageURL?: string;
+    lastName: string | undefined;
+    gender: string| undefined;
+    age: number | undefined;
+    imageURL?: string | undefined;
     
 }
 
 export interface ActorDetails {
-    id?: string;
+    id?: string | undefined;
     firstName: string | undefined;
-    lastName: string ;
-    gender: string;
-    age: number;
-    imageURL?: string;
+    lastName: string | undefined;
+    gender: string | undefined;
+    age: number| undefined;
+    imageURL?: string | undefined;
     movies?: Movie[];
     
 }
