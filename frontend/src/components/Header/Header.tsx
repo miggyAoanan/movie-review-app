@@ -14,7 +14,6 @@ import 'react-toastify/dist/ReactToastify.css';
 function Header() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   //this is for the curent login user
   const { fullName, permissions } = useAppSelector(selectAuth)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -26,9 +25,6 @@ function Header() {
       isError: isLoginError,
       error: loginError }
   ] = useLoginUserMutation()
-
-
-
 
   const toggleModal = () => {
     setIsModalVisible(wasModalVisible => !wasModalVisible)
@@ -90,64 +86,63 @@ function Header() {
     window.location.reload()
   }
 
-  const handleClick = () => {
-    // window.location.reload()
-    navigate("/")
- 
-  }
-
   return (
-
-
     <div className="header mb-5">
 
+      <div className="linkContainer">
       <Link to="/">
-        <div className="logo" onClick={handleClick}>Movie App</div>
-      </Link>
-      {permissions === "admin" ?
-        <>
-          <Link to="/admin/movie/dash">
-            <div > Movies</div>
-          </Link>
-
-          <Link to="/admin/actor/dash">
-            <div >Actors</div>
-          </Link>
-          <Link to="/admin/user/dash">
-            <div >Users</div>
-          </Link>
-        </>
-        :
-        ""
-      }
-
+          <div className="logo">Movie App</div>
+        </Link>
+      </div>
       <div className="user">
-        {
-          fullName ?
-            <>
-              <div className="text-white name">Hi {fullName} !</div>
-              <button
-                onClick={() => handleLogout()}
-              >Logout</button>
-            </>
-            :
-            <>
-              <div className="text-white name">Hi Guest!</div>
-              <button className="btn btn-secondary" onClick={toggleModal} >Login</button>
-              <LoginModal
+        <div className="userDetails">
+          <div className="userimage">
+            <img src={user} alt="user" />
+          </div>
+          {
+            fullName ?
+              <>
+                <div className="text-white name">Hi {fullName} !</div>
 
-                loginErrorInput={errorInput}
-                onClose={onBackdropClick}
-                onLoginRequested={onLoginRequest}
-                isModalVisible={isModalVisible}
-              />
-            </>
-        }
-        <div className="user-image">
-          <img src={user} alt="user" />
+
+                <div className="dropdown">
+                  <Link className="btn btn-secondary dropdown-toggle" to="/" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Admin
+                  </Link>
+
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {permissions === "admin" ? (
+                      <>
+                        <Link to="/admin/movie/dash"><span className="dropdown-item" >Movies</span></Link>
+                        <Link to="/admin/actor/dash"><span className="dropdown-item" >Actors</span></Link>
+                        <Link to="/admin/user/dash"><span className="dropdown-item" >Users</span></Link>
+                        <Link to="/"><span className="dropdown-item" onClick={() => handleLogout()} >Logout</span></Link>
+
+                      </>
+
+                    ) : (
+                      
+                        <Link to="/"><span className="dropdown-item" onClick={() => handleLogout()} >Logout</span></Link>
+                    )}             
+                  </ul>
+                </div>
+              </>
+              :
+              <>
+                <div className="text-white name">Hi Guest!</div>
+                <button className="btn btn-secondary" onClick={toggleModal} >Login</button>
+             </>
+          }
         </div>
       </div>
       <ToastContainer />
+      <LoginModal
+
+        loginErrorInput={errorInput}
+        onClose={onBackdropClick}
+        onLoginRequested={onLoginRequest}
+        isModalVisible={isModalVisible}
+      />
     </div>
   );
 }
