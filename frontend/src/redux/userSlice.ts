@@ -35,6 +35,14 @@ interface Login {
 }
 
 
+export interface UpdateArgs {
+    id?: string,
+    fullName: string | undefined,
+    email: string | undefined,
+    isActive: boolean | undefined
+  }
+  
+
 
 type ErrorI = {
     response?: {
@@ -112,12 +120,12 @@ export const login = createAsyncThunk<Login, Object>(
 )
 
 
-export const updateUser = createAsyncThunk<Object, User>(
+export const updateUser = createAsyncThunk<Object, UpdateArgs>(
     "users/updateUser",
     async (data, thunkAPI) => {
         try {
-            const { fullName, email, id } = data
-            const response = await axios.patch(USERS_URL + id, { fullName, email })
+            const {id, fullName, email, isActive } = data
+            const response = await axios.patch(USERS_URL + id, { fullName, email, isActive })
             return response.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
@@ -125,12 +133,12 @@ export const updateUser = createAsyncThunk<Object, User>(
     }
 )
 
-export const deleteUser = createAsyncThunk<Object, User>(
+export const deleteUser = createAsyncThunk< {id: string}, string>(
     "users/deleteUser",
     async (data, thunkAPI) => {
         try {
 
-            const response = await axios.delete(USERS_URL + data?.id)
+            const response = await axios.delete(USERS_URL + data)
             return response.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error)

@@ -91,7 +91,6 @@ function Header() {
   }
 
   const handleClick = () => {
-    
     // window.location.reload()
     navigate("/")
  

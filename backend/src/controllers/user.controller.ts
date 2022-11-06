@@ -359,7 +359,7 @@ export class UserController {
   ): Promise<User> {
     return this.userRepository.findById(id, filter);
   }
-  @authenticate('jwt')
+  // @authenticate('jwt')
   @patch('/users/{id}')
   @response(204, {
     description: 'User PATCH success',
