@@ -80,6 +80,25 @@ export const registerUser = createAsyncThunk<Object, User>(
     }
 )
 
+export const registerAdmin = createAsyncThunk<Object, User>(
+    "users/registerAdmin",
+    async (data, { rejectWithValue }) => {
+        try {
+
+            const response = await axios.post(ADMIN_URL, data)
+            return response.data
+        } catch (error: unknown) {
+            if (error) {
+                let message: ErrorI = error
+                return rejectWithValue(message.response?.data?.error?.message)
+            }
+            else {
+                return rejectWithValue(error)
+            }
+        }
+    }
+)
+
 export const login = createAsyncThunk<Login, Object>(
     "users/login",
     async (data, thunkAPI) => {
@@ -190,6 +209,25 @@ export const usersSlice = createSlice({
         })
         builder.addCase(updateUser.rejected, (state, action) => {
             state.loading = false;
+            state.errors = JSON.stringify(action.error.message)
+        })
+
+        builder.addCase(registerAdmin.pending, (state) => {
+            state.loading = true
+            state.registerStatus = "pending"
+
+        });
+        builder.addCase(registerAdmin.fulfilled, (state, action) => {
+            state.loading = false;
+            state.registerStatus = "fullfilled"
+
+
+        })
+        builder.addCase(registerAdmin.rejected, (state, action) => {
+            state.loading = false;
+
+            state.registerError = JSON.stringify(action.payload);
+            state.registerStatus = "rejected"
             state.errors = JSON.stringify(action.error.message)
         })
 

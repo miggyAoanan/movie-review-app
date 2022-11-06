@@ -13,15 +13,14 @@ const MovieDashboard = () => {
   const movies = useAppSelector((state: RootState) => state.movies.movies)
   const moviesState = useAppSelector((state: RootState) => state.movies)
   const dispatch = useAppDispatch();
-  const initApp = useCallback(async () => {
-    await dispatch(getMovies()).then((res)=>{
-      initApp()
-    });
-  }, [dispatch])
 
   useEffect(() => {
-    initApp()
-  }, [initApp])
+    if(movies){
+      dispatch(getMovies())
+    }
+  }, [dispatch])
+
+
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [error, setError] = useState("")
@@ -91,7 +90,7 @@ const toggleDeleteModal = () => {
   const onUpdateMovie : UpdateMovieFunction = async (args: Movie) => {
     console.log(args)
     dispatch(updateMovie(args)).then((res)=> {
-      initApp()
+      // initApp()
     })
 
     
@@ -100,7 +99,7 @@ const toggleDeleteModal = () => {
   const onDeleteMovie : DeleteMovieFunction = async (id: string) => {
     console.log(id)
     dispatch(deleteMovie(id)).then((res)=>{
-      initApp()
+      // initApp()
     })
   }
 

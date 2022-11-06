@@ -9,20 +9,17 @@ import './Dash.scss'
 import DeleteActorModal from "./modal/DeleteActorModal";
 import UpdateActorModal from "./modal/UpdateActorModal";
 
+
 const ActorDashboard = () => {
   const actors = useAppSelector(actorDetails)
   const dispatch = useAppDispatch();
-  const initApp = useCallback(async () => {
-    await dispatch(getActors()).then((res)=>{
-      initApp()
-      // clear()
-    })
+ 
+  useEffect(() => {
+    if(actors){
+     dispatch(getActors()) 
+    }
     
   }, [dispatch])
-
-  useEffect(() => {
-    initApp()
-  }, [initApp])
 
   
   const [isModalVisible, setIsModalVisible] = useState(false)// add
@@ -85,7 +82,7 @@ const ActorDashboard = () => {
   const onDeleteActor : DeleteActorFunction = async (id: string) => {
    
     dispatch(deleteActor(id)).then((res)=>{
-      initApp()
+      // initApp()
       onBackdropClick()
     })
   }
@@ -94,7 +91,7 @@ const ActorDashboard = () => {
   const onUpdateActor : UpdateActorFunction = async (args: Actor) => {
 
     dispatch(updateActor(args)).then((res)=>{
-      initApp()
+      // initApp()
       onBackdropClick()
         
     })

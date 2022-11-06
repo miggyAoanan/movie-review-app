@@ -7,16 +7,24 @@ import userIcon from "../../images/user.png"
 const UserDashBoard = () => {
     const users = useAppSelector(userDetails)
     const dispatch = useAppDispatch();
-    const initApp = useCallback(async () => {
-        await dispatch(getUsers()).then((res) => {
-            initApp()
-        })
 
-    }, [dispatch])
+   
 
     useEffect(() => {
-        initApp()
-    }, [initApp])
+        if(users){
+            dispatch( getUsers())
+           
+        }
+      
+    }, [dispatch])
+
+    //Add Admin Modal
+    const [forAdmin, setForAdmin] = useState("")
+    const [isModalVisible, setIsModalVisible] = useState(false)// add
+    const toggleModal = () => {
+        setIsModalVisible(wasModalVisible => !wasModalVisible)
+      }
+    
 
 
     return (
@@ -69,8 +77,8 @@ const UserDashBoard = () => {
       type="button" 
       className="btn btn-primary" 
       
-    //   onClick={() => { toggleModal()}}
-      >Add</button>
+      onClick={() => { setForAdmin("forAdmin"); toggleModal()}}
+      >Register Admin</button>
 
       
     </div>
