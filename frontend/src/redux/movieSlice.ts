@@ -12,7 +12,9 @@ interface MovieState {
     loading: boolean,
     errors: string,
     getMovieStatus: string,
-    addMovieStatus: string
+    addMovieStatus: string,
+    updateMovieStatus: string,
+    deleteMovieStatus: string,
     
 }
 
@@ -22,7 +24,10 @@ const initialState: MovieState = {
     loading: false,
     errors:"",
     getMovieStatus:"",
-    addMovieStatus:""
+    addMovieStatus:"",
+    updateMovieStatus:"",
+    deleteMovieStatus:""
+
 }
 
 
@@ -78,6 +83,33 @@ export const addMovie = createAsyncThunk<MovieDetails, Object>(
             else {
                 return rejectWithValue(error)
             }
+        }
+    }
+)
+
+
+export const updateMovie = createAsyncThunk<Object, Movie>(
+    "movies/updateMovie",
+    async (data, thunkAPI) => {
+        try {
+            const { id, title, year, cost, imageURL, actorIds } = data
+            const response = await axios.patch(MOVIES_URL + id, { title, year, cost, imageURL, actorIds })
+            return response.data
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const deleteMovie = createAsyncThunk< {id: string}, string>(
+    "movies/deleteMovie",
+    async (data, thunkAPI) => {
+        try {
+
+            const response = await axios.delete(MOVIES_URL + data)
+            return response.data
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
         }
     }
 )
@@ -158,6 +190,39 @@ export const movieSlice = createSlice({
         state.loading = false;
         state.addMovieStatus = "rejected"
     });
+
+    builder.addCase(updateMovie.pending, (state = initialState, action) => {
+        state.loading = true;
+        state.addMovieStatus = "pending"
+
+    });
+    builder.addCase(updateMovie.fulfilled, (state, action) => {
+       
+        state.loading = false;
+        state.addMovieStatus = "fullfilled"
+    });
+    builder.addCase(updateMovie.rejected, (state, action) => {
+        state.errors = JSON.stringify(action.payload);
+        state.loading = false;
+        state.addMovieStatus = "rejected"
+    });
+
+    builder.addCase(deleteMovie.pending, (state = initialState, action) => {
+        state.loading = true;
+        state.deleteMovieStatus = "pending"
+
+    });
+    builder.addCase(deleteMovie.fulfilled, (state, action) => {
+        state.loading = false;
+        state.deleteMovieStatus = "fullfilled"
+
+    });
+    builder.addCase(deleteMovie.rejected, (state, action) => {
+        state.errors = JSON.stringify(action.payload);
+        state.loading = false;
+        state.deleteMovieStatus = "rejected"
+    });
+
 
 
    }

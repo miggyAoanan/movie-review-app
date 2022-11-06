@@ -3,12 +3,12 @@ import  {Review} from "./review"
 
 
 export interface Movie {
-    id?: string;
-    title: string;
-    year: string;
-    cost:number;
-    imageURL?: string;
-    actorIds?: string[];
+    id?: string | undefined;
+    title: string | undefined;
+    year: string | undefined;
+    cost:number | undefined;
+    imageURL?: string | undefined;
+    actorIds?: string[] | undefined;
 }
 
 export interface MovieDetails {

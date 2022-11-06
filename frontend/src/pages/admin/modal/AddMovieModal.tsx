@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import ModalRWD from './ModalRWD';
-import { Button, ButtonContainer, Error } from './ModalPopup.styled'
+import ModalRWD from '../../../components/Modal/ModalRWD';
+import { Button, ButtonContainer, Error } from '../../../components/Modal/ModalPopup.styled'
 
-import { Movie } from "../../interfaces/movie"
+import { Movie } from "../../../interfaces/movie"
 
 
 export type AddMovieFunction = (args: Movie) => Promise<void>;

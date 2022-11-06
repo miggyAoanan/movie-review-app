@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
-import { getMovies, addMovie } from "../../redux/movieSlice";
+import { getMovies, addMovie, deleteMovie, updateMovie } from "../../redux/movieSlice";
 import './Dash.scss'
 
-import AddMovieModal, { AddMovieFunction } from "../../components/Modal/AddMovieModal";
+import AddMovieModal, { AddMovieFunction } from "./modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
+import UpdateMovieModal ,{UpdateMovieFunction} from "./modal/UpdateMovieModal";
+import DeleteMovieModal ,{DeleteMovieFunction} from "./modal/DeleteMovieModal";
 
 const MovieDashboard = () => {
 
@@ -12,7 +14,9 @@ const MovieDashboard = () => {
   const moviesState = useAppSelector((state: RootState) => state.movies)
   const dispatch = useAppDispatch();
   const initApp = useCallback(async () => {
-    await dispatch(getMovies());
+    await dispatch(getMovies()).then((res)=>{
+      initApp()
+    });
   }, [dispatch])
 
   useEffect(() => {
@@ -21,18 +25,37 @@ const MovieDashboard = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [error, setError] = useState("")
+
+  // this for update Movie
+  const [movieDataforUpdate, setMovieDataforUpdate] = useState<Movie>()
+
   const toggleModal = () => {
     setIsModalVisible(wasModalVisible => !wasModalVisible)
   }
 
   const onBackdropClick = () => {
     setIsModalVisible(false)
+    setEditModalVisible(false)
+    setDeleteModalVisible(false)
   }
 
+  // update Modal
+const [isEditModalVisible, setEditModalVisible] = useState(false)
+const toggleEditModal = () => {
+  setEditModalVisible(isEditModalVisible => !isEditModalVisible)
+}
+
+//delete modal
+const [deleteMovieId, setDeleteMovieId] = useState("")
+const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
+const toggleDeleteModal = () => {
+  setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
+}
+
+
+
   const onAddMovie: AddMovieFunction = async (args: Movie) => {
-
     const movieData = { ...args }
-
     const title = movieData.title
     const cost = Number(movieData.cost)
     const year = movieData.year
@@ -57,18 +80,30 @@ const MovieDashboard = () => {
     else if (actorIds.length === 0) {
       setError("Actor is required");
     }
-
-
-
     else {
       dispatch(addMovie({ ...saveMoviedata })).then((res) => {
 
       })
       setError("")
     }
-
-
   }
+
+  const onUpdateMovie : UpdateMovieFunction = async (args: Movie) => {
+    console.log(args)
+    dispatch(updateMovie(args)).then((res)=> {
+      initApp()
+    })
+
+    
+  }
+
+  const onDeleteMovie : DeleteMovieFunction = async (id: string) => {
+    console.log(id)
+    dispatch(deleteMovie(id)).then((res)=>{
+      initApp()
+    })
+  }
+
 
   return (
     <div className="wrapper">
@@ -98,8 +133,16 @@ const MovieDashboard = () => {
                     <td><img src={movie.imageURL} alt={movie.title} className='imageDash' /></td>
                     <td>
 
-                      <button type="button" className="btn btn-secondary">Edit</button>
-                      <button type="button" className="btn btn-danger">Delete</button>
+                      <button 
+                      type="button" 
+                      className="btn btn-secondary"
+                      onClick={ () =>{toggleEditModal(); setMovieDataforUpdate(movie)}}
+                      >Edit</button>
+                      <button 
+                      type="button" 
+                      className="btn btn-danger"
+                      onClick={() => {toggleDeleteModal(); setDeleteMovieId(movie.id!)} }
+                      >Delete</button>
 
                     </td>
                   </tr>
@@ -121,6 +164,21 @@ const MovieDashboard = () => {
         onClose={onBackdropClick}
         isModalVisible={isModalVisible}
         onAddMovie={onAddMovie}
+      />
+
+      <UpdateMovieModal
+      onClose={onBackdropClick}
+      isEditModalVisible={isEditModalVisible}
+      onUpdateMovie={onUpdateMovie}
+      movieDataforUpdate={movieDataforUpdate}
+      />
+
+      <DeleteMovieModal 
+       onClose={onBackdropClick}
+       isDeleteModalVisible={isDeleteModalVisible}
+       deleteMovieId= {deleteMovieId}
+       onDeleteMovie={onDeleteMovie}
+      
       />
     </div>
   )

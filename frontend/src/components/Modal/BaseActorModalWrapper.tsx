@@ -1,22 +1,20 @@
-
 import React, { MouseEventHandler, ReactNode } from 'react'
 
 import Modal from './Modal';
-import { Actor } from '../../interfaces'
+
 
 import {  Header, Message, CloseSign } from './ModalPopup.styled'
 
-export interface BaseModalWrapperProps {
+export interface BaseActorModalWrapperProps {
     isModalVisible?: boolean;
-    isEditModalVisible?:boolean;
     isDeleteModalVisible?:boolean;
+    isEditModalVisible?: boolean;
     onBackdropClick: () => void;
     header?: string;
     message?: string;
     content?: ReactNode;
     forUpdateId?: string;
-    forDeleteId?: string;
-    deleteMovieId?:string;
+    deleteId?: string;
 }
 
 interface ComponentsProps {
@@ -29,10 +27,10 @@ interface ComponentsProps {
     }>;
   }
   
-type Props =  BaseModalWrapperProps & ComponentsProps;
+type Props =  BaseActorModalWrapperProps & ComponentsProps;
 
-const BaseModalWrapper: React.FC<Props> = ({forUpdateId,forDeleteId,deleteMovieId,isDeleteModalVisible, content,isEditModalVisible, isModalVisible, onBackdropClick, header, message, ContainerComponent, CloseButtonComponent }) => {
-    if ((isModalVisible)  ||  (isEditModalVisible || isDeleteModalVisible) || forUpdateId  || forDeleteId) {
+const BaseActorModalWrapper: React.FC<Props> = ({forUpdateId,deleteId, content, isModalVisible,isDeleteModalVisible,isEditModalVisible, onBackdropClick, header, message, ContainerComponent, CloseButtonComponent }) => {
+    if (isModalVisible ||isDeleteModalVisible || isEditModalVisible) {
         return (<Modal onBackdropClick={onBackdropClick}>
             <ContainerComponent>
                 <CloseButtonComponent onClick={onBackdropClick}>
@@ -44,14 +42,12 @@ const BaseModalWrapper: React.FC<Props> = ({forUpdateId,forDeleteId,deleteMovieI
                
             </ContainerComponent>
     
-        </Modal>);
-    }else{
+        </Modal>)
+    }
+  
+    else{
         return null
     }
-
-   
-  
-   
 }
 
-export default BaseModalWrapper
+export default BaseActorModalWrapper
