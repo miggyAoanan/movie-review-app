@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function Header() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   //this is for the curent login user
   const { fullName, permissions } = useAppSelector(selectAuth)
@@ -89,13 +90,20 @@ function Header() {
     window.location.reload()
   }
 
+  const handleClick = () => {
+    
+    // window.location.reload()
+    navigate("/")
+ 
+  }
+
   return (
 
 
     <div className="header mb-5">
 
       <Link to="/">
-        <div className="logo">Movie App</div>
+        <div className="logo" onClick={handleClick}>Movie App</div>
       </Link>
       {permissions === "admin" ?
         <>

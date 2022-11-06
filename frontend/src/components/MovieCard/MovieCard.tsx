@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./MovieCard.scss";
 import {Movie} from '../../interfaces/movie'
 
 function MovieCard(props : Movie) {
 
-  const data = props
+  const [data] = useState(props)
+
+  
   
   return (
     <div className="card-item">

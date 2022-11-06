@@ -18,12 +18,3 @@ root.render(
   </React.StrictMode>
 );
 
-// root.render(
-  
-//     <Provider store={store}>
-//       <App />
-//     </Provider>
-
-// );
-
-

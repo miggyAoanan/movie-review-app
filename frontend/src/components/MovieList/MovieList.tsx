@@ -1,12 +1,18 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import MovieCard from "../MovieCard/MovieCard";
 import "./MovieList.scss";
 
 import {useAppDispatch, useAppSelector, RootState} from '../../store/store'
 import { getMovies } from "../../redux/movieSlice";
+import { MovieDetails } from "../../interfaces";
 
 const MovieList = () => {
+
   const dispatch = useAppDispatch();
+  const location = useLocation();
+  const keyLocation = location.key
+
   const initApp = useCallback(async () => {
     await dispatch(getMovies());
   }, [dispatch])
@@ -17,7 +23,8 @@ const MovieList = () => {
 
   const movies = useAppSelector( (state:RootState) => state.movies.movies)
   const moviesState = useAppSelector( (state:RootState) => state.movies)
-  
+
+
  let renderMovies
 
   renderMovies =
@@ -29,17 +36,18 @@ const MovieList = () => {
     </div>
   );
   
+
+  
+ 
+ 
   return (
     <div className="movie-wrapper">
     <div className="movie-list">
       <h2>Movies</h2>
-      {/* <div className="movie-container"><MovieCard link={link}/></div> */}
+    
       <div className="movie-container">{renderMovies}</div>
     </div>
-    <div className="show-list">
-      <h2>Shows</h2>
-      {/* <div className="movie-container"><MovieCard link={link}/></div> */}
-    </div>
+    
   </div>
   )
 }
