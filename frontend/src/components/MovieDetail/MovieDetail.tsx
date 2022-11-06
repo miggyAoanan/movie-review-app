@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "./MovieDetail.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -8,7 +8,7 @@ import { getUsers } from "../../redux/userSlice";
 import { RootState } from "../../store/store"
 
 import ActorCard from "../ActorCard/ActorCard";
-import { Actor, Review } from "../../interfaces/index";
+import { Actor, MovieDetails, Review } from "../../interfaces/index";
 import { getReviews } from "../../redux/reviewSlice";
 
 function MovieDetail() {
@@ -16,81 +16,55 @@ function MovieDetail() {
   const dispatch = useAppDispatch();
 
 
-  const movie = useAppSelector((state: RootState) => state.movies.movie)
+  const data = useAppSelector((state: RootState) => state.movies.movie)
   const moviesState = useAppSelector((state: RootState) => state.movies)
   // const actors = useAppSelector((state: RootState) => state.movies.movie?.actors)
   // const reviews = useAppSelector((state: RootState) => state.movies.movie?.reviews)
   const users = useAppSelector((state: RootState) => state.users.users)
+
+
   useEffect(() => {
-
-    const initGetMovies = async () => {
-      await dispatch(getMovie(id))
-      await dispatch(getMovieActors(id))
-      await dispatch(getUsers())
-      // await dispatch(getReviews())
+    if (id) {
+      dispatch(getMovie(id))
     }
-    initGetMovies()
+  }, [id, dispatch])
+  const movie = useMemo(() => data, [data])
+  let reviews = useMemo(() => movie?.reviews, [id])
 
-  }, [])
+  console.log(reviews)
 
+  let ratings: number[] = [];
 
-
-  // const arrayReview :[] = []
-  // const reviews = movie?.reviews!
-  // console.log(arrayReview);
-
-
-  // if(reviews){
-  //   arrayReview.push(reviews)
-  // }
+  reviews?.map((review) => {
+    ratings.push(review.rating)
+  })
 
 
+  let aveRatings = 0;
+  if (ratings.length) {
+    aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
+    console.log(aveRatings);
 
-  // const [userRating, setUserRating] = useState(0)
-  // let ratings: number[] = [];
+  }
 
-  // reviews?.map((review) => {
-  //   ratings.push(review.rating)
-  // })
+  let renderActors
 
-
-  // let aveRatings = 0;
-  // if (ratings.length) {
-  //   aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
-  //   // setUserRating(aveRatings)
-
-  // }
-  // console.log(userRating);
-
-  // let renderActors
-
-  // renderActors =
-  //   moviesState.getMovieStatus == "fullfilled" ?
-
-  //     actors?.map((movie, index) => (<ActorCard key={index} {...movie} />)) :
-  //     (
-  //       <div className="movies-error">
-  //         <h3>{moviesState.errors}</h3>
-  //       </div>
-  //     );
+  renderActors = movie?.actors?.map((movie, index) => (<ActorCard key={index} {...movie} />))
 
   let renderReviews
 
-  renderReviews =
-    moviesState.getMovieStatus == "fullfilled" ?
+  renderReviews = movie?.reviews?.map((review, index) => (
+   
 
-      movie?.reviews?.map((review, index) => (
+    <div key={index} className="reviewDiv">
+          <span className="reviewRating">{review.rating}</span>
+          <p className="reviewDesc"> {review.description} </p>
+          <p className="userDetail">Anonymous </p>
 
-        <div key={index}>
-            <span>{review.description}</span>
+    </div>
 
-        </div>
-      )) :
-      (
-        <div className="movies-error">
-          <h3>{moviesState.errors}</h3>
-        </div>
-      );
+  ))
+
 
 
 
@@ -105,7 +79,7 @@ function MovieDetail() {
               <div className="movie-title">{movie?.title}</div>
               <div className="movie-rating mb-5">
                 <span>
-                  {/* IMDB Rating <i className="fa fa-star"></i> : {aveRatings} */}
+                  IMDB Rating <i className="fa fa-star"></i> : {aveRatings}
                 </span>
                 <span>
                   Cost <i className="fa-light fa-sack-dollar"></i> : {movie?.cost}
@@ -119,11 +93,11 @@ function MovieDetail() {
 
               <div className="review-container">
 
-                <h1>test</h1>
+                <h1 className="mt-5"> User Reviews</h1>
+                {renderReviews}
 
+               
 
-
-                {/* <h2>{renderReviews}</h2> */}
 
               </div>
 
@@ -138,7 +112,7 @@ function MovieDetail() {
               </div>
 
               <div className="actor-container">
-                {/* {renderActors} */}
+                {renderActors}
               </div>
 
             </div>

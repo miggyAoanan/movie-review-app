@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import MovieCard from "../MovieCard/MovieCard";
 import "./MovieList.scss";
-
 import {useAppDispatch, useAppSelector, RootState} from '../../store/store'
 import { getMovies } from "../../redux/movieSlice";
-import { MovieDetails } from "../../interfaces";
+
 
 const MovieList = () => {
-
   const dispatch = useAppDispatch();
   const location = useLocation();
   const keyLocation = location.key
@@ -37,9 +35,6 @@ const MovieList = () => {
   );
   
 
-  
- 
- 
   return (
     <div className="movie-wrapper">
     <div className="movie-list">
