@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import { USERS_URL, ADMIN_URL } from '../API/index'
 import { User } from '../interfaces/user';
-
+import { RootState } from '../store/store';
 
 interface UserState {
     user: User | null,
@@ -198,3 +198,5 @@ export const usersSlice = createSlice({
 
 export default usersSlice.reducer;
 export const { setUsers } = usersSlice.actions
+export const userDetails = (state: RootState) => state.users.users;
+export const userState = (state: RootState) => state.users;

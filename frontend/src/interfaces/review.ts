@@ -3,6 +3,6 @@ export interface Review {
     description: string;
     rating: number;
     userId: string;
-    movieId: number;
+    movieId: string;
  
 }

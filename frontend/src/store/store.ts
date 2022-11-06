@@ -5,6 +5,7 @@ import authReducer from '../redux/authSlice'
 import userReducer from '../redux/userSlice';
 import movieReducer from '../redux/movieSlice'
 import actorReducer from '../redux/actorSlice'
+import reviewReducer from '../redux/reviewSlice'
 import { authApi } from '../authServices/authApi'
 
 
@@ -15,6 +16,7 @@ export const store = configureStore({
     users: userReducer,
     movies: movieReducer,
     actors: actorReducer,
+    reviews: reviewReducer
     
   },
   middleware: (getDefaultMiddleware) =>

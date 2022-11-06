@@ -114,6 +114,9 @@ function Header() {
           <Link to="/admin/actor/dash">
             <div >Actors</div>
           </Link>
+          <Link to="/admin/user/dash">
+            <div >Users</div>
+          </Link>
         </>
         :
         ""
