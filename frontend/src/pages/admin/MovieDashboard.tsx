@@ -57,7 +57,8 @@ const MovieDashboard = () => {
 
     console.log(args);
     const movieData = { ...args }
-    const title = movieData.title
+    const title = movieData.title   
+    const overview = movieData.overview
     const cost = Number(movieData.cost)
     const year = movieData.year
     const imageURL = movieData.imageURL
@@ -65,7 +66,7 @@ const MovieDashboard = () => {
 
     // actorIds.push(movieData.actorIds)
 
-    const saveMoviedata = { title, cost, year, imageURL, actorIds }
+    const saveMoviedata = { title, overview, cost, year, imageURL, actorIds }
 
 
     if (title === "") {
@@ -82,25 +83,26 @@ const MovieDashboard = () => {
     }
     else {
       dispatch(addMovie({ ...saveMoviedata })).then((res:any) => {
-          console.log(res);
+         
+          dispatch(getMovies())
       })
       
     }
   }
 
   const onUpdateMovie: UpdateMovieFunction = async (args: Movie) => {
-    console.log(args)
+   
     dispatch(updateMovie(args)).then((res:any) => {
-      // initApp()
+      dispatch(getMovies())
     })
 
 
   }
 
   const onDeleteMovie: DeleteMovieFunction = async (id: string) => {
-    console.log(id)
+   
     dispatch(deleteMovie(id)).then((res:any) => {
-      // initApp()
+      dispatch(getMovies())
     })
   }
 

@@ -20,6 +20,7 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
 
   const [id, setId] = useState<string | undefined>("")
   const [title, setTitle] = useState<string | undefined>("")
+  const [overview, setOverview] = useState<string | undefined>("")
   const [cost, setCost] = useState<number | undefined>(0)
   const [year, setYear] = useState<string | undefined>("")
   const [imageURL, setImageURL] = useState<string | undefined>("")
@@ -29,6 +30,7 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
   useEffect(() => {
     setId(movieDataforUpdate?.id)
     setTitle(movieDataforUpdate?.title)
+    setTitle(movieDataforUpdate?.overview)
     setCost(movieDataforUpdate?.cost)
     setYear(movieDataforUpdate?.year)
     setImageURL(movieDataforUpdate?.imageURL)
@@ -38,6 +40,11 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setTitle(event.target.value)
   }
+
+  const handleOverviewChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setOverview(event.target.value)
+  }
+
 
   const handleCostChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setCost(Number(event.target.value))
@@ -84,6 +91,19 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
               placeholder='Movie title'
               onChange={handleTitleChange}
               value={title}
+              className="form-control form-control-sm"
+            />
+
+          </div>
+
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Movie Overview</span>
+            <input
+              type="text"
+              name='title'
+              placeholder='Movie overview'
+              onChange={handleTitleChange}
+              value={overview}
               className="form-control form-control-sm"
             />
 

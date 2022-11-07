@@ -44,6 +44,7 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
 
   const [input, setInput] = useState({
     title: "",
+    overview:"",
     year: "",
     cost: 0,
     imageURL: "",
@@ -117,6 +118,19 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
               placeholder='Movie title'
               onChange={handleChange}
               value={input.title}
+              className="form-control form-control-sm"
+            />
+
+          </div>
+
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Movie Overview</span>
+            <input
+              type="text"
+              name='overview'
+              placeholder='Movie Overview'
+              onChange={handleChange}
+              value={input.overview}
               className="form-control form-control-sm"
             />
 
