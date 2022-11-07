@@ -17,7 +17,7 @@ interface UpdateMovieModalProps {
 
 const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible, onClose, error, onUpdateMovie, movieDataforUpdate }) => {
 
-  
+
   const [id, setId] = useState<string | undefined>("")
   const [title, setTitle] = useState<string | undefined>("")
   const [cost, setCost] = useState<number | undefined>(0)
@@ -53,7 +53,7 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
 
   const handleActorIdsChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const array = []
-    const data  = event.target.value
+    const data = event.target.value
     array.push(data)
     setActorIds(array)
   }
@@ -62,57 +62,85 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault()
 
-    const updateData = {id, title, cost, year, imageURL, actorIds}
+    const updateData = { id, title, cost, year, imageURL, actorIds }
     // console.log(updateData)
     onUpdateMovie(updateData)
-    
+
   }
 
   return (
     <ModalRWD
-      header='Edit Movie'
+      // header='Edit Movie'
       onBackdropClick={onClose}
       isEditModalVisible={isEditModalVisible}
       content={
         <>
-          <input
-            type="text"
-            name='title'
-            placeholder='Movie title'
-            onChange={handleTitleChange}
-            value={title}
-          />
-          <input
-            type="text"
-            placeholder='Year'
-            name='year'
-            onChange={handleYearChange}
-            value={year}
-          />
-          <input
-            type="number"
-            placeholder='Cost'
-            name='cost'
-            onChange={handleCostChange}
-            value={cost}
-          />
-          <input
-            type="text"
-            placeholder='image'
-            name='imageURL'
-            onChange={handleImageURLChange}
-            value={imageURL}
-          />
-          <input type="text"
-            placeholder='actors'
-            name='actorIds'
-            onChange={handleActorIdsChange}
-            value={actorIds}
-          />
+          <p className='fs-5 text-white'>Edit movie details</p>
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Movie Title</span>
+            <input
+              type="text"
+              name='title'
+              placeholder='Movie title'
+              onChange={handleTitleChange}
+              value={title}
+              className="form-control form-control-sm"
+            />
+
+          </div>
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Year</span>
+            <input
+              type="text"
+              placeholder='Year'
+              name='year'
+              onChange={handleYearChange}
+              value={year}
+              className="form-control form-control-sm"
+            />
+          </div>
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Cost</span>
+            <input
+              type="number"
+              placeholder='Cost'
+              name='cost'
+              onChange={handleCostChange}
+              value={cost}
+              className="form-control form-control-sm"
+            />
+
+          </div>
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Image URL</span>
+            <input
+              type="text"
+              placeholder='image'
+              name='imageURL'
+              onChange={handleImageURLChange}
+              value={imageURL}
+              className="form-control form-control-sm"
+            />
+
+          </div>
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Actors</span>
+            <input type="text"
+              placeholder='actors'
+              name='actorIds'
+              onChange={handleActorIdsChange}
+              value={actorIds}
+              className="form-control form-control-sm"
+            />
+          </div>
+
           <ButtonContainer>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>Save</Button>
-            {/* <Button onClick={() => onUpdateMovie({ ...input })}>Add</Button> */}
+            <button onClick={onClose}
+             className="btn btn-light btn-sm px-5"
+             >Cancel</button>
+            <button onClick={handleSubmit}
+            className="btn btn-primary btn-sm px-5"
+            >Save</button>
           </ButtonContainer>
 
         </>

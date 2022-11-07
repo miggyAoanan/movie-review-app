@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { getActors, actorDetails, deleteActor, updateActor } from "../../redux/actorSlice"
+import { getActors, actorDetails, deleteActor, updateActor, addActor } from "../../redux/actorSlice"
 
 
 import { Actor } from '../../interfaces'
-import AddActorModal ,{DeleteActorFunction, UpdateActorFunction} from "./modal/AddActorModal";
+import AddActorModal ,{AddActorFunction}  from "./modal/AddActorModal";
 import './Dash.scss'
-import DeleteActorModal from "./modal/DeleteActorModal";
-import UpdateActorModal from "./modal/UpdateActorModal";
+import DeleteActorModal ,{DeleteActorFunction} from "./modal/DeleteActorModal";
+import UpdateActorModal ,{UpdateActorFunction} from "./modal/UpdateActorModal";
 
 
 const ActorDashboard = () => {
@@ -52,38 +52,23 @@ const ActorDashboard = () => {
     // clear()
   }
 
-  const setUpdateActorId = (id:string) =>{
-    setUpdateId(id)
-  
+  const onAddActor: AddActorFunction = async (args: Actor) => {
+    
+    let age = Number(args.age)
+    const actorData : Actor = {firstName: args.firstName, lastName: args.lastName, age, gender:args.gender, imageURL: args.imageURL}
+    dispatch(addActor(actorData)).then((res)=>{
+      console.log(res)
+      onBackdropClick()
+      dispatch(getActors())
+    })
+
   }
 
-  // const clearUpdate =() =>{
-  //   setUpdateId("")
-  // }
 
-  // const clearDelete =() =>{
-  //   setDeleteId("")
-  // }
-
-  // const clear =() => {
-  //   clearDelete()
-  //   clearUpdate()
-  // } 
-
-  //testing delete
-
-  // const onDeleteActor: DeleteActorFunction = async (id:string) => {
-  //  console.log(id)
-    
-
-  // }
-
-  
   const onDeleteActor : DeleteActorFunction = async (id: string) => {
-   
     dispatch(deleteActor(id)).then((res)=>{
-      // initApp()
-      onBackdropClick()
+    onBackdropClick()
+    dispatch(getActors())
     })
   }
 
@@ -91,21 +76,27 @@ const ActorDashboard = () => {
   const onUpdateActor : UpdateActorFunction = async (args: Actor) => {
 
     dispatch(updateActor(args)).then((res)=>{
-      // initApp()
+      dispatch(getActors())
       onBackdropClick()
         
     })
 
   }
 
+  const clear = () => {
+
+  }
+
   return (
     <div className="wrapper">
+      <h2 className="h2 text-center text-white mb-5">Actor List </h2>
       <table className='table table-dark '>
         <thead >
           <tr className='bg-dark'>
             <th scope="col">#</th>
-            <th scope="col">Actor Name</th>
             <th scope="col">Image</th>
+            <th scope="col">Actor Name</th>
+            <th scope="col">Gender</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -115,20 +106,21 @@ const ActorDashboard = () => {
               return (
                 <tr key={actor.id}>
                   <td>{index + 1}</td>
-                  <td>{actor.firstName}&nbsp;{actor.lastName}</td>
                   <td><img src={actor.imageURL} alt={actor.lastName} className='imageDash' /></td>
+                  <td>{actor.firstName}&nbsp;{actor.lastName}</td>
+                  <td>{actor.gender}</td>
                   <td>
 
                     <button 
                     type="button" 
-                    className="btn btn-secondary"
+                    className="btn btn-secondary btn-sm "
                   
                     onClick={() => { toggleEditModal(); setActorForUpdate(actor)}}
                     >Edit</button>
                     &nbsp;
                     <button 
                     type="button" 
-                    className="btn btn-danger"
+                    className="btn btn-danger btn-sm"
                     onClick={() => { toggleDeleteModal(); setDeleteId(actor.id!)}}
                     >Delete</button>
 
@@ -142,7 +134,7 @@ const ActorDashboard = () => {
 
       <button 
       type="button" 
-      className="btn btn-primary" 
+      className="btn btn-primary btn-sm px-5" 
       
       onClick={() => { toggleModal()}}
       >Add</button>
@@ -150,9 +142,7 @@ const ActorDashboard = () => {
       <AddActorModal
         onClose={onBackdropClick}
         isModalVisible={isModalVisible}
-        forUpdateId={updateId}
-        onUpdateActor={onUpdateActor}
-        actorForUpdate={actorForUpdate}
+        onAddActor={onAddActor}   
       />
 
       <UpdateActorModal 

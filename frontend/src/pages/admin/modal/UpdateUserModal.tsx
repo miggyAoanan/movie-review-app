@@ -76,7 +76,7 @@ const UpdateUserModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditModal
         <>
 
           <h2 className='fw-bold mb-2 text-uppercase text-white'> Update Admin</h2>
-          <p className='text-white-50 mb-4 fs-6'>Please enter User details</p>
+          <p className='text-white-50 mb-4 fs-6'>Edit User details</p>
           <div className='form-outline form-white mb-4'>
             <input
               type="text"
@@ -101,12 +101,24 @@ const UpdateUserModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditModal
           </div>
 
           <div className='form-outline form-white mb-4'>
+            <p className='text-white-50 mb-4 fs-6'> Activate</p>
             <label className="switch">
-              <input type="checkbox"
-                value={String(isActive)}
-                onChange={handleisActiveChange}
 
-              />
+            {
+              isActive === true ? 
+              <input type="checkbox" defaultChecked
+              value={String(isActive)}
+              onChange={handleisActiveChange}
+
+            />
+            :
+            <input type="checkbox"
+            value={String(isActive)}
+            onChange={handleisActiveChange}
+
+          />
+            }
+             
               <div className="slider"></div>
             </label>
           </div>

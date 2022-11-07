@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ActorModalRWD from '../../../components/Modal/ActorModalRWD'
+import { ButtonContainer } from '../../../components/Modal/ModalPopup.styled'
 
 
 export type DeleteActorFunction = (id: string) => Promise<void>;
@@ -17,24 +18,28 @@ const DeleteActorModal: React.FC<DeleteMovieModalProps> = ({ isDeleteModalVisibl
 
   return (
     <ActorModalRWD
-      header='Delete Movie'
+      // header='Delete Actor ?'
       onBackdropClick={onClose}
       isDeleteModalVisible={isDeleteModalVisible}
       deleteId={deleteId}
       content={
         <>
-          
-          <h2 className='fw-bold mb-2 text-uppercase text-white'>Are you sure you want to delete?</h2>
+          <p className='fs-5 text-white'>Delete Actor ?</p>
 
-              <button onClick={onClose}
-                className="btn btn-light btn-lg px-5"
-                type='button'
-              > Cancel</button>
+          <ButtonContainer>
+            <button onClick={onClose}
+              className="btn btn-light btn-sm px-5"
+              type='button'
+            > Cancel</button>
 
-              <button onClick={() => { onDeleteActor(deleteId!) }}
-                className="btn btn-danger btn-lg px-5"
-                type='button'
-              > Delete</button>
+            <button onClick={() => { onDeleteActor(deleteId!) }}
+              className="btn btn-danger btn-sm px-5"
+              type='button'
+            > Delete</button>
+
+          </ButtonContainer>
+
+
 
         </>
       }

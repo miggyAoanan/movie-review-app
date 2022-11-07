@@ -18,14 +18,14 @@ interface UpdateActorModalProps {
 const UpdateActorModal: React.FC<UpdateActorModalProps> = ({ isEditModalVisible, onClose, error, onUpdateActor, actorForUpdate }) => {
 
   const [id, setId] = useState<string | undefined>("")
-  const [firstName, setFirstName] =  useState<string | undefined>("")
-  const [lastName, setLastName] =  useState<string | undefined>("")
+  const [firstName, setFirstName] = useState<string | undefined>("")
+  const [lastName, setLastName] = useState<string | undefined>("")
   const [gender, setGender] = useState<string | undefined>("")
-  const [age, setAge] =  useState<number | undefined>(0)
-  const [imageURL, setImageURL] =  useState<string | undefined>("")
+  const [age, setAge] = useState<number | undefined>(0)
+  const [imageURL, setImageURL] = useState<string | undefined>("")
 
   useEffect(() => {
-    const actor = { ...actorForUpdate } 
+    const actor = { ...actorForUpdate }
     setId(actor.id)
     setFirstName(actor.firstName)
     setLastName(actor.lastName)
@@ -38,7 +38,7 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({ isEditModalVisible,
 
     setFirstName(event.target.value)
   }
-  
+
   const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
 
     setLastName(event.target.value)
@@ -58,11 +58,11 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({ isEditModalVisible,
     setImageURL(event.target.value)
   }
 
-  
+
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault()
-    const actordData = { id,firstName, lastName, gender, age, imageURL }
+    const actordData = { id, firstName, lastName, gender, age, imageURL }
     // const actordData = { firstName, lastName, gender, age, imageURL }
     // let data = {id, ...actordData}
     onUpdateActor(actordData)
@@ -71,61 +71,97 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({ isEditModalVisible,
 
   return (
     <ActorModalRWD
-      header='Edit Actor'
+      // header='Edit Actor'
       onBackdropClick={onClose}
       isEditModalVisible={isEditModalVisible}
       content={
         <>
 
-          <div className='form-outline form-white mb-4'>
+          <p className='fs-5 text-white'>Update Actor details</p>
+
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>First Name</span>
             <input
               type="text"
               placeholder="firstname"
               id="firstName"
               name="firstName"
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
               value={firstName}
               onChange={handleFirstNameChange}
             />
           </div>
 
-          <div className='form-outline form-white mb-4'>
+          <div className='form-outline form-white mb-2'>
+            <span className='fs-6 text-white'>Last Name</span>
             <input
               type="text"
               placeholder="lastname"
               id="lastName"
               name="lastName"
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
               value={lastName}
               onChange={handleLastNameChange}
             />
           </div>
           <div className='d-flex flex-row'>
-
             <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
+
+              {gender === "male" ?
+
+                <input
+                  className="form-check-input"
+                  type="radio" name="gender"
+                  checked
+                  id="inlineRadio1"
+                  value="male"
+                  onChange={handleGenderChange}
+
+                /> :
+
+                <input
+                className="form-check-input "
                 type="radio" name="gender"
                 id="inlineRadio1"
                 value="male"
                 onChange={handleGenderChange}
-              />
-              <label className="form-check-label">Male</label>
 
+              /> 
+              
+            }
+
+
+              <span className='fs-6 text-white'>Male</span>
             </div>
-            <div className="form-check form-check-inline">
-              <input
+            <div className="form-check form-check-inline ">
+              {
+                gender === "female" ? 
+                <input
                 className="form-check-input"
+                checked
                 type="radio"
                 name="gender"
                 id="inlineRadio2"
                 value="female"
                 onChange={handleGenderChange}
               />
-              <label className="form-check-label" >Female</label>
+              :
+
+              <input
+              className="form-check-input"
+              type="radio"
+              name="gender"
+              id="inlineRadio2"
+              value="female"
+              onChange={handleGenderChange}
+            />
+              }
+             
+              <span className='fs-6 text-white'>Female</span>
             </div>
           </div>
-          <div className='form-outline form-white mb-4'>
+          <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>Age</span>
             <input
               type="number"
               placeholder="Age"
@@ -133,25 +169,29 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({ isEditModalVisible,
               name="age"
               value={age}
               onChange={handleAgeChange}
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
             />
           </div>
 
-          <div className='form-outline form-white mb-4'>
+          <div className='form-outline form-white '>
+            <span className='fs-6 text-white'>Image URL</span>
             <input
               type="text"
               placeholder="Image URL"
               id="imageURL"
               name="imageURL"
               value={imageURL}
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
               onChange={handleImageChange}
             />
           </div>
           <ButtonContainer>
-            <Button onClick={onClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>Save</Button>
-            {/* <Button onClick={() => onUpdateActor({ ...input })}>Add</Button> */}
+            <button onClick={onClose}
+              className="btn btn-light btn-sm px-5"
+            >Cancel</button>
+            <button onClick={handleSubmit}
+              className="btn btn-primary btn-sm px-5"
+            >Save</button>
           </ButtonContainer>
 
         </>

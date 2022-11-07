@@ -5,8 +5,8 @@ import './Dash.scss'
 
 import AddMovieModal, { AddMovieFunction } from "./modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
-import UpdateMovieModal ,{UpdateMovieFunction} from "./modal/UpdateMovieModal";
-import DeleteMovieModal ,{DeleteMovieFunction} from "./modal/DeleteMovieModal";
+import UpdateMovieModal, { UpdateMovieFunction } from "./modal/UpdateMovieModal";
+import DeleteMovieModal, { DeleteMovieFunction } from "./modal/DeleteMovieModal";
 
 const MovieDashboard = () => {
 
@@ -15,7 +15,7 @@ const MovieDashboard = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if(movies){
+    if (movies) {
       dispatch(getMovies())
     }
   }, [dispatch])
@@ -39,17 +39,17 @@ const MovieDashboard = () => {
   }
 
   // update Modal
-const [isEditModalVisible, setEditModalVisible] = useState(false)
-const toggleEditModal = () => {
-  setEditModalVisible(isEditModalVisible => !isEditModalVisible)
-}
+  const [isEditModalVisible, setEditModalVisible] = useState(false)
+  const toggleEditModal = () => {
+    setEditModalVisible(isEditModalVisible => !isEditModalVisible)
+  }
 
-//delete modal
-const [deleteMovieId, setDeleteMovieId] = useState("")
-const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
-const toggleDeleteModal = () => {
-  setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
-}
+  //delete modal
+  const [deleteMovieId, setDeleteMovieId] = useState("")
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
+  const toggleDeleteModal = () => {
+    setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
+  }
 
 
 
@@ -87,18 +87,18 @@ const toggleDeleteModal = () => {
     }
   }
 
-  const onUpdateMovie : UpdateMovieFunction = async (args: Movie) => {
+  const onUpdateMovie: UpdateMovieFunction = async (args: Movie) => {
     console.log(args)
-    dispatch(updateMovie(args)).then((res)=> {
+    dispatch(updateMovie(args)).then((res) => {
       // initApp()
     })
 
-    
+
   }
 
-  const onDeleteMovie : DeleteMovieFunction = async (id: string) => {
+  const onDeleteMovie: DeleteMovieFunction = async (id: string) => {
     console.log(id)
-    dispatch(deleteMovie(id)).then((res)=>{
+    dispatch(deleteMovie(id)).then((res) => {
       // initApp()
     })
   }
@@ -106,15 +106,17 @@ const toggleDeleteModal = () => {
 
   return (
     <div className="wrapper">
+      <h2 className="h2 text-center text-white mb-5">Movie List </h2>
       <table className='table table-dark '>
         <thead >
           <tr className='bg-dark'>
             <th scope="col">#</th>
+            <th scope="col">Image</th>
             <th scope="col">Title</th>
             <th scope="col">Year</th>
             <th scope="col">Cost</th>
-            <th scope="col">Image</th>
-            <th scope="col">Action</th>
+            <th scope="col"></th>
+
           </tr>
         </thead>
         <tbody>
@@ -126,27 +128,32 @@ const toggleDeleteModal = () => {
 
                   <tr key={movie.id}>
                     <td>{index + 1}</td>
+                    <td><img src={movie.imageURL} alt={movie.title} className='imageDash' /></td>
                     <td>{movie.title}</td>
                     <td>{movie.year}</td>
                     <td>{movie.cost}</td>
-                    <td><img src={movie.imageURL} alt={movie.title} className='imageDash' /></td>
                     <td>
 
-                      <button 
-                      type="button" 
-                      className="btn btn-secondary"
-                      onClick={ () =>{toggleEditModal(); setMovieDataforUpdate(movie)}}
-                      >Edit</button>
-                      <button 
-                      type="button" 
-                      className="btn btn-danger"
-                      onClick={() => {toggleDeleteModal(); setDeleteMovieId(movie.id!)} }
-                      >Delete</button>
+                      <div className="d-grid gap-2 d-md-block">
+
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm"
+                          onClick={() => { toggleEditModal(); setMovieDataforUpdate(movie) }}
+                        >Edit</button>
+                        &nbsp;
+                        &nbsp;
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => { toggleDeleteModal(); setDeleteMovieId(movie.id!) }}
+                        >Delete</button>
+
+                      </div>
+
 
                     </td>
                   </tr>
-
-
                 )
               })
 
@@ -158,7 +165,9 @@ const toggleDeleteModal = () => {
         </tbody>
       </table>
 
-      <button type="button" className="btn btn-primary" onClick={toggleModal}>Add</button>
+      <button type="button" className="btn btn-primary btn-sm px-5" onClick={toggleModal}>Add</button>
+
+
       <AddMovieModal
         onClose={onBackdropClick}
         isModalVisible={isModalVisible}
@@ -166,18 +175,18 @@ const toggleDeleteModal = () => {
       />
 
       <UpdateMovieModal
-      onClose={onBackdropClick}
-      isEditModalVisible={isEditModalVisible}
-      onUpdateMovie={onUpdateMovie}
-      movieDataforUpdate={movieDataforUpdate}
+        onClose={onBackdropClick}
+        isEditModalVisible={isEditModalVisible}
+        onUpdateMovie={onUpdateMovie}
+        movieDataforUpdate={movieDataforUpdate}
       />
 
-      <DeleteMovieModal 
-       onClose={onBackdropClick}
-       isDeleteModalVisible={isDeleteModalVisible}
-       deleteMovieId= {deleteMovieId}
-       onDeleteMovie={onDeleteMovie}
-      
+      <DeleteMovieModal
+        onClose={onBackdropClick}
+        isDeleteModalVisible={isDeleteModalVisible}
+        deleteMovieId={deleteMovieId}
+        onDeleteMovie={onDeleteMovie}
+
       />
     </div>
   )

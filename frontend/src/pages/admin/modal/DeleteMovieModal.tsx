@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD'
-
+import { ButtonContainer } from '../../../components/Modal/ModalPopup.styled'
 
 export type DeleteMovieFunction = (id: string) => Promise<void>;
 
@@ -21,27 +21,25 @@ const DeleteMovieModal: React.FC<DeleteMovieModalProps> = ({ isDeleteModalVisibl
 
   return (
     <ModalRWD
-      header='Delete Movie'
+      // header='Delete Movie ?'
       onBackdropClick={onClose}
       isDeleteModalVisible={isDeleteModalVisible}
       deleteMovieId={deleteMovieId}
       content={
         <>
-          
-          <h2 className='fw-bold mb-2 text-uppercase text-white'>Are you sure you want to delete?</h2>
-
-              <button onClick={onClose}
-                className="btn btn-light btn-lg px-5"
+         <p className='fs-5 text-white'>Delete Movie ?</p>
+                   
+          <ButtonContainer>
+          <button onClick={onClose}
+                className="btn btn-light btn-sm px-5"
                 type='button'
               > Cancel</button>
 
-
-
-
               <button onClick={() => { onDeleteMovie(deleteMovieId!) }}
-                className="btn btn-danger btn-lg px-5"
+                className="btn btn-danger btn-sm px-5"
                 type='button'
               > Delete</button>
+          </ButtonContainer>
 
         </>
       }

@@ -1,19 +1,17 @@
 import React, { useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD';
 import { useAppDispatch } from "../../../store/store"
-import { registerAdmin } from "../../../redux/userSlice"
 
 
-export interface RegisterArgs{
+
+export interface RegisterArgs {
   fullName: string,
   email: string,
   password: string,
   confirm: string
 }
 
-
-
-export type RegisterFunction = (args:RegisterArgs ) => Promise<void>;
+export type RegisterFunction = (args: RegisterArgs) => Promise<void>;
 
 
 interface RegisterAdminModalProps {
@@ -23,9 +21,9 @@ interface RegisterAdminModalProps {
   onRegisterRequested: RegisterFunction;
 }
 
-const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModalVisible, RegisterAdminErrorInput, onRegisterRequested}) => {
+const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModalVisible, RegisterAdminErrorInput, onRegisterRequested }) => {
   const dispatch = useAppDispatch();
-  const [showRegister, setShowRegister] = useState(false)
+  const [errorInput, setErrorInput] = useState("")
   const [input, setInput] = useState({
     fullName: "",
     email: "",
@@ -42,38 +40,7 @@ const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModa
     }));
 
   }
-  const handleSubmit = (event: React.SyntheticEvent): void => {
-    event.preventDefault()
-    // eslint-disable-next-line
-    let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    if (fullName === "") {
-      alert("fullName is required");
-    } else if (email === "") {
-      alert("Email is required");
-    } else if (password === "") {
-      alert("Password is required");
-    } else if (confirm === "") {
-      alert("Confirm password is required");
-    } else if (password !== confirm) {
-      alert("Passwords do not match");
-    } else {
-      if (!emailReg.test(email)) {
-        alert("Please enter a valid email");
-      } else {
-        const userData = { fullName, email, password };
-        dispatch(registerAdmin(userData))
 
-      }
-    }
-  }
-
-  const clear = () => {
-    input.fullName = ""
-    input.email = ""
-    input.password = ""
-    input.confirm = ""
-    error = ""
-  }
 
   return (
     <ModalRWD
@@ -82,9 +49,10 @@ const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModa
       content={
         <>
 
-          <h2 className='fw-bold mb-2 text-uppercase text-white'> Register Admin</h2>
-          <p className='text-white-50 mb-4 fs-6'>Please enter User details</p>
-          <div className='form-outline form-white mb-4'>
+          <p className='fs-5 text-white'>Register Admin</p>
+
+          <div className='form-outline form-white'>
+          <span className='fs-6 text-white'>Full Name</span>
             <input
               type="text"
               placeholder="Please enter fullname"
@@ -92,46 +60,54 @@ const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModa
               name="fullName"
               onChange={handleChange}
               value={input.fullName}
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
             />
           </div>
 
-          <div className='form-outline form-white mb-4'>
+          <div className='form-outline form-white'>
+          <span className='fs-6 text-white'>Email</span>
             <input
               type="text"
               placeholder="Please enter you email"
               name="email"
               onChange={handleChange}
               value={input.email}
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
             />
           </div>
-          <div className='form-outline form-white mb-4'>
+          <div className='form-outline form-white'>
+          <span className='fs-6 text-white'>Password</span>
             <input
               type="password"
-              placeholder="Please enter password"
+              placeholder="*********"
               name="password"
               onChange={handleChange}
               value={input.password}
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
             />
           </div>
 
           <div className='form-outline form-white mb-4'>
+          <span className='fs-6 text-white'>Confirm Password</span>
             <input
               type="password"
-              placeholder="Please confirm password"
+              placeholder="*********"
               name="confirm"
               onChange={handleChange}
               value={input.confirm}
-              className="form-control form-control-lg"
+              className="form-control form-control-sm"
             />
           </div>
+
+          {
+            error? <p className='text-danger fs-6'>{error}</p>
+            : ""
+          }
           <button
-            className="btn btn-light btn-lg px-5"
+            className="btn btn-primary btn-sm px-5"
             type='button'
-            // onClick={handleSubmit}
-            onClick={() => onRegisterRequested({fullName, email, password, confirm })}
+
+            onClick={() => onRegisterRequested({ fullName, email, password, confirm })}
           >
             Register
           </button>

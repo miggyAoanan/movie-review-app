@@ -4,107 +4,37 @@ import { addActor, getActor, updateActor, deleteActor } from '../../../redux/act
 import { Actor } from "../../../interfaces"
 import ActorModalRWD from '../../../components/Modal/ActorModalRWD';
 
-//tested
-export type DeleteActorFunction = (id: string) => Promise<void>;
-//test update
-
-export type UpdateActorFunction = (args: Actor) => Promise<void>;
-
+export type AddActorFunction = (args: Actor) => Promise<void>;
 interface AddActorModalProps {
   onClose: () => void;
   isModalVisible: boolean;
-  forUpdateId?: string;
-  onUpdateActor: UpdateActorFunction;
-  actorForUpdate?: Actor;
+  error?: string;
+  onAddActor: AddActorFunction;
 }
 
-const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, forUpdateId, onUpdateActor, actorForUpdate }) => {
+const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, onAddActor }) => {
   const dispatch = useAppDispatch();
-  const [firstName, setFirstName] =  useState<string | undefined>("")
-  const [lastName, setLastName] =  useState<string | undefined>("")
-  const [gender, setGender] = useState<string | undefined>("")
-  const [age, setAge] =  useState<number | undefined>(0)
-  const [imageURL, setImageURL] =  useState<string | undefined>("")
 
-  useEffect(() => {
-    const initGetActor = async () => {
-      await dispatch(getActor(forUpdateId))
-    }
-    initGetActor()
-    const actor = { ...actorForUpdate } 
+  const [input, setInput] = useState({
+    firstName: "",
+    lastName: "",
+    gender: "",
+    age: 0,
+    imageURL: ""
+
+  });
+
+
+  const { firstName, lastName, gender, imageURL } = input;
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setInput((prevState) => ({
+      ...prevState,
+      [event.target.name]: event.target.value,
+    }));
+  }
+
   
-    setFirstName(actor.firstName)
-    setLastName(actor.lastName)
-    setGender(actor.gender)
-    setAge(actor.age)
-    setImageURL(actor.imageURL)
-
-
-  }, [forUpdateId])
-
-  const actor = useAppSelector((state: RootState) => state.actors.actor)
-
-
-  useEffect(() => {
-
-    console.log(actorForUpdate);
-    console.log("hello");
-  }, [])
-
-  const handleFirstNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-    setFirstName(event.target.value)
-  }
-  
-  const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-    setLastName(event.target.value)
-  }
-
-  const handleAgeChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-    setAge(Number(event.target.value))
-  }
-  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-    setGender(event.target.value)
-  }
-
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-    setImageURL(event.target.value)
-  }
-
-  const handleSubmit = (event: React.SyntheticEvent): void => {
-    event.preventDefault()
-
-    const actordData = { firstName, lastName, gender, age, imageURL }
-
-    if (forUpdateId) {
-      let data = {id:forUpdateId, ...actordData}
-      onUpdateActor(data)
-    } else {
-      dispatch(addActor(actordData))
-    }
-
-    // if (firstName === "") {
-    //   alert("Firstname is required")
-    // } else if (lastName === "") {
-    //   alert("Lastname is required")
-    // } else if (gender === "") {
-    //   alert("Gender is required")
-    // } else if (age === null) {
-    //   alert("Gender is required")
-    // }else if (imageURL === "") {
-    //   alert("imageURL is required")
-    // } else {
-    //   let age = Number(input.age)
-    //   const actordData = { firstName, lastName, gender, age, imageURL }
-    //   dispatch(addActor(actordData))
-    // }
-
-  }
-
 
 
 
@@ -113,19 +43,12 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
     <ActorModalRWD
       onBackdropClick={onClose}
       isModalVisible={isModalVisible}
-      forUpdateId={forUpdateId}
-     
+
       content={
         <>
 
-          <h2 className='fw-bold mb-2 text-uppercase text-white'>
-            {!forUpdateId ?
-              "Add Actor" : ""
-            }
-            {forUpdateId ? "Edit Actor" : ""}
-          </h2>
-          {!forUpdateId ?
-
+          <h2 className='fw-bold mb-2 text-uppercase text-white'>Add Actor </h2>
+        
             <>
               <div className='form-outline form-white mb-4'>
                 <input
@@ -134,8 +57,8 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                   id="firstName"
                   name="firstName"
                   className="form-control form-control-lg"
-                  value={firstName}
-                  onChange={handleFirstNameChange}
+                  value={input.firstName}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -146,8 +69,8 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                   id="lastName"
                   name="lastName"
                   className="form-control form-control-lg"
-                  value={lastName}
-                  onChange={handleLastNameChange}
+                  value={input.lastName}
+                  onChange={handleChange}
                 />
               </div>
               <div className='d-flex flex-row'>
@@ -158,7 +81,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                     type="radio" name="gender"
                     id="inlineRadio1"
                     value="male"
-                    onChange={handleGenderChange}
+                    onChange={handleChange}
                   />
                   <label className="form-check-label">Male</label>
 
@@ -170,7 +93,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                     name="gender"
                     id="inlineRadio2"
                     value="female"
-                    onChange={handleGenderChange}
+                    onChange={handleChange}
                   />
                   <label className="form-check-label" >Female</label>
                 </div>
@@ -181,8 +104,8 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                   placeholder="Age"
                   id="age"
                   name="age"
-                  value={age}
-                  onChange={handleAgeChange}
+                  value={input.age}
+                  onChange={handleChange}
                   className="form-control form-control-lg"
                 />
               </div>
@@ -193,23 +116,21 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                   placeholder="Image URL"
                   id="imageURL"
                   name="imageURL"
-                  value={imageURL}
+                  value={input.imageURL}
                   className="form-control form-control-lg"
-                  onChange={handleImageChange}
+                  onChange={handleChange}
                 />
               </div>
 
               <button
                 className="btn btn-light btn-lg px-5"
                 type='button'
-                onClick={handleSubmit}
+                onClick={() => onAddActor({ ...input })}
               >
                 Save
               </button>
             </>
-            : ""
-          }
-
+      
         
 
           

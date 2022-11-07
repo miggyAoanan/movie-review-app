@@ -75,6 +75,7 @@ const ReviewDashboard = () => {
 
   return (
     <div className="wrapper">
+      <h2 className="h2 text-center text-white mb-5">Review List </h2>
       <table className='table table-dark '>
         <thead >
           <tr className='bg-dark'>
@@ -105,12 +106,12 @@ const ReviewDashboard = () => {
                       <label className="switch"
 
                       >
-                        {review.isActive == true ?
+                        {review.isActive === true ?
 
                           <input type="checkbox" defaultChecked
                             value={String(review.isActive)}
                             onClick={() => onUpdateReview({ id: review.id, isActive: review.isActive })}
-                           
+                            className="btn btn-secondary btn-sm "
                           />
                           :
 
@@ -118,7 +119,7 @@ const ReviewDashboard = () => {
                             value={String(review.isActive)}
 
                             onClick={() => onUpdateReview({ id: review.id, isActive: review.isActive })}
-
+                            className="btn btn-secondary btn-sm "
                           />
                           }
 
@@ -134,7 +135,7 @@ const ReviewDashboard = () => {
 
                     <button
                       type="button"
-                      className="btn btn-danger"
+                      className="btn btn-danger btn-sm"
                       onClick={() => { toggleDeleteModal(); setDeleteId(review.id!) }}
                     >Delete</button>
 
