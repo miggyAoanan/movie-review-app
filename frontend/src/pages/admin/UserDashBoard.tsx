@@ -148,6 +148,7 @@ const UserDashBoard = () => {
               return (
                 <tr key={user.id}>
                   <td>{index + 1}</td>
+
                   <td> <img src={userIcon} alt="user" className='imageDash' /></td>
                   <td>{user.fullName}</td>                
                   <td>{user.permissions}</td>

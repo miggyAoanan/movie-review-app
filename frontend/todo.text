@@ -7,7 +7,12 @@ React JWT Authentication App using RTK Query | RTK Query Auth | Redux-Toolkit | 
 2. Autocomplete
 https://stackblitz.com/edit/multiselect-autocomplete?file=src%2Fapp%2Fchips-autocomplete-example.ts
 
+https://codesandbox.io/s/csttx?file=/src/App.js
 
+3. add reviews
+
+for star rating
+https://codepen.io/BlackShabat/pen/pJZooM
 
 
 Notes:
@@ -16,3 +21,9 @@ movie review API
 https://www.themoviedb.org/
 images 
 links
+
+
+user hasmany 
+
+
+

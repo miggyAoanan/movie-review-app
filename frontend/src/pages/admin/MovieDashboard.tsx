@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { getMovies, addMovie, deleteMovie, updateMovie } from "../../redux/movieSlice";
 import './Dash.scss'
 
+
+
 import AddMovieModal, { AddMovieFunction } from "./modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
 import UpdateMovieModal, { UpdateMovieFunction } from "./modal/UpdateMovieModal";
@@ -11,7 +13,7 @@ import DeleteMovieModal, { DeleteMovieFunction } from "./modal/DeleteMovieModal"
 const MovieDashboard = () => {
 
   const movies = useAppSelector((state: RootState) => state.movies.movies)
-  const moviesState = useAppSelector((state: RootState) => state.movies)
+  // const moviesState = useAppSelector((state: RootState) => state.movies)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -19,8 +21,6 @@ const MovieDashboard = () => {
       dispatch(getMovies())
     }
   }, [dispatch])
-
-
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [error, setError] = useState("")
@@ -54,15 +54,16 @@ const MovieDashboard = () => {
 
 
   const onAddMovie: AddMovieFunction = async (args: Movie) => {
+
+    console.log(args);
     const movieData = { ...args }
     const title = movieData.title
     const cost = Number(movieData.cost)
     const year = movieData.year
     const imageURL = movieData.imageURL
+    const actorIds = args.actorIds
 
-    let actorIds = []
-
-    actorIds.push(movieData.actorIds)
+    // actorIds.push(movieData.actorIds)
 
     const saveMoviedata = { title, cost, year, imageURL, actorIds }
 
@@ -71,25 +72,25 @@ const MovieDashboard = () => {
       setError("title is required");
     } else if (year === "") {
       setError("Year is required");
-    } else if (cost === null) {
-      setError("Cost is required");
+    } else if (cost === 0) {
+      setError("Cost cannot be 0");
     } else if (imageURL === "") {
-      setError("Year is required");
+      setError("Image is required");
     }
-    else if (actorIds.length === 0) {
+    else if (actorIds?.length === 0) {
       setError("Actor is required");
     }
     else {
-      dispatch(addMovie({ ...saveMoviedata })).then((res) => {
-
+      dispatch(addMovie({ ...saveMoviedata })).then((res:any) => {
+          console.log(res);
       })
-      setError("")
+      
     }
   }
 
   const onUpdateMovie: UpdateMovieFunction = async (args: Movie) => {
     console.log(args)
-    dispatch(updateMovie(args)).then((res) => {
+    dispatch(updateMovie(args)).then((res:any) => {
       // initApp()
     })
 
@@ -98,7 +99,7 @@ const MovieDashboard = () => {
 
   const onDeleteMovie: DeleteMovieFunction = async (id: string) => {
     console.log(id)
-    dispatch(deleteMovie(id)).then((res) => {
+    dispatch(deleteMovie(id)).then((res:any) => {
       // initApp()
     })
   }
@@ -123,7 +124,7 @@ const MovieDashboard = () => {
 
           {
             movies ? (
-              movies.map((movie, index) => {
+              movies.map((movie:Movie, index: number) => {
                 return (
 
                   <tr key={movie.id}>
@@ -172,6 +173,7 @@ const MovieDashboard = () => {
         onClose={onBackdropClick}
         isModalVisible={isModalVisible}
         onAddMovie={onAddMovie}
+        error={error}
       />
 
       <UpdateMovieModal

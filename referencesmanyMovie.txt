@@ -74,7 +74,8 @@ lb4 relation
         Source: User
         Target: Review
 
-4 User 
+4 User  hasMany() Review - done
+Source -> (hasMany) -> Target
 
 For reference - https://loopback.io/getting-started.html
 

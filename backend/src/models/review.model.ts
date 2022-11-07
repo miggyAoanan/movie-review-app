@@ -35,7 +35,7 @@ export class Review extends Entity {
 
   @property({
     type: 'boolean',
-    default: false
+
   })
   isActive?: boolean;
 

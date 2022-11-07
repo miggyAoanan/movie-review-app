@@ -23,7 +23,7 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
   const [cost, setCost] = useState<number | undefined>(0)
   const [year, setYear] = useState<string | undefined>("")
   const [imageURL, setImageURL] = useState<string | undefined>("")
-  const [actorIds, setActorIds] = useState<string[] | undefined>()
+  const [actorIds, setActorIds] = useState<string[] | string | undefined>()
 
 
   useEffect(() => {

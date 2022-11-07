@@ -25,7 +25,7 @@ const initialState: ActorState = {
     getActorStatus: "",
     addActorStatus: "",
     updateActorStatus: "",
-    deleteActorStatus:""
+    deleteActorStatus: ""
 }
 
 export const getActors = createAsyncThunk<ActorDetails[]>(
@@ -53,6 +53,8 @@ export const getActor = createAsyncThunk<ActorDetails, string | undefined>(
         }
     }
 )
+
+
 
 export const addActor = createAsyncThunk<ActorDetails, Object>(
     "actors/addActor",
@@ -86,7 +88,7 @@ export const updateActor = createAsyncThunk<Object, Actor>(
     }
 )
 
-export const deleteActor = createAsyncThunk< {id: string}, string>(
+export const deleteActor = createAsyncThunk<{ id: string }, string>(
     "actors/deleteActor",
     async (data, thunkAPI) => {
         try {
