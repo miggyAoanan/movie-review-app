@@ -33,6 +33,12 @@ export class Review extends Entity {
   })
   movieId: string;
 
+  @property({
+    type: 'boolean',
+    default: false
+  })
+  isActive?: boolean;
+
 
   constructor(data?: Partial<Review>) {
     super(data);

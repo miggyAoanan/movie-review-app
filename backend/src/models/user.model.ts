@@ -45,7 +45,8 @@ export class User extends Entity {
   permissions?: string;
 
   @belongsTo(() => Review)
-  reviewId: string;
+  userId: string;
+
   @property({
     type: 'string',
   })

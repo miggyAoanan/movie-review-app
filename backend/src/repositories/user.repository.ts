@@ -30,7 +30,8 @@ export class UserRepository extends DefaultCrudRepository<
     @inject(`datasources.${UserServiceBindings.DATASOURCE_NAME}`)
     dataSource: juggler.DataSource,
     @repository.getter('UserCredentialsRepository')
-    protected userCredentialsRepositoryGetter: Getter<UserCredentialsRepository>, @repository.getter('ReviewRepository') protected reviewRepositoryGetter: Getter<ReviewRepository>,
+    protected userCredentialsRepositoryGetter: Getter<UserCredentialsRepository>, 
+    @repository.getter('ReviewRepository') protected reviewRepositoryGetter: Getter<ReviewRepository>,
      
   ) {
     super(User, dataSource);

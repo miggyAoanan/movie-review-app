@@ -192,3 +192,4 @@ export default reviewSlice.reducer;
 
 export const reviewDetails = (state:RootState) => state.reviews.reviews;
 export const reviewState = (state: RootState) => state.reviews
+export const {setReviews, setReview} = reviewSlice.actions

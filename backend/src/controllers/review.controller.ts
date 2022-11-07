@@ -37,13 +37,15 @@ export class ReviewController {
         'application/json': {
           schema: getModelSchemaRef(Review, {
             title: 'NewReview',
-            exclude: ['id'],
+            exclude: ['id', 'isActive'],
           }),
         },
       },
     })
     review: Omit<Review, 'id'>,
   ): Promise<Review> {
+
+    review.isActive = false
     return this.reviewRepository.create(review);
   }
 
@@ -74,6 +76,8 @@ export class ReviewController {
     @param.filter(Review) filter?: Filter<Review>,
   ): Promise<Review[]> {
     return this.reviewRepository.find(filter);
+    // return this.reviewRepository.find({include: ['users']});
+
   }
 
   @patch('/reviews')

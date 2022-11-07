@@ -115,7 +115,8 @@ function Header() {
                       <>
                         <Link to="/admin/movie/dash"><span className="dropdown-item" >Movies</span></Link>
                         <Link to="/admin/actor/dash"><span className="dropdown-item" >Actors</span></Link>
-                        <Link to="/admin/user/dash"><span className="dropdown-item" >Users</span></Link>
+                        <Link to="/admin/review/dash"><span className="dropdown-item" >Reviews</span></Link>
+                        <Link to="/admin/user/dash"><span className="dropdown-item" >Users</span></Link>  
                         <Link to="/"><span className="dropdown-item" onClick={() => handleLogout()} >Logout</span></Link>
 
                       </>

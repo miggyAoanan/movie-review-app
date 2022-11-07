@@ -13,6 +13,7 @@ import UserDashBoard from "./pages/admin/UserDashBoard";
 import { useAppDispatch, useAppSelector, RootState } from "./store/store";
 import { selectAuth } from './redux/authSlice'
 import { setUser } from "./redux/authSlice";
+import ReviewDashboard from "./pages/admin/ReviewDashboard";
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/admin/movie/dash" element={<MovieDashboard />} />
                 <Route path="/admin/actor/dash" element={<ActorDashboard />} />
                 <Route path="/admin/user/dash" element={<UserDashBoard />} />
+                <Route path="/admin/review/dash" element={<ReviewDashboard />} />
               </>
               :
               (
