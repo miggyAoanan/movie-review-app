@@ -19,6 +19,13 @@ export class Movie extends Entity {
 
   @property({
     type: 'string',
+
+  })
+  overview: string;
+
+
+  @property({
+    type: 'string',
     required: true,
   })
   year: string;

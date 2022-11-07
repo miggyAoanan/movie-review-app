@@ -21,6 +21,7 @@ import {
 } from '../models';
 import {MovieRepository} from '../repositories';
 
+
 export class MovieReviewController {
   constructor(
     @repository(MovieRepository) protected movieRepository: MovieRepository,
@@ -60,7 +61,7 @@ export class MovieReviewController {
         'application/json': {
           schema: getModelSchemaRef(Review, {
             title: 'NewReviewInMovie',
-            exclude: ['id'],
+            exclude: ['id', 'userName'],
             optional: ['movieId']
           }),
         },

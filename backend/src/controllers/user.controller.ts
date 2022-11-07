@@ -132,7 +132,7 @@ export class UserController {
         'application/json': {
           schema: getModelSchemaRef(NewUserRequest, {
             title: 'NewUser',
-            exclude: ['id', 'verificationToken', 'isActive', 'permissions'],
+            exclude: ['id', 'verificationToken', 'isActive', 'permissions', 'reviewId'],
           }),
         },
       },
@@ -141,27 +141,34 @@ export class UserController {
   ): Promise<User> {
     const userAlreadyExistsError = 'User already exists.';
     //check if the email exist --> to avoid duplicates
-
+    const dbCheckCount = await this.userRepository.count()
     const foundUser = await this.userRepository.findOne({
       where: { email: newUserRequest.email },
     });
 
-    if (!foundUser) {
+    if (dbCheckCount.count === 0 && !foundUser) {
+      const password = await hash(newUserRequest.password, await genSalt());
+      newUserRequest.isActive = true
+      newUserRequest.permissions = 'admin'
+      delete (newUserRequest as Partial<NewUserRequest>).password;
+      const savedUser = await this.userRepository.create(newUserRequest);
+      await this.userRepository.userCredentials(savedUser.id).create({ password });
+      return savedUser;
+    }
+
+    else if (dbCheckCount.count > 0 && !foundUser ) {
 
       const password = await hash(newUserRequest.password, await genSalt());
       newUserRequest.isActive = false
       newUserRequest.permissions = 'user'
       delete (newUserRequest as Partial<NewUserRequest>).password;
       const savedUser = await this.userRepository.create(newUserRequest);
-
       await this.userRepository.userCredentials(savedUser.id).create({ password });
-
       return savedUser;
     }
     else {
       throw new HttpErrors.Unauthorized(userAlreadyExistsError);
     }
-
 
   }
 
@@ -194,19 +201,24 @@ export class UserController {
     @requestBody(CredentialsRequestBody) credentials: Credentials,
   ): Promise<{ data: Object }> {
 
+    //check if active
+    const foundUser = await this.userRepository.findOne({
+      where: { email: credentials.email},
+    });
+
+    const isActive = foundUser?.isActive
     // Promise<{ token: string }>
     // ensure the user exists, and the password is correct
     const user = await this.userService.verifyCredentials(credentials);
-
     // convert a User object into a UserProfile object (reduced set of properties)
     const userProfile = this.userService.convertToUserProfile(user);
-
     // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
-
-    let data = {...user, token}
-
-    return { data};
+    if(isActive === false){
+      throw new HttpErrors.Unauthorized("Please wait for the activation");
+    }
+    let data = { ...user, token }
+    return { data };
   }
 
   @authenticate('jwt')
@@ -395,6 +407,11 @@ export class UserController {
     description: 'User DELETE success',
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
+    const users = await this.userRepository.find()
+    const index = users.findIndex((user)=> user.id === id)
+    if(index === 0){
+      throw new HttpErrors.Unauthorized("You cannot delete the root admin");
+    }
     await this.userRepository.deleteById(id);
   }
 

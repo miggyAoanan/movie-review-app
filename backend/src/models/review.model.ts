@@ -29,6 +29,12 @@ export class Review extends Entity {
 
   @property({
     type: 'string',
+
+  })
+  userName: string;
+
+  @property({
+    type: 'string',
     required: true,
   })
   movieId: string;
