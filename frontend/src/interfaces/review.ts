@@ -4,5 +4,6 @@ export interface Review {
     rating: number;
     userId: string;
     movieId: string;
+    isActive: boolean;
  
 }

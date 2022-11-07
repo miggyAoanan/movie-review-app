@@ -6,6 +6,7 @@ export interface AuthState {
     fullName: string | null;
     token: string | null;
     permissions: string |null;
+    isActive: boolean | null;
    
 }
 
@@ -14,6 +15,7 @@ const initialState: AuthState = {
     fullName: null,
     token: null,
     permissions: null,
+    isActive: null
    
 }
 
@@ -25,12 +27,14 @@ export const authSlice = createSlice({
             localStorage.setItem("user", JSON.stringify({
                 fullName: action.payload.fullName,
                 token: action.payload.token,
-                permissions: action.payload.permissions
+                permissions: action.payload.permissions,
+                isActive: action.payload.isActive
             })
             );
             state.fullName = action.payload.fullName;
             state.token = action.payload.token;
-            state.permissions= action.payload.permissions
+            state.permissions= action.payload.permissions;
+            state.isActive = action.payload.isActive;
             
         },
 
@@ -39,6 +43,7 @@ export const authSlice = createSlice({
             state.fullName = null;
             state.token = null;
             state.permissions = null;
+            state.isActive = null;
         }
     }
 })

@@ -6,12 +6,14 @@ import { getReviews, reviewDetails, reviewState, updateReview, deleteReview } fr
 import { Review } from '../../interfaces'
 
 import './Dash.scss'
-import DeleteReviewModal , {DeleteReviewFunction}from "./modal/DeleteReviewModal";
+import DeleteReviewModal, { DeleteReviewFunction } from "./modal/DeleteReviewModal";
+import UpdateReviewModal, { UpdateFunction } from "./modal/UpdateReviewModal";
 
 
 const ReviewDashboard = () => {
   const reviews = useAppSelector(reviewDetails)
   const dispatch = useAppDispatch();
+
 
   useEffect(() => {
     if (reviews) {
@@ -22,15 +24,16 @@ const ReviewDashboard = () => {
 
 
   const [isModalVisible, setIsModalVisible] = useState(false)// add
+
+  const [isActive, setIsActive] = useState<boolean | undefined>(false)
+  const [test, setTest] = useState<string | undefined>("")
+
+  //activate modal
   const [updateId, setUpdateId] = useState("")
-
-
-  // //test update
-  // const [actorForUpdate, setActorForUpdate] = useState<Actor>()
-  // const [isEditModalVisible, setEditModalVisible] = useState(false)
-  // const toggleEditModal = () => {
-  //   setEditModalVisible(isEditModalVisible => !isEditModalVisible)
-  // }
+  const [isEditModalVisible, setEditModalVisible] = useState(false)
+  const toggleEditModal = () => {
+    setEditModalVisible(isEditModalVisible => !isEditModalVisible)
+  }
 
   // //toggle add modal
   // const toggleModal = () => {
@@ -47,35 +50,28 @@ const ReviewDashboard = () => {
   const onBackdropClick = () => {
     setIsModalVisible(false)
     setDeleteModalVisible(false)
-    // setEditModalVisible(false)
+    setEditModalVisible(false)
     // clear()
   }
 
-  // const setUpdateActorId = (id:string) =>{
-  //   setUpdateId(id)
 
-  // }
-
-
-
-  const onDeleteReview : DeleteReviewFunction = async (id: string) => {
-
-    dispatch(deleteReview(id)).then((res)=>{
+  const onDeleteReview: DeleteReviewFunction = async (id: string) => {
+    dispatch(deleteReview(id)).then((res) => {
       // initApp()
       onBackdropClick()
     })
   }
 
 
-  // const onUpdateActor : UpdateActorFunction = async (args: Actor) => {
+  const onUpdateReview: UpdateFunction = async (args: { id: string | undefined, isActive: boolean | undefined }) => {
 
-  //   dispatch(updateActor(args)).then((res)=>{
-  //     // initApp()
-  //     onBackdropClick()
+    let isActiveValue = !args.isActive 
+    let newArgs = { id: args.id, isActive: isActiveValue }
+    dispatch(updateReview(newArgs)).then((res) => {
+      dispatch(getReviews())
+    })
 
-  //   })
-
-  // }
+  }
 
   return (
     <div className="wrapper">
@@ -87,6 +83,7 @@ const ReviewDashboard = () => {
             <th scope="col">UserID</th>
             <th scope="col">Review Content</th>
             <th scope="col">Rating</th>
+            <th scope="col">Status</th>
             <th scope="col"></th>
             <th scope="col"></th>
           </tr>
@@ -101,15 +98,31 @@ const ReviewDashboard = () => {
                   <td>{review.userId}</td>
                   <td>{review.description}</td>
                   <td>{review.rating}</td>
+                  <td>{String(review.isActive)}</td>
                   <td>
 
                     <div className='form-outline form-white mb-4'>
-                      <label className="switch">
-                        <input type="checkbox"
-                        // value={String(isActive)}
-                        // onChange={handleisActiveChange}
+                      <label className="switch"
 
-                        />
+                      >
+                        {review.isActive == true ?
+
+                          <input type="checkbox" defaultChecked
+                            value={String(review.isActive)}
+                            onClick={() => onUpdateReview({ id: review.id, isActive: review.isActive })}
+                           
+                          />
+                          :
+
+                          <input type="checkbox" 
+                            value={String(review.isActive)}
+
+                            onClick={() => onUpdateReview({ id: review.id, isActive: review.isActive })}
+
+                          />
+                          }
+
+                       
                         <div className="slider"></div>
                       </label>
                     </div>
@@ -122,7 +135,7 @@ const ReviewDashboard = () => {
                     <button
                       type="button"
                       className="btn btn-danger"
-                    onClick={() => { toggleDeleteModal(); setDeleteId(review.id!)}}
+                      onClick={() => { toggleDeleteModal(); setDeleteId(review.id!) }}
                     >Delete</button>
 
                   </td>
@@ -133,37 +146,24 @@ const ReviewDashboard = () => {
         </tbody>
       </table>
 
-      <button
-        type="button"
-        className="btn btn-primary"
-
-      // onClick={() => { toggleModal()}}
-      >Add</button>
-
-      {/* <AddActorModal
+      <UpdateReviewModal
         onClose={onBackdropClick}
-        isModalVisible={isModalVisible}
-        forUpdateId={updateId}
-        onUpdateActor={onUpdateActor}
-        actorForUpdate={actorForUpdate}
+        isEditModalVisible={isEditModalVisible}
+        onUpdateRequested={onUpdateReview}
+        reviewId={updateId}
       />
 
-      <UpdateActorModal 
-      onClose={onBackdropClick}
-      isEditModalVisible={isEditModalVisible}
-      onUpdateActor={onUpdateActor}
-      actorForUpdate={actorForUpdate}
-      
-      />
- */
+
+
+
       <DeleteReviewModal
-       onClose={onBackdropClick}
-       isDeleteModalVisible={isDeleteModalVisible}
-       onDeleteReview={onDeleteReview}
-       deleteId={deleteId}
+        onClose={onBackdropClick}
+        isDeleteModalVisible={isDeleteModalVisible}
+        onDeleteReview={onDeleteReview}
+        deleteId={deleteId}
       />
-       
-    }
+
+
     </div>
   )
 }

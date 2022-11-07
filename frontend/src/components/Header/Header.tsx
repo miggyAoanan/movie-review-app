@@ -75,7 +75,7 @@ function Header() {
   useEffect(() => {
     if (isLoginSuccess) {
       toast.success("login successfull")
-      dispatch(setUser({ fullName: loginData.data.fullName, token: loginData.data.token, permissions: loginData.data.permissions }))
+      dispatch(setUser({ fullName: loginData.data.fullName, token: loginData.data.token, permissions: loginData.data.permissions, isActive: loginData.data.isActive}))
       console.log(isLoginSuccess)
     }
 

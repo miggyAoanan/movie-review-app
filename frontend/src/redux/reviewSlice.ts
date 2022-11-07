@@ -5,6 +5,13 @@ import { REVIEWS_URL } from '../API'
 
 import  { Review, ErrorI } from '../interfaces/index'
 
+export interface UpdateArgs {
+    id?: string,
+    isActive: boolean | undefined
+  }
+  
+
+
 interface ReviewState {
     review: Review | null,
     reviews: Review[],
@@ -73,12 +80,12 @@ export const addReview = createAsyncThunk<Review, Object>(
     }
 )
 
-export const updateReview = createAsyncThunk<Object, Review>(
+export const updateReview = createAsyncThunk<Object, UpdateArgs>(
     "reviews/updateReview",
     async (data, thunkAPI) => {
         try {
-            const { id, description, rating, userId, movieId  } = data
-            const response = await axios.patch(REVIEWS_URL + id, { description, rating, userId, movieId  })
+            const { id, isActive } = data
+            const response = await axios.patch(REVIEWS_URL + id, { isActive  })
             return response.data
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
