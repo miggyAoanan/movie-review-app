@@ -14,6 +14,9 @@ import { useAppDispatch, useAppSelector, RootState } from "./store/store";
 import { selectAuth } from './redux/authSlice'
 import { setUser } from "./redux/authSlice";
 import ReviewDashboard from "./pages/admin/ReviewDashboard";
+import Actorlist from "./components/Actor/ActorList";
+import ActorMovieList from "./components/Actor/ActorMovieList";
+
 
 
 function App() {
@@ -34,7 +37,10 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/movie" element={<Home />} />
             <Route path="/movie/:id" element={<MovieDetail />} />
+            <Route path="/actor" element={<Actorlist />} />
+            <Route path="/actor/:id" element={<ActorMovieList />} />
             {permissions === "admin" ?
               <>
                 <Route path="/admin/movie/dash" element={<MovieDashboard />} />

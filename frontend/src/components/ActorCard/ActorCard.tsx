@@ -2,15 +2,16 @@ import React from 'react'
 import "./ActorCard.scss";
 
 import { Actor } from '../../interfaces';
+import { Link } from "react-router-dom";
 
 
 const ActorCard = (props : Actor) => {
 
   const data = props
-  // return(<h1></h1>)
+ 
   return (
     <div className="card-item">
-    
+        <Link to={`/actor/${data.id}`}>
         <div className="card-inner">
           <div className="card-top">
             <img src={data.imageURL} />
@@ -25,7 +26,7 @@ const ActorCard = (props : Actor) => {
           </div>
         </div>
    
-
+        </Link>
       </div>
    
   )

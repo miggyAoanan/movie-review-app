@@ -135,6 +135,27 @@ export class MovieController {
     
   }
 
+  @get('/actor-movies/{id}')
+  @response(200, {
+    description: 'Movie model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(Movie, {includeRelations: true}),
+        items: getModelSchemaRef(Movie, {includeRelations: true}),
+      },
+    },
+  })
+  async findMovieByActorId(
+    @param.path.string('id') id: string,
+   
+    @param.filter(Movie) filter?: Filter<Movie>,
+  ): Promise<Movie> {
+
+    return this.movieRepository.findById(id, {include :['actors']});
+    
+  }
+
+
 
   
 

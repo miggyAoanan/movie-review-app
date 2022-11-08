@@ -1,20 +1,16 @@
 import React, { useState, useMemo, useEffect } from "react";
 import "./MovieDetail.scss";
-
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { getMovie, getMovieActors } from "../../redux/movieSlice";
-import { getUsers } from "../../redux/userSlice";
+import { getMovie } from "../../redux/movieSlice";
 import { RootState } from "../../store/store"
-
 import ActorCard from "../ActorCard/ActorCard";
 import { Rating } from 'react-simple-star-rating'
 
 import { Review } from '../../interfaces/review'
-import { addReview, addMovieReview, AddReviewArgs } from '../../redux/reviewSlice'
+import { addMovieReview, AddReviewArgs } from '../../redux/reviewSlice'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 
 function MovieDetail() {
@@ -43,7 +39,6 @@ function MovieDetail() {
     ratings.push(review.rating)
   })
 
-
   let aveRatings = 0;
   if (ratings.length) {
     aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
@@ -65,14 +60,9 @@ function MovieDetail() {
     </ul>
   ))
 
-
-  //filter the reviews
   let filteredReviews
 
   filteredReviews = movie?.reviews?.filter((review) => review.isActive != false)
-
-
-
 
   let renderReviews
 
@@ -92,15 +82,9 @@ function MovieDetail() {
 
   ))
 
-
-
-
-
-  // Catch Rating value
   const handleRating = (rate: number) => {
     setUserRating(rate)
 
-    // other logic
   }
 
 
@@ -132,9 +116,6 @@ function MovieDetail() {
     }else{
       toast.error("Admin cannot add a review")
     }
-
-
-
 
   }
 

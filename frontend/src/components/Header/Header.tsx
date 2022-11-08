@@ -14,11 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 function Header() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  //this is for the curent login user
   const { fullName, permissions } = useAppSelector(selectAuth)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  // const [errorInput, setErrorInput] = useState("")
-
   const [loginUser,
     { data: loginData,
       isSuccess: isLoginSuccess,
@@ -97,8 +94,15 @@ function Header() {
     <div className="header mb-5">
 
       <div className="linkContainer">
-      <Link to="/">
+         <Link to="/">
           <div className="logo">Movie App</div>
+        </Link>
+        <Link to="/movie">
+          <div className="">Movies</div>
+        </Link>
+
+        <Link to="/actor">
+          <div className="">Actors</div>
         </Link>
       </div>
       <div className="user">
@@ -146,7 +150,6 @@ function Header() {
       <ToastContainer />
       <LoginRegisterModal
 
-        // loginErrorInput={errorInput}
         onClose={onBackdropClick}
         onLoginRequested={onLoginRequest}
         isModalVisible={isModalVisible}

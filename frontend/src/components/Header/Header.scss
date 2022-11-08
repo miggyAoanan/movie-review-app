@@ -12,6 +12,12 @@
 .linkContainer{
   display: flex;
   flex: 5;
+  align-items: center;
+  text-align: center;
+}
+.linkContainer a {
+  color: $font-primary;
+  margin: 0 0 0 30px;
 }
 .user{
   display: flex;
