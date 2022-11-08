@@ -8,7 +8,7 @@ import { Review } from '../../interfaces'
 import './Dash.scss'
 import DeleteReviewModal, { DeleteReviewFunction } from "./modal/DeleteReviewModal";
 import UpdateReviewModal, { UpdateFunction } from "./modal/UpdateReviewModal";
-
+import { Rating } from 'react-simple-star-rating'
 
 const ReviewDashboard = () => {
   const reviews = useAppSelector(reviewDetails)
@@ -92,6 +92,7 @@ const ReviewDashboard = () => {
           <tr className='bg-dark'>
             <th scope="col">#</th>
             <th scope="col">User</th>
+            <th scope="col">Movie</th>
             <th scope="col">Review Content</th>
             <th scope="col">Rating</th>
             <th scope="col">Status</th>
@@ -106,8 +107,15 @@ const ReviewDashboard = () => {
                 <tr key={review.id}>
                   <td>{index + 1}</td>
                   <td>{review.userName}</td>
+                  <td>{review.movieName}</td>
                   <td>{review.description}</td>
-                  <td>{review.rating}</td>
+                  <td>
+                  <Rating
+                    disableFillHover={true}
+                   size={25}
+                   initialValue={review.rating}
+                  />
+                  </td>
                   <td>{String(review.isActive)}</td>
                   <td>
 

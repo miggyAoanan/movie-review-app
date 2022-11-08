@@ -18,7 +18,7 @@ function MovieDetail() {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state: RootState) => state.movies.movie)
   const moviesState = useAppSelector((state: RootState) => state.movies)
-  // const users = useAppSelector((state: RootState) => state.users.users)
+  const users = useAppSelector((state: RootState) => state.users.users)
   const [userRating, setUserRating] = useState(0)
   const [description, setDescription] = useState("")
 
@@ -28,23 +28,35 @@ function MovieDetail() {
     }
   }, [id, dispatch])
   const movie = useMemo(() => data, [data])
+
+
   let reviews = useMemo(() => movie?.reviews, [id])
+
+
   let movieName = movie?.title
+
+
 
   console.log(reviews)
 
-  let ratings: number[] = [];
+  // let ratings: number[] = [];
 
-  reviews?.map((review: Review) => {
-    ratings.push(review.rating)
-  })
+  // reviews?.map((review: Review) => {
+  //   ratings.push(review.rating)
+  // })
 
-  let aveRatings = 0;
-  if (ratings.length) {
-    aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
-    console.log(aveRatings);
+  // let aveRatings = 0;
+  // let rounded = 0;
+  // let small 
+  // if (ratings.length) {
+  //   aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
+  //   console.log(aveRatings);
+  //   rounded = Math.round(aveRatings)
+  //  small = Number(aveRatings.toPrecision(2))
 
-  }
+
+  // }
+
 
   let renderActors
 
@@ -71,8 +83,10 @@ function MovieDetail() {
 
     <div key={index} className="reviewDiv">
       <span className="reviewRating">
-
-        <i className="fa fa-star"></i> : {review.rating}<span>/5</span>
+        <Rating
+          size={20}
+          initialValue={Math.round(review.rating)}
+        />
       </span>
 
       <p className="reviewDesc"> {review.description} </p>
@@ -113,11 +127,35 @@ function MovieDetail() {
 
       }
 
-    }else{
+    } else if (userPermission === "admin") {
       toast.error("Admin cannot add a review")
+    } else {
+      toast.error("You need to login to add a review")
     }
 
   }
+
+  //ratings of the approve reviews
+
+
+  let ratings: number[] = [];
+
+  filteredReviews?.map((review: Review) => {
+    ratings.push(review.rating)
+  })
+
+  let aveRatings = 0;
+  let rounded = 0;
+  let small
+  if (ratings.length) {
+    aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
+    console.log(aveRatings);
+    rounded = Math.round(aveRatings)
+    small = Number(aveRatings.toPrecision(2))
+
+
+  }
+
 
   return (
     <>
@@ -130,9 +168,15 @@ function MovieDetail() {
               <div className="topSectionLeft">
                 <div className="movie-title">{movie?.title}</div>
                 <div className="movie-rating mb-5">
-                  <span>
-                    IMDB Rating <i className="fa fa-star"></i> : {aveRatings}
-                  </span>
+                  IMDB Rating <Rating
+
+                    size={20}
+                    initialValue={rounded}
+                  />
+                      {rounded}
+                  {/* <span>
+                    IMDB Rating <i className="fa fa-star"></i> : {small}
+                  </span> */}
                   <span>
                     Cost <i className="fa-light fa-sack-dollar"></i> : {movie?.cost}
                   </span>
@@ -145,8 +189,6 @@ function MovieDetail() {
               <div className="imageSection">
                 <img src={movie?.imageURL} alt={movie?.title} className="movieImage" />
               </div>
-
-
 
 
             </div>
@@ -174,7 +216,8 @@ function MovieDetail() {
 
                   <Rating
                     onClick={handleRating}
-
+                    size={25}
+                    initialValue={1}
                   />
                 </div>
 
