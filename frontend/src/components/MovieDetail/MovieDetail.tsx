@@ -29,14 +29,9 @@ function MovieDetail() {
   }, [id, dispatch])
   const movie = useMemo(() => data, [data])
 
-
   let reviews = useMemo(() => movie?.reviews, [id])
 
-
   let movieName = movie?.title
-
-
-
   console.log(reviews)
 
   // let ratings: number[] = [];

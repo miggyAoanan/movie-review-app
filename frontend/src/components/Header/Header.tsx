@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import user from "../../images/user.png";
+import logo from "../../images/logo.png"
 import "./Header.scss";
 import LoginRegisterModal, { LoginFunction } from "../Modal/LoginRegisterModal";
 
@@ -95,7 +96,9 @@ function Header() {
 
       <div className="linkContainer">
          <Link to="/">
-          <div className="logo">Movie App</div>
+          <div className="logoDiv">
+            <img src={logo} alt="logo" className="logo"  />
+          </div>
         </Link>
         <Link to="/movie">
           <div className="">Movies</div>
