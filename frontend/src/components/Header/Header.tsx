@@ -50,8 +50,8 @@ function Header() {
           console.log(res)
         }
         else {
-          console.log(res)
-          console.log(res.error.data.error.message);// if thre is a single error
+      
+         
           let errorMessage = res.error.data.error.message
           let errorName = res.error.data.error.name
           let error = errorName + ": " + errorMessage

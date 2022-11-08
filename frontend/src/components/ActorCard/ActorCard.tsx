@@ -1,9 +1,7 @@
 import React from 'react'
 import "./ActorCard.scss";
-
 import { Actor } from '../../interfaces';
 import { Link } from "react-router-dom";
-
 
 const ActorCard = (props : Actor) => {
 
@@ -14,7 +12,7 @@ const ActorCard = (props : Actor) => {
         <Link to={`/actor/${data.id}`}>
         <div className="card-inner">
           <div className="card-top">
-            <img src={data.imageURL} />
+            <img src={data.imageURL} alt={data.firstName} />
           </div>
         </div>
         <div className="card-bottom">

@@ -1,6 +1,5 @@
 import React, { useMemo, useEffect } from "react";
 import './ActorMovie.scss'
-
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { getMovies} from "../../redux/movieSlice";
@@ -35,7 +34,6 @@ function ActorMovieList() {
   return (
     <div className="movie-wrapper">
     <div className="movie-list">
-
         <div className="actorContainer">
             <img src={actorData?.imageURL}  alt={actorData?.firstName}/>
             <h2>{actorData?.firstName}&nbsp;{actorData?.lastName}</h2>
@@ -45,7 +43,7 @@ function ActorMovieList() {
         </div>
       
     
-      <div className="movie-container">{renderMovies}</div>
+      <div className="movie-container mb-2">{renderMovies}</div>
     </div>
     
   </div>

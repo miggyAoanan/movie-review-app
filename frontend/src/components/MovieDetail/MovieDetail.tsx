@@ -18,7 +18,7 @@ function MovieDetail() {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state: RootState) => state.movies.movie)
   const moviesState = useAppSelector((state: RootState) => state.movies)
-  const users = useAppSelector((state: RootState) => state.users.users)
+  // const users = useAppSelector((state: RootState) => state.users.users)
   const [userRating, setUserRating] = useState(0)
   const [description, setDescription] = useState("")
 

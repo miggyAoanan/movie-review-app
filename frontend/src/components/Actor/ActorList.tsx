@@ -25,8 +25,7 @@ const Actorlist = () => {
     return (
         <div className="movie-wrapper">
             <div className="movie-list">
-                <h2>Actors</h2>
-
+                <h2>Actors </h2>
                 <div className="movie-container">{renderActors}</div>
             </div>
 
