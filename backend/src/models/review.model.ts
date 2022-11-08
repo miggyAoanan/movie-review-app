@@ -32,6 +32,12 @@ export class Review extends Entity {
 
   })
   userName: string;
+  @property({
+    type: 'string',
+
+  })
+  movieName: string;
+
 
   @property({
     type: 'string',

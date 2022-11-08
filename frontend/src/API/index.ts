@@ -7,3 +7,6 @@ export const USERS_URL = 'http://localhost:3000/users/' // CRUD for users- also 
 export const ADMIN_URL = 'http://localhost:3000/admin/'// create new admin user
 
 export const BASE_URL =  'http://localhost:3000'
+
+// add reviews
+export const MOVIE_REVIEWS_URL = 'http://localhost:3000/movies/' //+id/reviews

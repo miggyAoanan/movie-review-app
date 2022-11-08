@@ -3,7 +3,9 @@ export interface Review {
     description: string;
     rating: number;
     userId: string;
-    movieId: string;
-    isActive: boolean;
+    userName?: string;
+    movieName?: string;
+    movieId?: string;
+    isActive?: boolean;
  
 }

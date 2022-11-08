@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '../store/store';
-import { REVIEWS_URL } from '../API'
+import { REVIEWS_URL, MOVIE_REVIEWS_URL } from '../API'
 
 import  { Review, ErrorI } from '../interfaces/index'
 
@@ -10,7 +10,14 @@ export interface UpdateArgs {
     isActive: boolean | undefined
   }
   
-
+export interface AddReviewArgs {
+    description:string |undefined, 
+    rating:number |undefined, 
+    movieId:string |undefined, 
+    userId:string |undefined, 
+    userName:string | undefined,
+    movieName:string |undefined
+}
 
 interface ReviewState {
     review: Review | null,
@@ -67,6 +74,25 @@ export const addReview = createAsyncThunk<Review, Object>(
         try {
 
             const response = await axios.post(REVIEWS_URL, data)
+            return response.data
+        } catch (error: unknown) {
+            if (error) {
+                let message: ErrorI = error
+                return rejectWithValue(message.response?.data?.error?.message)
+            }
+            else {
+                return rejectWithValue(error)
+            }
+        }
+    }
+)
+
+export const addMovieReview = createAsyncThunk<Review, AddReviewArgs>(
+    "reviews/addReview",
+    async (data, { rejectWithValue }) => {
+        try {
+            const {description, rating, movieId, userId, userName} = data;
+            const response = await axios.post(MOVIE_REVIEWS_URL+ movieId+ "/reviews", data)
             return response.data
         } catch (error: unknown) {
             if (error) {

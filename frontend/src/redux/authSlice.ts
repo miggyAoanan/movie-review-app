@@ -7,6 +7,7 @@ export interface AuthState {
     token: string | null;
     permissions: string |null;
     isActive: boolean | null;
+    id: string | null;
    
 }
 
@@ -15,7 +16,8 @@ const initialState: AuthState = {
     fullName: null,
     token: null,
     permissions: null,
-    isActive: null
+    isActive: null,
+    id: null,
    
 }
 
@@ -28,13 +30,15 @@ export const authSlice = createSlice({
                 fullName: action.payload.fullName,
                 token: action.payload.token,
                 permissions: action.payload.permissions,
-                isActive: action.payload.isActive
+                isActive: action.payload.isActive,
+                id: action.payload.id
             })
             );
             state.fullName = action.payload.fullName;
             state.token = action.payload.token;
             state.permissions= action.payload.permissions;
             state.isActive = action.payload.isActive;
+            state.id = action.payload.id;
             
         },
 
@@ -44,6 +48,7 @@ export const authSlice = createSlice({
             state.token = null;
             state.permissions = null;
             state.isActive = null;
+            state.id = null;
         }
     }
 })

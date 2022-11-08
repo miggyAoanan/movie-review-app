@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { RootState } from '../store/store';
 
 import { MOVIES_URL , MOVIE_ACTORS_URL} from '../API'
 
@@ -230,6 +231,7 @@ export const movieSlice = createSlice({
 })
 
 export default movieSlice.reducer;
+export const movieDetails = (state:RootState) => state.movies.movies;
 export const {setMovies} = movieSlice.actions
 
 

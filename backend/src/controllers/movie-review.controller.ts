@@ -61,7 +61,7 @@ export class MovieReviewController {
         'application/json': {
           schema: getModelSchemaRef(Review, {
             title: 'NewReviewInMovie',
-            exclude: ['id', 'userName'],
+            exclude: ['id'],
             optional: ['movieId']
           }),
         },

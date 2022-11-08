@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import user from "../../images/user.png";
 import "./Header.scss";
-import LoginModal, { LoginFunction } from "../Modal/LoginModal";
+import LoginRegisterModal, { LoginFunction } from "../Modal/LoginRegisterModal";
 
 import { useAppDispatch, useAppSelector } from "../../store/store"
 import { logout, selectAuth, setUser } from "../../redux/authSlice";
@@ -17,7 +17,7 @@ function Header() {
   //this is for the curent login user
   const { fullName, permissions } = useAppSelector(selectAuth)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [errorInput, setErrorInput] = useState("")
+  // const [errorInput, setErrorInput] = useState("")
 
   const [loginUser,
     { data: loginData,
@@ -39,13 +39,13 @@ function Header() {
     let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
     if (email === "") {
-      setErrorInput("Email is required")
+      toast.error("Email is required")
     } else if (password === "") {
-      setErrorInput("Password is required")
+      toast.error("Password is required")
     } else if (password.length <= 8) {
-      setErrorInput("Must be at least 8 character")
+      toast.error("Must be at least 8 character")
     } else if (!emailReg.test(email)) {
-      setErrorInput("Must be a valid email format")
+      toast.error("Must be a valid email format")
     }
     else {
       await loginUser({ email, password }).then((res: any) => {
@@ -58,7 +58,7 @@ function Header() {
           let errorMessage = res.error.data.error.message
           let errorName = res.error.data.error.name
           let error = errorName + ": " + errorMessage
-          setErrorInput(error)
+          toast.error(error)
           let errorArray: any = []
           let errors: any = res.error.data.error.details
           errors.forEach((err: any) => {
@@ -75,8 +75,14 @@ function Header() {
   useEffect(() => {
     if (isLoginSuccess) {
       toast.success("login successfull")
-      dispatch(setUser({ fullName: loginData.data.fullName, token: loginData.data.token, permissions: loginData.data.permissions, isActive: loginData.data.isActive}))
-      console.log(isLoginSuccess)
+      dispatch(setUser({ 
+        fullName: loginData.data.fullName, 
+        token: loginData.data.token, 
+        permissions: loginData.data.permissions, 
+        isActive: loginData.data.isActive,
+        id: loginData.data.id
+      }))
+    
       onBackdropClick()
     }
 
@@ -138,9 +144,9 @@ function Header() {
         </div>
       </div>
       <ToastContainer />
-      <LoginModal
+      <LoginRegisterModal
 
-        loginErrorInput={errorInput}
+        // loginErrorInput={errorInput}
         onClose={onBackdropClick}
         onLoginRequested={onLoginRequest}
         isModalVisible={isModalVisible}

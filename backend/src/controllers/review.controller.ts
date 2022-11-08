@@ -17,19 +17,19 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Review} from '../models';
-import {ReviewRepository} from '../repositories';
-
+import { Review } from '../models';
+import { ReviewRepository } from '../repositories';
+import { HttpErrors } from '@loopback/rest';
 export class ReviewController {
   constructor(
     @repository(ReviewRepository)
-    public reviewRepository : ReviewRepository,
-  ) {}
+    public reviewRepository: ReviewRepository,
+  ) { }
 
   @post('/reviews')
   @response(200, {
     description: 'Review model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Review)}},
+    content: { 'application/json': { schema: getModelSchemaRef(Review) } },
   })
   async create(
     @requestBody({
@@ -45,14 +45,22 @@ export class ReviewController {
     review: Omit<Review, 'id'>,
   ): Promise<Review> {
 
-    review.isActive = false
+    // const findReview = await this.reviewRepository.findOne({
+    //   where: { userId: review.userId, movieId: review.movieId}
+    // });
+
+    // if(findReview){
+    //   throw new HttpErrors.Unauthorized("Please wait for the activation");
+    // }
+
+    // review.isActive = false
     return this.reviewRepository.create(review);
   }
 
   @get('/reviews/count')
   @response(200, {
     description: 'Review model count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async count(
     @param.where(Review) where?: Where<Review>,
@@ -67,7 +75,7 @@ export class ReviewController {
       'application/json': {
         schema: {
           type: 'array',
-          items: getModelSchemaRef(Review, {includeRelations: true}),
+          items: getModelSchemaRef(Review, { includeRelations: true }),
         },
       },
     },
@@ -83,13 +91,13 @@ export class ReviewController {
   @patch('/reviews')
   @response(200, {
     description: 'Review PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async updateAll(
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Review, {partial: true}),
+          schema: getModelSchemaRef(Review, { partial: true }),
         },
       },
     })
@@ -104,13 +112,13 @@ export class ReviewController {
     description: 'Review model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(Review, {includeRelations: true}),
+        schema: getModelSchemaRef(Review, { includeRelations: true }),
       },
     },
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(Review, {exclude: 'where'}) filter?: FilterExcludingWhere<Review>
+    @param.filter(Review, { exclude: 'where' }) filter?: FilterExcludingWhere<Review>
   ): Promise<Review> {
     return this.reviewRepository.findById(id, filter);
   }
@@ -124,7 +132,7 @@ export class ReviewController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Review, {partial: true}),
+          schema: getModelSchemaRef(Review, { partial: true }),
         },
       },
     })

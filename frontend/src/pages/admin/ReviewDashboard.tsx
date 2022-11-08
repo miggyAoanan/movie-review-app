@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { getReviews, reviewDetails, reviewState, updateReview, deleteReview } from "../../redux/reviewSlice"
-
+import { getMovies, movieDetails} from "../../redux/movieSlice";
 
 import { Review } from '../../interfaces'
 
@@ -14,6 +14,8 @@ const ReviewDashboard = () => {
   const reviews = useAppSelector(reviewDetails)
   const dispatch = useAppDispatch();
 
+  const movies = useAppSelector(movieDetails)
+
 
   useEffect(() => {
     if (reviews) {
@@ -21,6 +23,15 @@ const ReviewDashboard = () => {
     }
 
   }, [dispatch])
+
+  useEffect(() => {
+    if (movies) {
+      dispatch(getMovies())
+    }
+
+  }, [dispatch])
+
+
 
 
   const [isModalVisible, setIsModalVisible] = useState(false)// add
@@ -65,7 +76,7 @@ const ReviewDashboard = () => {
 
   const onUpdateReview: UpdateFunction = async (args: { id: string | undefined, isActive: boolean | undefined }) => {
 
-    let isActiveValue = !args.isActive 
+    let isActiveValue = !args.isActive
     let newArgs = { id: args.id, isActive: isActiveValue }
     dispatch(updateReview(newArgs)).then((res) => {
       dispatch(getReviews())
@@ -80,8 +91,7 @@ const ReviewDashboard = () => {
         <thead >
           <tr className='bg-dark'>
             <th scope="col">#</th>
-            <th scope="col">MovieId</th>
-            <th scope="col">UserID</th>
+            <th scope="col">User</th>
             <th scope="col">Review Content</th>
             <th scope="col">Rating</th>
             <th scope="col">Status</th>
@@ -95,8 +105,7 @@ const ReviewDashboard = () => {
               return (
                 <tr key={review.id}>
                   <td>{index + 1}</td>
-                  <td>{review.movieId}</td>
-                  <td>{review.userId}</td>
+                  <td>{review.userName}</td>
                   <td>{review.description}</td>
                   <td>{review.rating}</td>
                   <td>{String(review.isActive)}</td>
@@ -115,15 +124,15 @@ const ReviewDashboard = () => {
                           />
                           :
 
-                          <input type="checkbox" 
+                          <input type="checkbox"
                             value={String(review.isActive)}
 
                             onClick={() => onUpdateReview({ id: review.id, isActive: review.isActive })}
                             className="btn btn-secondary btn-sm "
                           />
-                          }
+                        }
 
-                       
+
                         <div className="slider"></div>
                       </label>
                     </div>
