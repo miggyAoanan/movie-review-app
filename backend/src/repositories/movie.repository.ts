@@ -16,7 +16,9 @@ export class MovieRepository extends DefaultCrudRepository<
   public readonly reviews: HasManyRepositoryFactory<Review, typeof Movie.prototype.id>;
 
   constructor(
-    @inject('datasources.db') dataSource: DbDataSource, @repository.getter('ActorRepository') protected actorRepositoryGetter: Getter<ActorRepository>, @repository.getter('ReviewRepository') protected reviewRepositoryGetter: Getter<ReviewRepository>,
+    @inject('datasources.db') dataSource: DbDataSource, 
+    @repository.getter('ActorRepository') protected actorRepositoryGetter: Getter<ActorRepository>, 
+    @repository.getter('ReviewRepository') protected reviewRepositoryGetter: Getter<ReviewRepository>,
   ) {
     super(Movie, dataSource);
     this.reviews = this.createHasManyRepositoryFactoryFor('reviews', reviewRepositoryGetter,);

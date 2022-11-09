@@ -92,16 +92,13 @@ export class AdminController {
     });
 
     if (!foundUser) {
-
       const password = await hash(NewAdminUserRequest.password, await genSalt());
       NewAdminUserRequest.isActive = false
       NewAdminUserRequest.permissions = 'admin'
       delete (NewAdminUserRequest as Partial<NewAdminUserRequest>).password;
       const savedUser = await this.userRepository.create(NewAdminUserRequest);
-
       await this.userRepository.userCredentials(savedUser.id).create({ password });
-      
-
+    
       return savedUser;
     }
     else {

@@ -18,6 +18,7 @@ import {
   response,
 } from '@loopback/rest';
 import {Movie} from '../models';
+import {CustomResponse, CustomResponseSchema} from '../models'
 import {MovieRepository} from '../repositories';
 
 export class MovieController {
@@ -70,11 +71,51 @@ export class MovieController {
       },
     },
   })
-  async find(
+  async searchByname(
     @param.filter(Movie) filter?: Filter<Movie>,
   ): Promise<Movie[]> {
     return this.movieRepository.find({include :['actors', 'reviews']});
-    // return this.movieRepository.find();
+
+  }
+
+  @get('search/movies/{term}')
+  @response(200, {
+    description:
+      'Returns an array of all movies based on the find filter (provide movie title as the search key).',
+      content: {'application/json': {schema: CustomResponseSchema}},
+  })
+  async searchByName(
+    @param.path.string('term') term: string,
+  ): Promise<CustomResponse<{}>> {
+
+      try {
+
+        const searchParam = term || '';
+        const searchParams = [{title: {like: term, options: 'i'}}];
+        const filterObject = {
+          where: {or: searchParams},
+          order: ['title ASC'],
+          include :['actors', 'reviews']
+          
+        };
+        const moviesList = await this.movieRepository.find(filterObject);
+
+        return {
+          status: 'success',
+          data: moviesList,
+          message: 'Successfully fetched movies.',
+        };
+        
+      } catch (error:any) {
+        return {
+          status: 'fail',
+          data: null,
+          message: 'Fetching movie data failed.',
+        };
+      }
+
+    // return this.movieRepository.find({include :['actors', 'reviews']});
+
   }
 
   @patch('/movies')
@@ -156,23 +197,6 @@ export class MovieController {
   }
 
 
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
 
   @patch('/movies/{id}')
   @response(204, {

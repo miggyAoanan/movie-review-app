@@ -19,6 +19,7 @@ import {
 } from '@loopback/rest';
 import {Actor} from '../models';
 import {ActorRepository} from '../repositories';
+import {CustomResponse, CustomResponseSchema} from '../models'
 
 export class ActorController {
   constructor(
@@ -147,4 +148,41 @@ export class ActorController {
   async deleteById(@param.path.string('id') id: string): Promise<void> {
     await this.actorRepository.deleteById(id);
   }
+
+  @get('/search/actors/{term}')
+  @response(200, {
+    description:
+      'Returns an array of all actors based on the find filter (provide actor first name or last name as the search key).',
+    content: {'application/json': {schema: CustomResponseSchema}},
+  })
+  async searchByName(
+    @param.path.string('term') term: string,
+  ): Promise<CustomResponse<{}>> {
+    try {
+      const searchParam = term || '';
+      const searchParams = [
+        {firstName: {like: searchParam, options: 'i'}},
+        {lastName: {like: searchParam, options: 'i'}},
+      ];
+      const filterObject = {
+        where: {or: searchParams},
+        order: ['firstName ASC'],
+       
+      };
+      const actorsList = await this.actorRepository.find(filterObject);
+     
+      return {
+        status: 'success',
+        data: actorsList,
+        message: 'Successfully fetched actor data.',
+      };
+    } catch (error) {
+      return {
+        status: 'fail',
+        data: null,
+        message: error ? error.message : 'Fetching actor data failed.',
+      };
+    }
+  }
+
 }

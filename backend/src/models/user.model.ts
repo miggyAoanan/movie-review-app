@@ -57,7 +57,6 @@ export class User extends Entity {
   userCredentials: UserCredentials;
 
 
-
   constructor(data?: Partial<User>) {
     super(data);
   }

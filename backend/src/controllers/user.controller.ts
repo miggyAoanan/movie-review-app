@@ -140,11 +140,13 @@ export class UserController {
     newUserRequest: NewUserRequest,
   ): Promise<User> {
     const userAlreadyExistsError = 'User already exists.';
+    
     //check if the email exist --> to avoid duplicates
     const dbCheckCount = await this.userRepository.count()
     const foundUser = await this.userRepository.findOne({
       where: { email: newUserRequest.email },
     });
+
 
     if (dbCheckCount.count === 0 && !foundUser) {
       const password = await hash(newUserRequest.password, await genSalt());
