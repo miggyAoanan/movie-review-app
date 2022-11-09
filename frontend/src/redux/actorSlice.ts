@@ -90,7 +90,7 @@ export const updateActor = createAsyncThunk<Object, Actor>(
 
 export const deleteActor = createAsyncThunk<{ id: string }, string>(
     "actors/deleteActor",
-    async (data, thunkAPI) => {
+    async (data:string, thunkAPI) => {
         try {
 
             const response = await axios.delete(ACTORS_URL + data)
@@ -100,6 +100,20 @@ export const deleteActor = createAsyncThunk<{ id: string }, string>(
         }
     }
 )
+
+export const searcheActors = createAsyncThunk(
+    "actors/searcheActors",
+    async (name: string, thunkAPI) => {
+        try {
+            const response = await axios.get(ACTORS_URL + name)
+            return response.data
+
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+  );
+
 
 
 export const actorSlice = createSlice({
@@ -117,75 +131,76 @@ export const actorSlice = createSlice({
     },
 
     extraReducers: (builder) => {
-        builder.addCase(getActors.pending, (state = initialState, action) => {
+        builder.addCase(getActors.pending, (state = initialState) => {
             state.loading = true;
             state.getActorStatus = "pending"
 
         });
-        builder.addCase(getActors.fulfilled, (state, action) => {
+        builder.addCase(getActors.fulfilled, (state = initialState, action: PayloadAction<ActorDetails[]>) => {
             state.actors = action.payload;
             state.loading = false;
             state.getActorStatus = "fullfilled"
         });
 
-        builder.addCase(getActors.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
+        builder.addCase(getActors.rejected, (state = initialState) => {
+           
             state.loading = false;
             state.getActorStatus = "rejected"
         });
 
-        builder.addCase(getActor.pending, (state = initialState, action) => {
+        builder.addCase(getActor.pending, (state = initialState) => {
             state.loading = true;
             state.getActorStatus = "pending"
 
         });
-        builder.addCase(getActor.fulfilled, (state, action) => {
+        builder.addCase(getActor.fulfilled, (state = initialState, action: PayloadAction<Actor>) => {
             state.actor = action.payload;
             state.loading = false;
             state.getActorStatus = "fullfilled"
         });
 
-        builder.addCase(getActor.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
+        builder.addCase(getActor.rejected, (state = initialState) => {
+
             state.loading = false;
             state.getActorStatus = "rejected"
         });
 
-        builder.addCase(updateActor.pending, (state = initialState, action) => {
+        builder.addCase(updateActor.pending, (state = initialState) => {
             state.loading = true;
             state.updateActorStatus = "pending"
 
         });
-        builder.addCase(updateActor.fulfilled, (state, action) => {
-            // state.actors = state.actors?.filter((actor)=> actor.id !== action.meta.arg.id)
-            // state.actor = action.payload
-            state.loading = false;
+        builder.addCase(updateActor.fulfilled, (state = initialState) => {
+           
+             state.loading = false;
             state.updateActorStatus = "fullfilled"
 
         });
-        builder.addCase(updateActor.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
+        builder.addCase(updateActor.rejected, (state = initialState) => {
+           
             state.loading = false;
             state.updateActorStatus = "rejected"
         });
 
-        builder.addCase(deleteActor.pending, (state = initialState, action) => {
+        builder.addCase(deleteActor.pending, (state = initialState) => {
             state.loading = true;
             state.deleteActorStatus = "pending"
 
         });
-        builder.addCase(deleteActor.fulfilled, (state, action) => {
+        builder.addCase(deleteActor.fulfilled, (state = initialState) => {
             state.loading = false;
             state.deleteActorStatus = "fullfilled"
 
         });
-        builder.addCase(deleteActor.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
+        builder.addCase(deleteActor.rejected, (state = initialState) => {
+          
             state.loading = false;
             state.deleteActorStatus = "rejected"
         });
 
+        
 
+        
 
     }
 })
