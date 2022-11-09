@@ -21,30 +21,10 @@ const UpdateReviewModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditMod
   const [id, setId] = useState<string | undefined>("")
 
   useEffect(() => {
-
-    if (reviewId) {
-      
-
+    if (reviewId) {  
       setId(reviewId)
-
-
     }
   }, [reviewId])
-
-
-
-  const handleisActiveChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    let value = event.target.value // false
-    let newValue
-    if (value === "false") {
-      newValue = true
-    }
-    else {
-      newValue = false
-    }
-    setIsActive(newValue)
-  }
-
 
   return (
     <ModalRWD

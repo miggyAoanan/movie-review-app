@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD';
-import { useAppDispatch } from "../../../store/store"
+
 
 export interface RegisterArgs {
   fullName: string,
@@ -20,8 +20,7 @@ interface RegisterAdminModalProps {
 }
 
 const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModalVisible, RegisterAdminErrorInput, onRegisterRequested }) => {
-  const dispatch = useAppDispatch();
-  const [errorInput, setErrorInput] = useState("")
+ 
   const [input, setInput] = useState({
     fullName: "",
     email: "",
@@ -38,7 +37,6 @@ const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModa
     }));
 
   }
-
 
   return (
     <ModalRWD

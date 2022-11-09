@@ -3,15 +3,12 @@ import "./MovieDetail.scss";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector ,RootState} from '../../store/store'
 import { getMovie } from "../../redux/movieSlice";
-
 import ActorCard from "../ActorCard/ActorCard";
 import { Rating } from 'react-simple-star-rating'
-
-import { Review } from '../../interfaces/review'
 import { addMovieReview, AddReviewArgs } from '../../redux/reviewSlice'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Actor, Movie, MovieDetails } from "../../interfaces";
+import { Actor, Review} from "../../interfaces";
 
 
 function MovieDetail() {
@@ -19,7 +16,6 @@ function MovieDetail() {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state: RootState) => state.movies.movie)
   const moviesState = useAppSelector((state: RootState) => state.movies)
-  const users = useAppSelector((state: RootState) => state.users.users)
   const [userRating, setUserRating] = useState(0)
   const [description, setDescription] = useState("")
 
@@ -28,36 +24,21 @@ function MovieDetail() {
       dispatch(getMovie(id))
     }
   }, [id, dispatch])
+
   const movie = useMemo(() => data, [data])
-
-  let reviews = useMemo(() => movie?.reviews, [id])
-
   let movieName = movie?.title
-  console.log(reviews)
+  let renderActors  = movie?.actors?.map((actor:Actor, index:number) => (<ActorCard key={index} {...actor} />))
 
-
-  let renderActors
-
-  renderActors = movie?.actors?.map((actor:Actor, index:number) => (<ActorCard key={index} {...actor} />))
-
-  let renderActorsList
-
-  renderActorsList = movie?.actors?.map((movie, index) => (
+  let renderActorsList  = movie?.actors?.map((act:Actor, index:number) => (
 
     <ul className="actorList">
-      <li key={index}> {movie.firstName} &nbsp; {movie.lastName}</li>
+      <li key={index}> {act.firstName} &nbsp; {act.lastName}</li>
 
     </ul>
   ))
 
-  let filteredReviews
-
-  filteredReviews = movie?.reviews?.filter((rev) => rev.isActive !== false)
-
-  let renderReviews
-
-  renderReviews = filteredReviews?.map((review, index) => (
-
+  let filteredReviews  = movie?.reviews?.filter((rev:Review) => rev.isActive !== false)
+  let renderReviews  = filteredReviews?.map((review:Review, index:number) => (
 
     <div key={index} className="reviewDiv">
       <span className="reviewRating">
@@ -66,19 +47,15 @@ function MovieDetail() {
           initialValue={Math.round(review.rating)}
         />
       </span>
-
       <p className="reviewDesc"> {review.description} </p>
       <p className="userDetail">{review.userName} </p>
-
     </div>
 
   ))
 
   const handleRating = (rate: number) => {
     setUserRating(rate)
-
   }
-
 
   const handleChangetextArea = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(event.target.value)
@@ -90,7 +67,7 @@ function MovieDetail() {
     const userName = user.fullName;
     const movieId = id;
     const reviewData: AddReviewArgs = { description, rating: userRating, movieId, movieName, userId, userName }
-    console.log(userRating)
+
 
     if (userPermission === "user") {
       if (userRating === 0) {
@@ -98,11 +75,9 @@ function MovieDetail() {
       } else if (description === "") {
         toast.error("Please add review details")
       } else {
-        dispatch(addMovieReview(reviewData)).then((res) => {
-
+        dispatch(addMovieReview(reviewData)).then((res:any) => {
           toast.warning("Review awaiting for moderation")
         })
-
       }
 
     } else if (userPermission === "admin") {
@@ -114,8 +89,6 @@ function MovieDetail() {
   }
 
   //ratings of the approve reviews
-
-
   let ratings: number[] = [];
 
   filteredReviews?.map((revs: Review) => {
@@ -127,8 +100,6 @@ function MovieDetail() {
   let small
   if (ratings.length) {
     aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
-    console.log(aveRatings);
-  
     small = Number(aveRatings.toPrecision(2))
   }
 
@@ -143,8 +114,7 @@ function MovieDetail() {
             <div className="section-left">
               <div className="topSectionLeft">
                 <div className="movie-title">{movie?.title}</div>
-                <div className="movie-rating mb-5">
-               
+                <div className="movie-rating mb-5">             
                   <span>
                     IMDB Rating <i className="fa fa-star"></i> : {small}
                   </span>
@@ -177,14 +147,12 @@ function MovieDetail() {
               <div className="review-container">
 
                 <h2 className="mt-5"> User Reviews</h2>
-                {renderReviews}
+                {renderReviews ?  renderReviews : (<p className="mt-4 mb-4">No User Reviews </p>)}
 
               </div>
 
-
-              <div className="formreviewContainer">
+              <div className="formreviewContainer mt-4">
                 <div className="starRatingDiv mb-2">
-
                   <Rating
                     onClick={handleRating}
                     size={25}
@@ -192,24 +160,23 @@ function MovieDetail() {
                   />
                 </div>
 
-                <div className="input-group mb-2">
+                <div className="input-group mb-2 mt-4">
                   <span className="input-group-text">Add a review</span>
-                  <textarea className="form-control" aria-label="Add a review" onChange={handleChangetextArea}></textarea>
+                  <textarea 
+                  className="form-control" 
+                  aria-label="Add a review"
+                   onChange={handleChangetextArea}
+                   placeholder="This is the best movie ever"
+                   ></textarea>
                 </div>
 
-                <div className="d-grid gap-2">
+                <div className="d-grid gap-2 mt-2">
                   <button className="btn btn-secondary btn-sm" type="button"
                     onClick={onSubmit}
-                  >Save</button>
+                  >Add a review</button>
                 </div>
-
-
               </div>
-
-
-
             </div>
-
           </>
         )}
       </div>
@@ -217,8 +184,7 @@ function MovieDetail() {
       <div className="actorContainer mb-2">
         <h2 className="text-white mt-4 mb-2">Cast</h2>
         <div className="actor-container mb-4">
-
-          {renderActors}
+          {renderActors ? renderActors : (<p className="text-white"> No Actors Found</p>)}
         </div>
 
       </div>

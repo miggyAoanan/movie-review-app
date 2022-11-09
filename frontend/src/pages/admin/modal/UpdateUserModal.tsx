@@ -67,8 +67,8 @@ const UpdateUserModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditModal
       content={
         <>
 
-          <h2 className='fw-bold mb-2 text-uppercase text-white'> Update Admin</h2>
-          <p className='text-white-50 mb-4 fs-6'>Edit User details</p>
+          <h2 className='fw-bold mb-2 text-uppercase text-white'> Update Users</h2>
+          <p className='text-white-50 mb-4 fs-6'>&nbsp;</p>
           <div className='form-outline form-white mb-4'>
             <input
               type="text"

@@ -146,7 +146,9 @@ const UserDashBoard = () => {
                   <td> <img src={userIcon} alt="user" className='imageDash' /></td>
                   <td>{user.fullName}</td>                
                   <td>{user.permissions}</td>
-                  <td>{String(user.isActive)}</td>
+                  <td>{
+                  user.isActive === true ? "Active" : "Inactive"
+                 }</td>
                   <td>
 
                     <button
@@ -173,7 +175,6 @@ const UserDashBoard = () => {
       <button
         type="button"
         className="btn btn-primary btn-sm px-2" 
-
         onClick={() => { toggleModal() }}
       >Register Admin</button>
       <RegisterAdminModal

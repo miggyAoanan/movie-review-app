@@ -9,9 +9,10 @@ import { Rating } from 'react-simple-star-rating'
 import { Review } from "../../interfaces";
 
 const ReviewDashboard = () => {
-  const reviews = useAppSelector(reviewDetails)
+  const reviews :Review[] = useAppSelector(reviewDetails)
   const dispatch = useAppDispatch();
   const movies = useAppSelector(movieDetails)
+  
 
   useEffect(() => {
     if (reviews) {
@@ -31,7 +32,7 @@ const ReviewDashboard = () => {
   const [deleteId, setDeleteId] = useState<string | undefined>("")
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
   const toggleDeleteModal = () => {
-    setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
+    setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
   }
 
   const onBackdropClick = () => {
@@ -43,6 +44,7 @@ const ReviewDashboard = () => {
   const onDeleteReview: DeleteReviewFunction = async (id: string) => {
     dispatch(deleteReview(id)).then((res:any) => {
       onBackdropClick()
+      dispatch(getReviews())
     })
   }
 
@@ -89,7 +91,8 @@ const ReviewDashboard = () => {
                    initialValue={review.rating}
                   />
                   </td>
-                  <td>{String(review.isActive)}</td>
+                  <td>{review.isActive === true ? "Active" : "Inactive"}</td>
+                 
                   <td>
 
                     <div className='form-outline form-white mb-4'>

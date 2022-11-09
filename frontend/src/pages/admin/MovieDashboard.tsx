@@ -5,7 +5,7 @@ import './Dash.scss'
 
 import AddMovieModal, { AddMovieFunction } from "./modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
-import UpdateMovieModal, { UpdateMovieFunction } from "./modal/UpdateMovieModal";
+import UpdateMovieModal, { UpdateMovieFunction , UpdateArgs} from "./modal/UpdateMovieModal";
 import DeleteMovieModal, { DeleteMovieFunction } from "./modal/DeleteMovieModal";
 
 const MovieDashboard = () => {
@@ -23,7 +23,7 @@ const MovieDashboard = () => {
   const [error, setError] = useState("")
 
   // this for update Movie
-  const [movieDataforUpdate, setMovieDataforUpdate] = useState<Movie>()
+  const [movieDataforUpdate, setMovieDataforUpdate] = useState<UpdateArgs>()
 
   const toggleModal = () => {
     setIsModalVisible(wasModalVisible => !wasModalVisible)
@@ -38,21 +38,20 @@ const MovieDashboard = () => {
   // update Modal
   const [isEditModalVisible, setEditModalVisible] = useState(false)
   const toggleEditModal = () => {
-    setEditModalVisible(isEditModalVisible => !isEditModalVisible)
+    setEditModalVisible(wasEditModalVisible => !wasEditModalVisible)
   }
 
   //delete modal
   const [deleteMovieId, setDeleteMovieId] = useState<string| undefined>("")
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
   const toggleDeleteModal = () => {
-    setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
+    setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
   }
 
 
 
   const onAddMovie: AddMovieFunction = async (args: Movie) => {
 
-    console.log(args);
     const movieData = { ...args }
     const title = movieData.title   
     const overview = movieData.overview
@@ -87,9 +86,9 @@ const MovieDashboard = () => {
     }
   }
 
-  const onUpdateMovie: UpdateMovieFunction = async (args: Movie) => {
+  const onUpdateMovie: UpdateMovieFunction = async (update: UpdateArgs) => {
    
-    dispatch(updateMovie(args)).then((res:any) => {
+    dispatch(updateMovie(update)).then((res:any) => {
       dispatch(getMovies())
     })
 
@@ -139,7 +138,7 @@ const MovieDashboard = () => {
                         <button
                           type="button"
                           className="btn btn-secondary btn-sm"
-                          onClick={() => { toggleEditModal(); setMovieDataforUpdate(movie) }}
+                          onClick={() => { toggleEditModal(); setMovieDataforUpdate({id:movie.id, cost:movie.cost, imageURL: movie.imageURL}) }}
                         >Edit</button>
                         &nbsp;
                         &nbsp;

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import ModalRWD from './ModalRWD';
-import { useAppDispatch } from "../../store/store"
+import { useAppDispatch, useAppSelector, RootState } from "../../store/store"
 import { registerUser } from "../../redux/userSlice"
 
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface LoginArgs {
@@ -22,7 +22,10 @@ interface LoginModalProps {
 }
 
 const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible, loginErrorInput, onLoginRequested }) => {
+  const [error, setError] = useState("")
+  const [message, setMessage] = useState("")
   const dispatch = useAppDispatch();
+  const registerStatus = useAppSelector((state: RootState) => state.users.getUsersStatus)
   const [showRegister, setShowRegister] = useState(false)
   const [input, setInput] = useState({
     fullName: "",
@@ -45,31 +48,31 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
     // eslint-disable-next-line
     let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     if (fullName === "") {
-      toast.error("fullName is required");
+      setError("Fullname is required");
     } else if (email === "") {
-      toast.error("Email is required");
+      setError("Email is required");
     } else if (password === "") {
-      toast.error("Password is required");
+      setError("Password is required");
     } else if (confirm === "") {
-      toast.error("Confirm password is required");
+      setError("Confirm password is required");
     } else if (password !== confirm) {
-      toast.error("Passwords do not match");
+      setError("Passwords do not match");
     } else {
       if (!emailReg.test(email)) {
-        toast.error("Please enter a valid email");
+        setError("Please enter a valid email");
       } else {
         const userData = { fullName, email, password };
         dispatch(registerUser(userData)).then((res: any) => {
-          if (res.data) {
-            console.log(res)
-          }
-          else {
-            console.log(res)
+
+          if (registerStatus === "fullfilled") {
+            setMessage("Registration successfull")
+          } else {
+
             console.log(res.error.data.error.message);
             let errorMessage = res.error.data.error.message
             let errorName = res.error.data.error.name
             let error = errorName + ": " + errorMessage
-            toast.error(error)
+            setError(error)
             let errorArray: any = []
             let errors: any = res.error.data.error.details
             errors.forEach((err: any) => {
@@ -90,7 +93,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
     input.email = ""
     input.password = ""
     input.confirm = ""
-   
+
   }
 
   return (
@@ -101,12 +104,21 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
         <>
 
           <h2 className='fw-bold mb-2 text-uppercase text-white'> {!showRegister ? "Login" : "Register"}</h2>
-          
+          {
+            error ? <p className='text-danger fs-6'>{error}</p>
+              : ""
+          }
+
+          {
+            message ? <p className='text-success fs-6'>{message}</p>
+              : ""
+          }
+
           {showRegister && (
 
             <>
               <div className='form-outline form-white'>
-              <span className='fs-6 text-white'>Full Name</span>
+                <span className='fs-6 text-white'>Full Name</span>
                 <input
                   type="text"
                   placeholder="Please enter fullname"
@@ -124,7 +136,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
           )}
 
           <div className='form-outline form-white'>
-          <span className='fs-6 text-white'>Email</span>
+            <span className='fs-6 text-white'>Email</span>
             <input
               type="text"
               placeholder="Please enter you email"
@@ -135,7 +147,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
             />
           </div>
           <div className='form-outline form-white'>
-          <span className='fs-6 text-white'>Password</span>
+            <span className='fs-6 text-white'>Password</span>
             <input
               type="password"
               placeholder="********"
@@ -149,7 +161,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
 
           {showRegister && (
             <div className='form-outline form-white mb-4'>
-               <span className='fs-6 text-white'>Confirm password</span>
+              <span className='fs-6 text-white'>Confirm password</span>
               <input
                 type="password"
                 placeholder="********"
@@ -161,11 +173,11 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
             </div>
 
           )}
-         
+
 
           {!showRegister ? (
             <button
-            className="btn btn-light btn-sm px-5 mt-4"
+              className="btn btn-light btn-sm px-5 mt-4"
               type='button'
               onClick={() => onLoginRequested({ email, password })}
             >
@@ -175,7 +187,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
           ) :
             (
               <button
-              className="btn btn-light btn-sm px-5"
+                className="btn btn-light btn-sm px-5"
                 type='button'
                 onClick={handleSubmit}
               >

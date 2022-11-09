@@ -12,12 +12,13 @@ import { useLoginUserMutation } from '../../authServices/authApi'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { getMovies, movieDetails } from "../../redux/movieSlice";
+
 
 function Header() {
   const dispatch = useAppDispatch();
   const { fullName, permissions } = useAppSelector(selectAuth)
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [error, setError] = useState("")
   const [loginUser,
     { data: loginData,
       isSuccess: isLoginSuccess }
@@ -36,13 +37,13 @@ function Header() {
     let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
     if (email === "") {
-      toast.error("Email is required")
+      setError("Email is required")
     } else if (password === "") {
-      toast.error("Password is required")
+      setError("Password is required")
     } else if (password.length <= 8) {
-      toast.error("Must be at least 8 character")
+      setError("Must be at least 8 character")
     } else if (!emailReg.test(email)) {
-      toast.error("Must be a valid email format")
+      setError("Must be a valid email format")
     }
     else {
       await loginUser({ email, password }).then((res: any) => {
@@ -55,7 +56,7 @@ function Header() {
           let errorMessage = res.error.data.error.message
           let errorName = res.error.data.error.name
           let error = errorName + ": " + errorMessage
-          toast.error(error)
+          setError(error)
           let errorArray: any = []
           let errors: any = res.error.data.error.details
           errors.forEach((err: any) => {
@@ -102,7 +103,6 @@ function Header() {
 
   return (
     <div className="header mb-5">
-
       <div className="linkContainer">
         <Link to="/">
           <div className="logoDiv">
@@ -132,8 +132,6 @@ function Header() {
           <div className="userimage">
             <img src={user} alt="user" />
           </div>
-
-
           <>
             {permissions === "user" &&  (
             <>
@@ -171,12 +169,9 @@ function Header() {
           {!fullName &&
           <>
           
-
           <div className="text-white name">Hi Guest!</div>
-          <button className="btn btn-secondary" onClick={toggleModal} >Login</button>
-          
-          </>
-          
+          <button className="btn btn-secondary" onClick={toggleModal} >Login</button>      
+          </>   
           
           }
            

@@ -1,20 +1,19 @@
 import React, { useEffect } from "react";
-import Slider from 'react-slick'
-
 import MovieCard from "../MovieCard/MovieCard";
 import "./MovieList.scss";
 import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { getMovies, movieDetails } from "../../redux/movieSlice";
-import { Settings } from "../../common/settings";
+
+import { Movie } from "../../interfaces";
 
 const MovieList = () => {
 
   const dispatch = useAppDispatch();
   const moviesState = useAppSelector((state: RootState) => state.movies)
-  const dataMovies = useAppSelector(movieDetails)
+  const movies  = useAppSelector(movieDetails)
 
   useEffect(() => {
-    if (dataMovies) {
+    if (movies) {
       dispatch(getMovies())
     }
   }, [dispatch])
@@ -22,10 +21,8 @@ const MovieList = () => {
 
 
   let renderMovies
-
-  renderMovies =
-  dataMovies ?
-  dataMovies?.map((movie, index) => (<MovieCard key={index} {...movie} />)) :
+  movies?
+  renderMovies  =  movies?.map((movie:Movie, index:number) => (<MovieCard key={index} {...movie} />)) :
       (
         <div className="movies-error">
           <h3>{moviesState.errors}</h3>
@@ -34,10 +31,11 @@ const MovieList = () => {
 
 
   return (
-    <div className="movie-wrapper">
-      <div className="movie-list">
+    <div className="main-movie-wrapper">
+      <div className="main-movie-list">
         <h2 className="text-white">Movies</h2>
-        <div className="movie-container"><Slider {...Settings}>{renderMovies}</Slider></div>
+        <div className="main-movie-container">{renderMovies}</div>
+       
       </div>
 
     </div>

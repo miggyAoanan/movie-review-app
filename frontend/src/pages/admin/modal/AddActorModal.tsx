@@ -44,25 +44,27 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
           <h2 className='fw-bold mb-2 text-uppercase text-white'>Add Actor </h2>
           {error && (<p className='text-danger fs-6'>{error}</p>)}
             <>
-              <div className='form-outline form-white mb-4'>
+            <div className='form-outline form-white'>
+            <span className='fs-6 text-white'>First Name</span>
                 <input
                   type="text"
                   placeholder="firstname"
                   id="firstName"
                   name="firstName"
-                  className="form-control form-control-lg"
+                  className="form-control form-control-sm"
                   value={input.firstName}
                   onChange={handleChange}
                 />
               </div>
 
-              <div className='form-outline form-white mb-4'>
+              <div className='form-outline form-white mb-2'>
+              <span className='fs-6 text-white'>Last Name</span>
                 <input
                   type="text"
                   placeholder="lastname"
                   id="lastName"
                   name="lastName"
-                  className="form-control form-control-lg"
+                  className="form-control form-control-sm"
                   value={input.lastName}
                   onChange={handleChange}
                 />
@@ -77,7 +79,8 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                     value="male"
                     onChange={handleChange}
                   />
-                  <label className="form-check-label">Male</label>
+                
+                  <span className='fs-6 text-white'>Male</span>
 
                 </div>
                 <div className="form-check form-check-inline">
@@ -89,10 +92,11 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                     value="female"
                     onChange={handleChange}
                   />
-                  <label className="form-check-label" >Female</label>
+                
+                  <span className='fs-6 text-white'>Female</span>
                 </div>
               </div>
-              <div className='form-outline form-white mb-4'>
+              <div className='form-outline form-white mp-2'>
                 <input
                   type="number"
                   placeholder="Age"
@@ -100,24 +104,25 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                   name="age"
                   value={input.age}
                   onChange={handleChange}
-                  className="form-control form-control-lg"
+                  className="form-control form-control-sm"
                 />
               </div>
 
               <div className='form-outline form-white mb-4'>
+              <span className='fs-6 text-white'>Image URL</span>
                 <input
                   type="text"
                   placeholder="Image URL"
                   id="imageURL"
                   name="imageURL"
                   value={input.imageURL}
-                  className="form-control form-control-lg"
+                  className="form-control form-control-sm"
                   onChange={handleChange}
                 />
               </div>
             
               <button
-                className="btn btn-light btn-lg px-5"
+               className="btn btn-primary btn-sm px-5"
                 type='button'
                 onClick={() => onAddActor({ ...input })}
               >

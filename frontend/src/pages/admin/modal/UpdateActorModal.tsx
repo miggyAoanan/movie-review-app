@@ -63,10 +63,8 @@ const UpdateActorModal: React.FC<UpdateActorModalProps> = ({ isEditModalVisible,
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault()
     const actordData = { id, firstName, lastName, gender, age, imageURL }
-    // const actordData = { firstName, lastName, gender, age, imageURL }
-    // let data = {id, ...actordData}
     onUpdateActor(actordData)
-    console.log(actordData)
+
   }
 
   return (
