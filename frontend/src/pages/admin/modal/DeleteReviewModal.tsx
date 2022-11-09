@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ActorModalRWD from '../../../components/Modal/ActorModalRWD'
 import { ButtonContainer } from '../../../components/Modal/ModalPopup.styled'
 
@@ -9,7 +9,7 @@ interface DeleteMovieModalProps {
   isDeleteModalVisible: boolean;
   error?: string;
   onDeleteReview: DeleteReviewFunction;
-  deleteId?: string;
+  deleteId: string | undefined;
 }
 
 const DeleteReviewModal: React.FC<DeleteMovieModalProps> = ({ isDeleteModalVisible, onClose, error, onDeleteReview, deleteId }) => {

@@ -45,6 +45,7 @@ export const getMovies = createAsyncThunk<MovieDetails[]>(
 )
 
 
+
 export const getMovie = createAsyncThunk <MovieDetails, string | undefined>(
     "movies/getMovie",
     async (id, {rejectWithValue}) => {
@@ -125,6 +126,7 @@ export const movieSlice = createSlice({
         setMovies: (state = initialState, action: PayloadAction<MovieDetails[]>) => {
             state.movies = action.payload;
         }
+        
 
 },
    extraReducers: (builder) =>{
@@ -223,8 +225,6 @@ export const movieSlice = createSlice({
         state.loading = false;
         state.deleteMovieStatus = "rejected"
     });
-
-
 
    }
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { getActors, actorDetails, deleteActor, updateActor, addActor } from "../../redux/actorSlice"
 
@@ -13,6 +13,7 @@ import UpdateActorModal ,{UpdateActorFunction} from "./modal/UpdateActorModal";
 const ActorDashboard = () => {
   const actors = useAppSelector(actorDetails)
   const dispatch = useAppDispatch();
+  const [error, setError] = useState("")
  
   useEffect(() => {
     if(actors){
@@ -23,14 +24,11 @@ const ActorDashboard = () => {
 
   
   const [isModalVisible, setIsModalVisible] = useState(false)// add
-  const [updateId, setUpdateId] = useState("") 
 
-
-  //test update
   const [actorForUpdate, setActorForUpdate] = useState<Actor>()
   const [isEditModalVisible, setEditModalVisible] = useState(false)
   const toggleEditModal = () => {
-    setEditModalVisible(isEditModalVisible => !isEditModalVisible)
+    setEditModalVisible(wasEditModalVisible => !wasEditModalVisible)
   }
 
   //toggle add modal
@@ -39,34 +37,46 @@ const ActorDashboard = () => {
   }
 
   //delete modal
-  const [deleteId, setDeleteId] = useState("")
+  const [deleteId, setDeleteId] = useState<string | undefined>("")
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
   const toggleDeleteModal = () => {
-    setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
+    setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
   }
 
   const onBackdropClick = () => {
     setIsModalVisible(false)
     setDeleteModalVisible(false)
     setEditModalVisible(false)
-    // clear()
+
   }
 
   const onAddActor: AddActorFunction = async (args: Actor) => {
     
     let age = Number(args.age)
     const actorData : Actor = {firstName: args.firstName, lastName: args.lastName, age, gender:args.gender, imageURL: args.imageURL}
-    dispatch(addActor(actorData)).then((res)=>{
-      console.log(res)
-      onBackdropClick()
-      dispatch(getActors())
-    })
-
+    if(args.firstName ===""){
+      setError("First name is required")
+    }else if(args.lastName ===""){
+      setError("Last name is required")
+    }else if(args.age === 0){
+      setError("Age cannot be 0")
+    }else if(args.gender === ""){
+      setError("Please choose a gender")
+    }else if(args.imageURL === ""){
+      setError("Please provide an image URL")
+    }else{
+      dispatch(addActor(actorData)).then((res:any)=>{
+        onBackdropClick()
+        dispatch(getActors())
+      })
+  
+    }
+   
   }
 
 
   const onDeleteActor : DeleteActorFunction = async (id: string) => {
-    dispatch(deleteActor(id)).then((res)=>{
+    dispatch(deleteActor(id)).then((res:any)=>{
     onBackdropClick()
     dispatch(getActors())
     })
@@ -75,7 +85,7 @@ const ActorDashboard = () => {
 
   const onUpdateActor : UpdateActorFunction = async (args: Actor) => {
 
-    dispatch(updateActor(args)).then((res)=>{
+    dispatch(updateActor(args)).then((res:any)=>{
       dispatch(getActors())
       onBackdropClick()
         
@@ -83,9 +93,6 @@ const ActorDashboard = () => {
 
   }
 
-  const clear = () => {
-
-  }
 
   return (
     <div className="wrapper">
@@ -121,7 +128,7 @@ const ActorDashboard = () => {
                     <button 
                     type="button" 
                     className="btn btn-danger btn-sm"
-                    onClick={() => { toggleDeleteModal(); setDeleteId(actor.id!)}}
+                    onClick={() => { toggleDeleteModal(); setDeleteId(actor.id)}}
                     >Delete</button>
 
                   </td>
@@ -142,7 +149,8 @@ const ActorDashboard = () => {
       <AddActorModal
         onClose={onBackdropClick}
         isModalVisible={isModalVisible}
-        onAddActor={onAddActor}   
+        onAddActor={onAddActor}
+        error={error}
       />
 
       <UpdateActorModal 

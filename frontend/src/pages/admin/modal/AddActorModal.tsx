@@ -1,6 +1,6 @@
-import React, { useState, useEffect, MouseEventHandler } from 'react'
-import { RootState, useAppDispatch, useAppSelector } from "../../../store/store"
-import { addActor, getActor, updateActor, deleteActor } from '../../../redux/actorSlice';
+import React, { useState } from 'react'
+import {  useAppDispatch } from "../../../store/store"
+
 import { Actor } from "../../../interfaces"
 import ActorModalRWD from '../../../components/Modal/ActorModalRWD';
 
@@ -12,9 +12,7 @@ interface AddActorModalProps {
   onAddActor: AddActorFunction;
 }
 
-const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, onAddActor }) => {
-  const dispatch = useAppDispatch();
-
+const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, onAddActor, error }) => {
   const [input, setInput] = useState({
     firstName: "",
     lastName: "",
@@ -25,7 +23,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
   });
 
 
-  const { firstName, lastName, gender, imageURL } = input;
+  // const { firstName, lastName, gender, imageURL } = input;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setInput((prevState) => ({
@@ -33,12 +31,6 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
       [event.target.name]: event.target.value,
     }));
   }
-
-  
-
-
-
-
   return (
     <ActorModalRWD
       onBackdropClick={onClose}
@@ -48,7 +40,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
         <>
 
           <h2 className='fw-bold mb-2 text-uppercase text-white'>Add Actor </h2>
-        
+          {error && (<p className='text-danger fs-6'>{error}</p>)}
             <>
               <div className='form-outline form-white mb-4'>
                 <input
@@ -121,7 +113,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                   onChange={handleChange}
                 />
               </div>
-
+            
               <button
                 className="btn btn-light btn-lg px-5"
                 type='button'
@@ -130,9 +122,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
                 Save
               </button>
             </>
-      
-        
-
+    
           
         </>
       }

@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD';
 import { User } from '../../../interfaces';
-import { useAppDispatch } from "../../../store/store"
 import '../../admin/Dash.scss'
-
 
 export interface UpdateArgs {
   id?: string,
@@ -11,8 +9,6 @@ export interface UpdateArgs {
   email: string | undefined,
   isActive: boolean | undefined
 }
-
-
 
 export type UpdateFunction = (args: UpdateArgs) => Promise<void>;
 
@@ -33,16 +29,12 @@ const UpdateUserModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditModal
 
 
   useEffect(() => {
-
     if (userForUpdate) {
       const userData = { ...userForUpdate }
       setId(userData.id)
       setFullname(userData.fullName)
       setEmail(userData.email)
-
       setIsActive(userData.isActive)
-
-
     }
   }, [userForUpdate])
 
@@ -104,21 +96,19 @@ const UpdateUserModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditModal
             <p className='text-white-50 mb-4 fs-6'> Activate</p>
             <label className="switch">
 
-            {
-              isActive === true ? 
-              <input type="checkbox" defaultChecked
-              value={String(isActive)}
-              onChange={handleisActiveChange}
+              {
+                isActive === true ?
+                  <input type="checkbox" defaultChecked
+                    value={String(isActive)}
+                    onChange={handleisActiveChange}
+                  />
+                  :
+                  <input type="checkbox"
+                    value={String(isActive)}
+                    onChange={handleisActiveChange}
+                  />
+              }
 
-            />
-            :
-            <input type="checkbox"
-            value={String(isActive)}
-            onChange={handleisActiveChange}
-
-          />
-            }
-             
               <div className="slider"></div>
             </label>
           </div>
@@ -126,8 +116,7 @@ const UpdateUserModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditModal
           <button
             className="btn btn-light btn-lg px-5"
             type='button'
-            // onClick={handleSubmit}
-            onClick={() => onUpdateRequested({id, fullName, email, isActive })}
+            onClick={() => onUpdateRequested({ id, fullName, email, isActive })}
           >
             Update
           </button>

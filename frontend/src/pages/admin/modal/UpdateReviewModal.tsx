@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD';
-import { User } from '../../../interfaces';
-import { useAppDispatch } from "../../../store/store"
 import '../../admin/Dash.scss'
 
 

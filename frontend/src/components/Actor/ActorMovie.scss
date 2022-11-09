@@ -1,15 +1,21 @@
 
 @import "../../common/color.scss";
-.movie-list {
+.actor-list {
   margin: 20px 0px;
   h2 {
-    color: $font-secondary;
+    color: $font-primary;
     margin-bottom: 10px;
     font-weight: 400;
   }
 }
 
-// .movie-container {
+.actor-movie-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-gap: 15px;
+}
+
+// .amovie-container {
 //   display: grid;
 //   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 //   grid-gap: 15px;

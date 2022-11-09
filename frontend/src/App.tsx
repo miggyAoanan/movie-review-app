@@ -10,12 +10,12 @@ import Footer from "./components/Footer/Footer";
 import MovieDashboard from "./pages/admin/MovieDashboard";
 import ActorDashboard from "./pages/admin/ActorDashboard";
 import UserDashBoard from "./pages/admin/UserDashBoard";
-import { useAppDispatch, useAppSelector, RootState } from "./store/store";
-import { selectAuth } from './redux/authSlice'
-import { setUser } from "./redux/authSlice";
+import { useAppDispatch, useAppSelector } from "./store/store";
+import { selectAuth, setUser } from './redux/authSlice'
 import ReviewDashboard from "./pages/admin/ReviewDashboard";
 import Actorlist from "./components/Actor/ActorList";
 import ActorMovieList from "./components/Actor/ActorMovieList";
+import MovieList from "./components/MovieList/MovieList";
 
 
 
@@ -37,8 +37,8 @@ function App() {
         <div className="container">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/movie" element={<Home />} />
-            <Route path="/movie/:id" element={<MovieDetail />} />
+            <Route path="/movie" element={<MovieList />} />
+            <Route path="/movie/:id" element={<MovieDetail/>} />
             <Route path="/actor" element={<Actorlist />} />
             <Route path="/actor/:id" element={<ActorMovieList />} />
             {permissions === "admin" ?

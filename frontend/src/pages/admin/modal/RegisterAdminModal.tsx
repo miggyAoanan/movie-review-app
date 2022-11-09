@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD';
 import { useAppDispatch } from "../../../store/store"
 
-
-
 export interface RegisterArgs {
   fullName: string,
   email: string,
@@ -50,6 +48,10 @@ const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModa
         <>
 
           <p className='fs-5 text-white'>Register Admin</p>
+          {
+            error? <p className='text-danger fs-6'>{error}</p>
+            : ""
+          }
 
           <div className='form-outline form-white'>
           <span className='fs-6 text-white'>Full Name</span>
@@ -99,10 +101,6 @@ const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModa
             />
           </div>
 
-          {
-            error? <p className='text-danger fs-6'>{error}</p>
-            : ""
-          }
           <button
             className="btn btn-primary btn-sm px-5"
             type='button'

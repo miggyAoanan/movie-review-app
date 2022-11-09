@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 import "./MovieDetail.scss";
 import { useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from '../../store/store'
+import { useAppDispatch, useAppSelector ,RootState} from '../../store/store'
 import { getMovie } from "../../redux/movieSlice";
-import { RootState } from "../../store/store"
+
 import ActorCard from "../ActorCard/ActorCard";
 import { Rating } from 'react-simple-star-rating'
 
@@ -34,28 +34,10 @@ function MovieDetail() {
   let movieName = movie?.title
   console.log(reviews)
 
-  // let ratings: number[] = [];
-
-  // reviews?.map((review: Review) => {
-  //   ratings.push(review.rating)
-  // })
-
-  // let aveRatings = 0;
-  // let rounded = 0;
-  // let small 
-  // if (ratings.length) {
-  //   aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
-  //   console.log(aveRatings);
-  //   rounded = Math.round(aveRatings)
-  //  small = Number(aveRatings.toPrecision(2))
-
-
-  // }
-
 
   let renderActors
 
-  renderActors = movie?.actors?.map((movie, index) => (<ActorCard key={index} {...movie} />))
+  renderActors = movie?.actors?.map((actor, index) => (<ActorCard key={index} {...actor} />))
 
   let renderActorsList
 
@@ -69,7 +51,7 @@ function MovieDetail() {
 
   let filteredReviews
 
-  filteredReviews = movie?.reviews?.filter((review) => review.isActive != false)
+  filteredReviews = movie?.reviews?.filter((rev) => rev.isActive !== false)
 
   let renderReviews
 
@@ -135,20 +117,18 @@ function MovieDetail() {
 
   let ratings: number[] = [];
 
-  filteredReviews?.map((review: Review) => {
-    ratings.push(review.rating)
+  filteredReviews?.map((revs: Review) => {
+    ratings.push(revs.rating)
   })
 
   let aveRatings = 0;
-  let rounded = 0;
+
   let small
   if (ratings.length) {
     aveRatings = ratings?.reduce((total, current) => total + current) / ratings.length
     console.log(aveRatings);
-    rounded = Math.round(aveRatings)
+  
     small = Number(aveRatings.toPrecision(2))
-
-
   }
 
 
@@ -163,17 +143,12 @@ function MovieDetail() {
               <div className="topSectionLeft">
                 <div className="movie-title">{movie?.title}</div>
                 <div className="movie-rating mb-5">
-                  IMDB Rating <Rating
-
-                    size={20}
-                    initialValue={rounded}
-                  />
-                      {rounded}
-                  {/* <span>
-                    IMDB Rating <i className="fa fa-star"></i> : {small}
-                  </span> */}
+               
                   <span>
-                    Cost <i className="fa-light fa-sack-dollar"></i> : {movie?.cost}
+                    IMDB Rating <i className="fa fa-star"></i> : {small}
+                  </span>
+                  <span>
+                    Budget <i className="fa-light fa-sack-dollar"></i> : {movie?.cost}
                   </span>
 
                   <span>

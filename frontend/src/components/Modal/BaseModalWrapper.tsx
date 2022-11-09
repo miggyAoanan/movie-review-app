@@ -1,9 +1,6 @@
 
 import React, { MouseEventHandler, ReactNode } from 'react'
-
 import Modal from './Modal';
-import { Actor } from '../../interfaces'
-
 import {  Header, Message, CloseSign } from './ModalPopup.styled'
 
 export interface BaseModalWrapperProps {

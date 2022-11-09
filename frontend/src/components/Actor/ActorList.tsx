@@ -4,6 +4,8 @@ import ActorCard from '../ActorCard/ActorCard'
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { getActors, actorDetails } from "../../redux/actorSlice";
 
+import "./ActorMovie.scss"
+
 const Actorlist = () => {
     const actors = useAppSelector(actorDetails)
     const dispatch = useAppDispatch();
@@ -23,10 +25,10 @@ const Actorlist = () => {
         ))
 
     return (
-        <div className="movie-wrapper">
-            <div className="movie-list">
+        <div className="actor-wrapper">
+            <div className="actor-list">
                 <h2>Actors </h2>
-                <div className="movie-container">{renderActors}</div>
+                <div className="actor-container">{renderActors}</div>
             </div>
 
         </div>

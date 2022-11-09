@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { getMovies, addMovie, deleteMovie, updateMovie } from "../../redux/movieSlice";
 import './Dash.scss'
-
-
 
 import AddMovieModal, { AddMovieFunction } from "./modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
@@ -13,7 +11,6 @@ import DeleteMovieModal, { DeleteMovieFunction } from "./modal/DeleteMovieModal"
 const MovieDashboard = () => {
 
   const movies = useAppSelector((state: RootState) => state.movies.movies)
-  // const moviesState = useAppSelector((state: RootState) => state.movies)
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -45,7 +42,7 @@ const MovieDashboard = () => {
   }
 
   //delete modal
-  const [deleteMovieId, setDeleteMovieId] = useState("")
+  const [deleteMovieId, setDeleteMovieId] = useState<string| undefined>("")
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
   const toggleDeleteModal = () => {
     setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
@@ -149,7 +146,7 @@ const MovieDashboard = () => {
                         <button
                           type="button"
                           className="btn btn-danger btn-sm"
-                          onClick={() => { toggleDeleteModal(); setDeleteMovieId(movie.id!) }}
+                          onClick={() => { toggleDeleteModal(); setDeleteMovieId(movie.id) }}
                         >Delete</button>
 
                       </div>

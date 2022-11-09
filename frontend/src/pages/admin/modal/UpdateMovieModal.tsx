@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD'
-import { Button, ButtonContainer, Error } from '../../../components/Modal/ModalPopup.styled'
+import { ButtonContainer } from '../../../components/Modal/ModalPopup.styled'
 
 import { Movie } from "../../../interfaces"
-
 
 export type UpdateMovieFunction = (args: Movie) => Promise<void>;
 
@@ -16,8 +15,6 @@ interface UpdateMovieModalProps {
 }
 
 const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible, onClose, error, onUpdateMovie, movieDataforUpdate }) => {
-
-
   const [id, setId] = useState<string | undefined>("")
   const [title, setTitle] = useState<string | undefined>("")
   const [overview, setOverview] = useState<string | undefined>("")
@@ -25,7 +22,6 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
   const [year, setYear] = useState<string | undefined>("")
   const [imageURL, setImageURL] = useState<string | undefined>("")
   const [actorIds, setActorIds] = useState<string[] | string | undefined>()
-
 
   useEffect(() => {
     setId(movieDataforUpdate?.id)
@@ -68,16 +64,13 @@ const UpdateMovieModal: React.FC<UpdateMovieModalProps> = ({ isEditModalVisible,
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault()
-
     const updateData = { id, title, cost, year, imageURL, actorIds }
-    // console.log(updateData)
     onUpdateMovie(updateData)
 
   }
 
   return (
     <ModalRWD
-      // header='Edit Movie'
       onBackdropClick={onClose}
       isEditModalVisible={isEditModalVisible}
       content={

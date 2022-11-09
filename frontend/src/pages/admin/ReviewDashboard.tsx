@@ -1,21 +1,16 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from '../../store/store'
-import { getReviews, reviewDetails, reviewState, updateReview, deleteReview } from "../../redux/reviewSlice"
+import { getReviews, reviewDetails, updateReview, deleteReview } from "../../redux/reviewSlice"
 import { getMovies, movieDetails} from "../../redux/movieSlice";
-
-import { Review } from '../../interfaces'
-
 import './Dash.scss'
 import DeleteReviewModal, { DeleteReviewFunction } from "./modal/DeleteReviewModal";
-import UpdateReviewModal, { UpdateFunction } from "./modal/UpdateReviewModal";
+import  { UpdateFunction } from "./modal/UpdateReviewModal";
 import { Rating } from 'react-simple-star-rating'
 
 const ReviewDashboard = () => {
   const reviews = useAppSelector(reviewDetails)
   const dispatch = useAppDispatch();
-
   const movies = useAppSelector(movieDetails)
-
 
   useEffect(() => {
     if (reviews) {
@@ -28,47 +23,24 @@ const ReviewDashboard = () => {
     if (movies) {
       dispatch(getMovies())
     }
-
   }, [dispatch])
 
 
-
-
-  const [isModalVisible, setIsModalVisible] = useState(false)// add
-
-  const [isActive, setIsActive] = useState<boolean | undefined>(false)
-  const [test, setTest] = useState<string | undefined>("")
-
-  //activate modal
-  const [updateId, setUpdateId] = useState("")
-  const [isEditModalVisible, setEditModalVisible] = useState(false)
-  const toggleEditModal = () => {
-    setEditModalVisible(isEditModalVisible => !isEditModalVisible)
-  }
-
-  // //toggle add modal
-  // const toggleModal = () => {
-  //   setIsModalVisible(wasModalVisible => !wasModalVisible)
-  // }
-
   //delete modal
-  const [deleteId, setDeleteId] = useState("")
+  const [deleteId, setDeleteId] = useState<string | undefined>("")
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
   const toggleDeleteModal = () => {
     setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
   }
 
   const onBackdropClick = () => {
-    setIsModalVisible(false)
+
     setDeleteModalVisible(false)
-    setEditModalVisible(false)
-    // clear()
   }
 
 
   const onDeleteReview: DeleteReviewFunction = async (id: string) => {
     dispatch(deleteReview(id)).then((res) => {
-      // initApp()
       onBackdropClick()
     })
   }
@@ -153,7 +125,7 @@ const ReviewDashboard = () => {
                     <button
                       type="button"
                       className="btn btn-danger btn-sm"
-                      onClick={() => { toggleDeleteModal(); setDeleteId(review.id!) }}
+                      onClick={() => { toggleDeleteModal(); setDeleteId(review.id) }}
                     >Delete</button>
 
                   </td>
@@ -163,16 +135,6 @@ const ReviewDashboard = () => {
           ) : ""}
         </tbody>
       </table>
-
-      <UpdateReviewModal
-        onClose={onBackdropClick}
-        isEditModalVisible={isEditModalVisible}
-        onUpdateRequested={onUpdateReview}
-        reviewId={updateId}
-      />
-
-
-
 
       <DeleteReviewModal
         onClose={onBackdropClick}

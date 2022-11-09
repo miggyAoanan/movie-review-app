@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD'
 import { ButtonContainer } from '../../../components/Modal/ModalPopup.styled'
 
@@ -14,14 +14,8 @@ interface DeleteMovieModalProps {
 
 const DeleteMovieModal: React.FC<DeleteMovieModalProps> = ({ isDeleteModalVisible, onClose, error, onDeleteMovie, deleteMovieId }) => {
 
-  // useEffect(() => {
-    
-  // }, [deleteMovieId])
-
-
   return (
     <ModalRWD
-      // header='Delete Movie ?'
       onBackdropClick={onClose}
       isDeleteModalVisible={isDeleteModalVisible}
       deleteMovieId={deleteMovieId}

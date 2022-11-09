@@ -5,11 +5,11 @@ import  {Review} from "./review"
 export interface Movie {
     id?: string;
     title: string | undefined;
-    overview?: string |undefined;
+    overview?: string;
     year: string | undefined;
     cost:number | undefined;
-    imageURL?: string | undefined;
-    actorIds?: string[] |undefined | string;
+    imageURL?: string;
+    actorIds?: string[] | string;
 }
 
 export interface MovieDetails {

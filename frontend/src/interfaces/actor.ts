@@ -2,7 +2,7 @@ import { Movie } from "./movie";
 
 export interface Actor {
    
-    id?: string | undefined;
+    id?: string;
     firstName: string | undefined;
     lastName: string | undefined;
     gender: string| undefined;
@@ -12,7 +12,7 @@ export interface Actor {
 }
 
 export interface ActorDetails {
-    id?: string | undefined;
+    id?: string;
     firstName: string | undefined;
     lastName: string | undefined;
     gender: string | undefined;

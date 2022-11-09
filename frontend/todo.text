@@ -19,6 +19,8 @@ https://codepen.io/BlackShabat/pen/pJZooM
 3fda444ff29f0afff3ca77b8c3b72d35c78667f7
 
 sonar-scanner.bat -D"sonar.projectKey=movieapp-frontend" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=3fda444ff29f0afff3ca77b8c3b72d35c78667f7"
+
+
 Notes:
 
 movie review API
@@ -28,6 +30,5 @@ links
 
 
 user hasmany 
-
 
 

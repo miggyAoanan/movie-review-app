@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useEffect } from "react";
 import Slider from 'react-slick'
-import { useSelector } from "react-redux";
+
 import MovieCard from "../MovieCard/MovieCard";
 import "./MovieList.scss";
 import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { getMovies, movieDetails } from "../../redux/movieSlice";
 import { Settings } from "../../common/settings";
-
 
 const MovieList = () => {
 
@@ -20,13 +19,13 @@ const MovieList = () => {
     }
   }, [dispatch])
 
-  const movies = useMemo(() => dataMovies, [dataMovies])
+
 
   let renderMovies
 
   renderMovies =
-    movies ?
-      movies?.map((movie, index) => (<MovieCard key={index} {...movie} />)) :
+  dataMovies ?
+  dataMovies?.map((movie, index) => (<MovieCard key={index} {...movie} />)) :
       (
         <div className="movies-error">
           <h3>{moviesState.errors}</h3>
@@ -37,8 +36,7 @@ const MovieList = () => {
   return (
     <div className="movie-wrapper">
       <div className="movie-list">
-        <h2>Movies</h2>
-
+        <h2 className="text-white">Movies</h2>
         <div className="movie-container"><Slider {...Settings}>{renderMovies}</Slider></div>
       </div>
 

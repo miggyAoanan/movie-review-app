@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from '../../store/store'
 import { userDetails, getUsers, registerAdmin, updateUser, deleteUser } from "../../redux/userSlice";
-
 import userIcon from "../../images/user.png"
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterAdminModal, { RegisterFunction, RegisterArgs } from "./modal/RegisterAdminModal";
 import UpdateUserModal, {UpdateFunction, UpdateArgs} from './modal/UpdateUserModal'
@@ -27,8 +25,6 @@ const UserDashBoard = () => {
 
   }, [dispatch])
 
-  //Add Admin Modal
-  const [forAdmin, setForAdmin] = useState("")
   const [isModalVisible, setIsModalVisible] = useState(false)// add
   const toggleModal = () => {
     setIsModalVisible(wasModalVisible => !wasModalVisible)
@@ -44,14 +40,14 @@ const UserDashBoard = () => {
   const [userForUpdate, setUserForUpdate] = useState<User>()
   const [isEditModalVisible, setIsEditModalVisible] = useState(false)// add
   const toggleEditModal = () => {
-    setIsEditModalVisible(isEditModalVisible => !isEditModalVisible)
+    setIsEditModalVisible(wasEditModalVisible => !wasEditModalVisible)
   }
 
     //delete modal
-    const [deleteId, setDeleteId] = useState("")
+    const [deleteId, setDeleteId] = useState<string |undefined>("")
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
     const toggleDeleteModal = () => {
-      setDeleteModalVisible(isDeleteModalVisible => !isDeleteModalVisible)
+      setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
     }
   
 
@@ -61,7 +57,7 @@ const UserDashBoard = () => {
     const { fullName, email, password, confirm } = args;
     let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
     if (fullName === "") {
-      setErrorInput("FullName is required");
+      setErrorInput("Fullname is required");
     } else if (email === "") {
       setErrorInput("Email is required");
     } else if (password === "") {
@@ -104,8 +100,6 @@ const UserDashBoard = () => {
 
 
   const onUpdateUser : UpdateFunction = async (args: UpdateArgs) => {
-
-   const forUpdate = {id: args.id, fullName: args.fullName, email: args.email, isActive: args.isActive}
     dispatch(updateUser(args)).then((res)=>{
       dispatch(getUsers())
       onBackdropClick()
@@ -165,7 +159,7 @@ const UserDashBoard = () => {
                     <button
                       type="button"
                       className="btn btn-danger btn-sm px-2"
-                    onClick={() => { toggleDeleteModal(); setDeleteId(user.id!)}}
+                    onClick={() => { toggleDeleteModal(); setDeleteId(user.id)}}
                     >Delete</button>
 
                   </td>
@@ -180,7 +174,7 @@ const UserDashBoard = () => {
         type="button"
         className="btn btn-primary btn-sm px-2" 
 
-        onClick={() => { setForAdmin("forAdmin"); toggleModal() }}
+        onClick={() => { toggleModal() }}
       >Register Admin</button>
       <RegisterAdminModal
         onClose={onBackdropClick}
@@ -201,7 +195,7 @@ const UserDashBoard = () => {
        deleteId={deleteId}
        onDeleteUser={onDeleteUser}
       />
-      <ToastContainer />
+     
     </div>
   )
 }

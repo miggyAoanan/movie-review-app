@@ -24,7 +24,6 @@ interface LoginModalProps {
 const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible, loginErrorInput, onLoginRequested }) => {
   const dispatch = useAppDispatch();
   const [showRegister, setShowRegister] = useState(false)
-  // const [errorInput, setErrorInput] = useState("")
   const [input, setInput] = useState({
     fullName: "",
     email: "",
@@ -33,7 +32,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
   });
 
   const { fullName, email, password, confirm } = input;
-  // let error = loginErrorInput;
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setInput((prevState) => ({
       ...prevState,
@@ -66,7 +65,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
           }
           else {
             console.log(res)
-            console.log(res.error.data.error.message);// if thre is a single error
+            console.log(res.error.data.error.message);
             let errorMessage = res.error.data.error.message
             let errorName = res.error.data.error.name
             let error = errorName + ": " + errorMessage
@@ -74,7 +73,6 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
             let errorArray: any = []
             let errors: any = res.error.data.error.details
             errors.forEach((err: any) => {
-
               errorArray.push(err.message)
             })
             console.log(errorArray)

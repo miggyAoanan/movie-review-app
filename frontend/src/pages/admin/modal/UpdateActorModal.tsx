@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import ActorModalRWD from '../../../components/Modal/ActorModalRWD'
-import { Button, ButtonContainer, Error } from '../../../components/Modal/ModalPopup.styled'
+import { ButtonContainer} from '../../../components/Modal/ModalPopup.styled'
 
 import { Actor } from "../../../interfaces"
 

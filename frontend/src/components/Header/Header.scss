@@ -11,7 +11,7 @@
 }
 .linkContainer{
   display: flex;
-  flex: 5;
+  flex: 3;
   align-items: center;
   text-align: center;
 }
@@ -22,9 +22,7 @@
 .user{
   display: flex;
   flex-direction: row;
-
   text-align: center;
-
   flex: 2;
   align-content: space-between;
 }
@@ -41,9 +39,8 @@
 }
 .userDetails{
   display: flex;
-
   justify-content: flex-end;
-  flex: 2;
+  flex: 3;
 }
 
 .name{
@@ -55,17 +52,11 @@
   position: relative;
   top: 4px;
   
+  
 }
 
-
-.logo {
-  color: $font-primary;
-  font-size: 20px;
-  font-weight: 600;
-}
 .userimage{
   display: flex;
-  
   justify-content: flex-end;
   flex: 1;
 }
@@ -77,4 +68,31 @@
   // margin-left: 5px;
   margin-right: 5px;
 
+}
+
+.search-bar {
+  width: 50%;
+  display: flex;
+  flex: 4;
+  justify-content: center;
+
+  form {
+    display: flex;
+    justify-content: center;
+    width: 70%;
+    button {
+      padding: 0px 8px;
+      font-size: 20px;
+      cursor: pointer;
+      height: 38px;
+    }
+  }
+
+  input {
+    font-size: 18px;
+    width: 100%;
+    padding: 5px 5px 5px 10px;
+    height: 38px;
+    outline: none;
+  }
 }
