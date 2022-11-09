@@ -100,7 +100,7 @@ const UserDashBoard = () => {
 
 
   const onUpdateUser : UpdateFunction = async (args: UpdateArgs) => {
-    dispatch(updateUser(args)).then((res)=>{
+    dispatch(updateUser(args)).then((res:any)=>{
       dispatch(getUsers())
       onBackdropClick()
     })
@@ -109,7 +109,7 @@ const UserDashBoard = () => {
 
   const onDeleteUser : DeleteUserFunction = async (id: string) => {
    
-    dispatch(deleteUser(id)).then((res)=>{
+    dispatch(deleteUser(id)).then((res:any)=>{
       dispatch(getUsers())
       onBackdropClick()
     })
@@ -138,7 +138,7 @@ const UserDashBoard = () => {
         </thead>
         <tbody>
           {users ? (
-            users.map((user, index) => {
+            users.map((user: User, index:number) => {
               return (
                 <tr key={user.id}>
                   <td>{index + 1}</td>

@@ -11,6 +11,7 @@ import { Review } from '../../interfaces/review'
 import { addMovieReview, AddReviewArgs } from '../../redux/reviewSlice'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Actor, Movie, MovieDetails } from "../../interfaces";
 
 
 function MovieDetail() {
@@ -37,7 +38,7 @@ function MovieDetail() {
 
   let renderActors
 
-  renderActors = movie?.actors?.map((actor, index) => (<ActorCard key={index} {...actor} />))
+  renderActors = movie?.actors?.map((actor:Actor, index:number) => (<ActorCard key={index} {...actor} />))
 
   let renderActorsList
 
@@ -165,11 +166,11 @@ function MovieDetail() {
             <div className="section-right">
               <div className="movie-info">
                 <h2 className="mt-5"> Overview</h2>
-                <p>This is the overview</p>
+                <p>{movie?.overview}</p>
 
                 <div className="actorListContainer">
 
-                  {renderActorsList}
+                  Actors:{renderActorsList}
                 </div>
               </div>
 

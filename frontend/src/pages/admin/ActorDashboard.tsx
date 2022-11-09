@@ -47,6 +47,7 @@ const ActorDashboard = () => {
     setIsModalVisible(false)
     setDeleteModalVisible(false)
     setEditModalVisible(false)
+    
 
   }
 
@@ -109,7 +110,7 @@ const ActorDashboard = () => {
         </thead>
         <tbody>
           {actors ? (
-            actors.map((actor, index) => {
+            actors.map((actor:Actor, index:number) => {
               return (
                 <tr key={actor.id}>
                   <td>{index + 1}</td>

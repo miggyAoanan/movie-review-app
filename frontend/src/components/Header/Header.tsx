@@ -12,10 +12,10 @@ import { useLoginUserMutation } from '../../authServices/authApi'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { getMovies, movieDetails } from "../../redux/movieSlice";
 
 function Header() {
   const dispatch = useAppDispatch();
-
   const { fullName, permissions } = useAppSelector(selectAuth)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [loginUser,
@@ -98,6 +98,8 @@ function Header() {
   }
 
 
+
+
   return (
     <div className="header mb-5">
 
@@ -133,10 +135,16 @@ function Header() {
 
 
           <>
-            {fullName && <div className="text-white name"> Hi {fullName} !</div>}
+            {permissions === "user" &&  (
+            <>
+            <div className="text-white name"> Hi {fullName} !</div>
+            <button className="btn btn-secondary" onClick={() => handleLogout()}  >Logout</button>
+            </>
+            )}
 
             {permissions === "admin" &&
-
+              <>
+              <div className="text-white name"> Hi {fullName} !</div>
               <div className="dropdown">
                 <Link className="btn btn-secondary dropdown-toggle" to="/" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                   Admin
@@ -154,6 +162,7 @@ function Header() {
 
                 </ul>
               </div>
+              </>
             }
 
           </>

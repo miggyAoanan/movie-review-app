@@ -16,19 +16,11 @@ import ReviewDashboard from "./pages/admin/ReviewDashboard";
 import Actorlist from "./components/Actor/ActorList";
 import ActorMovieList from "./components/Actor/ActorMovieList";
 import MovieList from "./components/MovieList/MovieList";
+import Protected from "./pages/Protected";
 
 
 
 function App() {
-  const dispatch = useAppDispatch();
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const { permissions } = useAppSelector(selectAuth)
-
-
-  useEffect(() => {
-    dispatch(setUser(user))
-
-  }, [])
 
   return (
     <div className="app">
@@ -41,18 +33,12 @@ function App() {
             <Route path="/movie/:id" element={<MovieDetail/>} />
             <Route path="/actor" element={<Actorlist />} />
             <Route path="/actor/:id" element={<ActorMovieList />} />
-            {permissions === "admin" ?
-              <>
+            <Route path="/" element={<Protected />}>
                 <Route path="/admin/movie/dash" element={<MovieDashboard />} />
                 <Route path="/admin/actor/dash" element={<ActorDashboard />} />
                 <Route path="/admin/user/dash" element={<UserDashBoard />} />
-                <Route path="/admin/review/dash" element={<ReviewDashboard />} />
-              </>
-              :
-              (
-                <Route path="/" element={<Navigate to='/' replace />} />
-              )
-            }
+                <Route path="/admin/review/dash" element={<ReviewDashboard />} />  
+            </Route>   
           </Routes>
         </div>
         <Footer />

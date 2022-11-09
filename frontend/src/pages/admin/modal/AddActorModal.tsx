@@ -23,7 +23,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
   });
 
 
-  // const { firstName, lastName, gender, imageURL } = input;
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setInput((prevState) => ({
@@ -31,6 +31,8 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
       [event.target.name]: event.target.value,
     }));
   }
+
+  
   return (
     <ActorModalRWD
       onBackdropClick={onClose}

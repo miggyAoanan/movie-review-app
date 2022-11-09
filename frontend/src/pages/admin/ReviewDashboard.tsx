@@ -6,6 +6,7 @@ import './Dash.scss'
 import DeleteReviewModal, { DeleteReviewFunction } from "./modal/DeleteReviewModal";
 import  { UpdateFunction } from "./modal/UpdateReviewModal";
 import { Rating } from 'react-simple-star-rating'
+import { Review } from "../../interfaces";
 
 const ReviewDashboard = () => {
   const reviews = useAppSelector(reviewDetails)
@@ -40,7 +41,7 @@ const ReviewDashboard = () => {
 
 
   const onDeleteReview: DeleteReviewFunction = async (id: string) => {
-    dispatch(deleteReview(id)).then((res) => {
+    dispatch(deleteReview(id)).then((res:any) => {
       onBackdropClick()
     })
   }
@@ -50,7 +51,7 @@ const ReviewDashboard = () => {
 
     let isActiveValue = !args.isActive
     let newArgs = { id: args.id, isActive: isActiveValue }
-    dispatch(updateReview(newArgs)).then((res) => {
+    dispatch(updateReview(newArgs)).then((res:any) => {
       dispatch(getReviews())
     })
 
@@ -74,7 +75,7 @@ const ReviewDashboard = () => {
         </thead>
         <tbody>
           {reviews ? (
-            reviews.map((review, index) => {
+            reviews.map((review: Review, index:number) => {
               return (
                 <tr key={review.id}>
                   <td>{index + 1}</td>
