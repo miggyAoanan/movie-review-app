@@ -16,6 +16,7 @@ interface MovieState {
     addMovieStatus: string,
     updateMovieStatus: string,
     deleteMovieStatus: string,
+    searchMovieStatus: string;
 
 }
 
@@ -27,7 +28,8 @@ const initialState: MovieState = {
     getMovieStatus: "",
     addMovieStatus: "",
     updateMovieStatus: "",
-    deleteMovieStatus: ""
+    deleteMovieStatus: "",
+    searchMovieStatus:""
 
 }
 
@@ -237,6 +239,23 @@ export const movieSlice = createSlice({
             state.errors = JSON.stringify(action.payload);
             state.loading = false;
             state.deleteMovieStatus = "rejected"
+        });
+
+        builder.addCase(searcheMovies.pending, (state = initialState) => {
+            state.loading = true;
+            state.searchMovieStatus = "pending"
+
+        });
+        builder.addCase(searcheMovies.fulfilled, (state, action) => {
+            state.movies = action.payload;
+            state.loading = false;
+            state.searchMovieStatus = "fullfilled"
+
+        });
+        builder.addCase(searcheMovies.rejected, (state, action) => {
+            state.errors = JSON.stringify(action.payload);
+            state.loading = false;
+            state.searchMovieStatus = "rejected"
         });
 
     },

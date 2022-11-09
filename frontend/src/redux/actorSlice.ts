@@ -9,11 +9,12 @@ interface ActorState {
     actor: ActorDetails | null,
     actors: ActorDetails[] | null,
     loading: boolean,
-    errors: string,
+    errors: any,
     getActorStatus: string,
     addActorStatus: string,
     updateActorStatus: string,
-    deleteActorStatus: string
+    deleteActorStatus: string,
+    searchActorStatus: string,
 
 }
 
@@ -25,7 +26,8 @@ const initialState: ActorState = {
     getActorStatus: "",
     addActorStatus: "",
     updateActorStatus: "",
-    deleteActorStatus: ""
+    deleteActorStatus: "",
+    searchActorStatus:""
 }
 
 export const getActors = createAsyncThunk<ActorDetails[]>(
@@ -143,7 +145,6 @@ export const actorSlice = createSlice({
         });
 
         builder.addCase(getActors.rejected, (state = initialState) => {
-           
             state.loading = false;
             state.getActorStatus = "rejected"
         });
@@ -160,7 +161,6 @@ export const actorSlice = createSlice({
         });
 
         builder.addCase(getActor.rejected, (state = initialState) => {
-
             state.loading = false;
             state.getActorStatus = "rejected"
         });
@@ -170,14 +170,12 @@ export const actorSlice = createSlice({
             state.updateActorStatus = "pending"
 
         });
-        builder.addCase(updateActor.fulfilled, (state = initialState) => {
-           
+        builder.addCase(updateActor.fulfilled, (state = initialState) => {  
              state.loading = false;
             state.updateActorStatus = "fullfilled"
 
         });
-        builder.addCase(updateActor.rejected, (state = initialState) => {
-           
+        builder.addCase(updateActor.rejected, (state = initialState) => { 
             state.loading = false;
             state.updateActorStatus = "rejected"
         });
@@ -190,17 +188,28 @@ export const actorSlice = createSlice({
         builder.addCase(deleteActor.fulfilled, (state = initialState) => {
             state.loading = false;
             state.deleteActorStatus = "fullfilled"
-
         });
-        builder.addCase(deleteActor.rejected, (state = initialState) => {
-          
+        builder.addCase(deleteActor.rejected, (state = initialState) => {         
             state.loading = false;
             state.deleteActorStatus = "rejected"
         });
 
-        
+        builder.addCase(searcheActors.pending, (state = initialState) => {
+            state.loading = true;
+            state.searchActorStatus = "pending"
 
-        
+        });
+        builder.addCase(searcheActors.fulfilled, (state = initialState,action) => {
+            state.actors = action.payload;
+            state.loading = false;
+            state.searchActorStatus = "fullfilled"
+        });
+        builder.addCase(searcheActors.rejected, (state = initialState, action) => {         
+            state.loading = false;
+            state.searchActorStatus = "rejected"
+            state.errors = action.payload
+        });
+
 
     }
 })
