@@ -35,7 +35,7 @@ const DeleteUserModal: React.FC<DeleteMovieModalProps> = ({ isDeleteModalVisible
               type='button'
             > Delete</button>
           </ButtonContainer>
-
+        
 
 
         </>

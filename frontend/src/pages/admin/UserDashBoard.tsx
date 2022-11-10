@@ -5,25 +5,27 @@ import userIcon from "../../images/user.png"
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterAdminModal, { RegisterFunction, RegisterArgs } from "./modal/RegisterAdminModal";
 import UpdateUserModal, {UpdateFunction, UpdateArgs} from './modal/UpdateUserModal'
-import { User } from "../../interfaces";
+import { User, ErrorI } from "../../interfaces";
 import DeleteUserModal, {DeleteUserFunction} from "./modal/DeleteUserModal";
+import { toast,ToastContainer} from "react-toastify";
 
 const UserDashBoard = () => {
   const users = useAppSelector(userDetails)
   const [errorInput, setErrorInput] = useState("")
   const dispatch = useAppDispatch();
+  
   useEffect(() => {
     if (users) {
       dispatch(getUsers())
     }
+   
   }, [dispatch])
 
-  const registerState = useAppSelector((state) => state.users)
-  useEffect(() => {
-    
-    console.log(registerState)
+        
 
-  }, [dispatch])
+  //   console.log(registerState)
+
+  // }, [dispatch])
 
   const [isModalVisible, setIsModalVisible] = useState(false)// add
   const toggleModal = () => {
@@ -109,9 +111,13 @@ const UserDashBoard = () => {
 
   const onDeleteUser : DeleteUserFunction = async (id: string) => {
    
-    dispatch(deleteUser(id)).then((res:any)=>{
+      dispatch(deleteUser(id)).then((res:any) =>{
       dispatch(getUsers())
       onBackdropClick()
+     const messsage :string = res.payload
+      toast.error(messsage)
+   
+      // console.log(res.payload.message)
     })
   }
 
@@ -196,7 +202,7 @@ const UserDashBoard = () => {
        deleteId={deleteId}
        onDeleteUser={onDeleteUser}
       />
-     
+       <ToastContainer />
     </div>
   )
 }
