@@ -335,7 +335,7 @@ export class UserController {
     @param.filter(User) filter?: Filter<User>,
   ): Promise<User[]> {
     return this.userRepository.find(filter);
-    // return this.userRepository.find({include:['review']});
+   
   }
 
 
@@ -408,13 +408,18 @@ export class UserController {
   @response(204, {
     description: 'User DELETE success',
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
+  async deleteById(@param.path.string('id') id: string): Promise<string> {
     const users = await this.userRepository.find()
     const index = users.findIndex((user)=> user.id === id)
+
+    const errorMessage = "You cannot delete the root admin";
+    const successMessage = "Successfully deleted";
     if(index === 0){
-      throw new HttpErrors.Unauthorized("You cannot delete the root admin");
+      // throw new HttpErrors.Unauthorized("You cannot delete the root admin");
+      return errorMessage
     }
-    await this.userRepository.deleteById(id);
+     await this.userRepository.deleteById(id);
+     return successMessage
   }
 
 
