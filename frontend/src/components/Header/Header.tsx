@@ -3,14 +3,15 @@ import { Link } from "react-router-dom";
 import user from "../../images/user.png";
 import logo from "../../images/logo.png"
 import "./Header.scss";
-import LoginRegisterModal, { LoginFunction } from "../Modal/LoginRegisterModal";
-
-import { useAppDispatch, useAppSelector } from "../../store/store"
-import { logout, selectAuth, setUser } from "../../redux/authSlice";
-import { useLoginUserMutation } from '../../authServices/authApi'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import LoginRegisterModal, { LoginFunction } from "../Modal/LoginRegisterModal";
+import { useAppDispatch, useAppSelector } from "../../store/store"
+import { logout, selectAuth, setUser } from "../../redux/authSlice";
+import { searchMovies } from "../../redux/movieSlice";
+import { useLoginUserMutation } from '../../authServices/authApi'
+import { searcheActors } from "../../redux/actorSlice";
 
 
 
@@ -32,7 +33,6 @@ function Header() {
   }
 
   const onLoginRequest: LoginFunction = async ({ email, password }) => {
-
     // eslint-disable-next-line
     let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
@@ -95,7 +95,16 @@ function Header() {
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault()
-    console.log(term)
+    
+    dispatch(searchMovies(term)).then((res) => {
+      console.log(res);
+    })
+
+    dispatch(searcheActors(term)).then((res)=> {
+      console.log(res);
+    })
+
+    setTerm("")
   }
 
 
@@ -121,7 +130,7 @@ function Header() {
       <div className="search-bar">
 
         <form onSubmit={handleSubmit}>
-          <input type="text" value={term} placeholder="Search for movies" onChange={(e) => setTerm(e.target.value)} />
+          <input type="text" value={term} placeholder="Search" onChange={(e) => setTerm(e.target.value)} />
           <button type="submit"> <i className="fa fa-search"></i> </button>
         </form>
 

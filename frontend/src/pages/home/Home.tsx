@@ -4,30 +4,32 @@ import MovieList from "../../components/MovieList/MovieList";
 
 import { useAppDispatch} from '../../store/store'
 import { movieDetails, searchMovies , getMovies} from "../../redux/movieSlice";
-import { searcheActors } from "../../redux/actorSlice";
+import { getActors, searcheActors } from "../../redux/actorSlice";
 import Actorlist from "../../components/Actor/ActorList";
-import HomeDetails from "./HomeDetails";
-
-
 
 const Home = () => {
 
   const dispatch = useAppDispatch()
-  const movieText =  "avengers";
-  const actortext = "chris"
+  const movieText =  "";
+  const actortext = ""
+
   useEffect(() => {
-    dispatch(searchMovies(movieText))
-    dispatch(searcheActors(actortext))
-    
+    if(movieText || actortext){
+      dispatch(searchMovies(movieText))
+      dispatch(searcheActors(actortext))
+    }else{
+      dispatch(getMovies())
+      dispatch(getActors())
+    }
   
   }, [dispatch])
   
   return (
     <div >
       <div className="banner-img"></div>
-      <HomeDetails />
-      {/* <MovieList />
-      <Actorlist /> */}
+    
+      <MovieList />
+      <Actorlist />
 
     </div>
   );

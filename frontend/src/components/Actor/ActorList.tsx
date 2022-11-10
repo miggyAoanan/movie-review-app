@@ -1,28 +1,15 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import ActorCard from '../ActorCard/ActorCard'
-import { useAppDispatch, useAppSelector } from '../../store/store'
-import { getActors, actorDetails } from "../../redux/actorSlice";
+import {  useAppSelector } from '../../store/store'
+import { actorDetails } from "../../redux/actorSlice";
 
 import "./ActorMovie.scss"
 
 const Actorlist = () => {
     const actors = useAppSelector(actorDetails)
-    const dispatch = useAppDispatch();
-    useEffect(() => {
-        if (actors) {
-            dispatch(getActors())
-        }
-
-    }, [dispatch])
-
     let renderActors
     renderActors =
-        actors?.map((actor, index) => (
-            <Link to={`/actor/${actor.id}`}>
-                <ActorCard key={index} {...actor} />
-            </Link>
-        ))
+        actors?.map((actor, index) => (<ActorCard key={index} {...actor} />))
 
     return (
         <div className="actor-wrapper">

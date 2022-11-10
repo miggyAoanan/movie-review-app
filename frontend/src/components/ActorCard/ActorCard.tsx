@@ -8,7 +8,7 @@ const ActorCard = (props : Actor) => {
   const data = props
  
   return (
-    <div className="card-item">
+    <div className="card-item" key={data.id}>
         <Link to={`/actor/${data.id}`}>
         <div className="card-inner">
           <div className="card-top">

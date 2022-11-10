@@ -7,7 +7,7 @@ function MovieCard(props: Movie) {
   const [data] = useState(props)
 
   return (
-    <div className="card-item">
+    <div className="card-item" key={data.id}>
       <Link to={`/movie/${data.id}`}>
         <div className="card-inner">
           <div className="card-top">

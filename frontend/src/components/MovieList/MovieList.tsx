@@ -1,34 +1,22 @@
-import React, { useEffect } from "react";
+import React from "react";
 import MovieCard from "../MovieCard/MovieCard";
 import "./MovieList.scss";
-import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
-import { getMovies, movieDetails } from "../../redux/movieSlice";
-
+import { useAppSelector, RootState} from '../../store/store'
+import { movieDetails } from "../../redux/movieSlice";
 import { Movie } from "../../interfaces";
 
 const MovieList = () => {
-
-  const dispatch = useAppDispatch();
   const moviesState = useAppSelector((state: RootState) => state.movies)
-  const movies  = useAppSelector(movieDetails)
-
-  useEffect(() => {
-    if (movies) {
-      dispatch(getMovies())
-    }
-  }, [dispatch])
-
-
+  const movies = useAppSelector(movieDetails)
 
   let renderMovies
-  movies?
+  movies?.length !== 0 ?
   renderMovies  =  movies?.map((movie:Movie, index:number) => (<MovieCard key={index} {...movie} />)) :
       (
         <div className="movies-error">
           <h3>{moviesState.errors}</h3>
         </div>
       );
-
 
   return (
     <div className="main-movie-wrapper">

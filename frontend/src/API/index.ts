@@ -10,3 +10,7 @@ export const BASE_URL =  'http://localhost:3000'
 
 // add reviews
 export const MOVIE_REVIEWS_URL = 'http://localhost:3000/movies/' //+id/reviews
+// seacrch movies
+export const MOVIE_SEARCH_URL = 'http://localhost:3000/search/movies/' //+string
+//seacrh actors
+export const ACTORS_SEARCH_URL = 'http://localhost:3000/search/actors/' // +string

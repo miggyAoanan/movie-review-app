@@ -31,7 +31,7 @@ function MovieDetail() {
 
   let renderActorsList  = movie?.actors?.map((act:Actor, index:number) => (
 
-    <ul className="actorList">
+    <ul className="actorList" key={index}>
       <li key={index}> {act.firstName} &nbsp; {act.lastName}</li>
 
     </ul>
