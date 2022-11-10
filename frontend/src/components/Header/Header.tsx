@@ -14,14 +14,14 @@ import { useLoginUserMutation } from '../../authServices/authApi'
 import { searcheActors } from "../../redux/actorSlice";
 
 
-
 function Header() {
   const dispatch = useAppDispatch();
   const { fullName, permissions } = useAppSelector(selectAuth)
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [error, setError] = useState("")
+  const [errorInput, setErrorInput] = useState("")
   const [loginUser,
     { data: loginData,
+      error: error,
       isSuccess: isLoginSuccess }
   ] = useLoginUserMutation()
 
@@ -30,42 +30,37 @@ function Header() {
   }
   const onBackdropClick = () => {
     setIsModalVisible(false)
+    setErrorInput("")
   }
-
+  const onClear = () => {
+    setErrorInput("")
+  }
   const onLoginRequest: LoginFunction = async ({ email, password }) => {
+
     // eslint-disable-next-line
     let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
 
     if (email === "") {
-      setError("Email is required")
+      setErrorInput("Email is required")
     } else if (password === "") {
-      setError("Password is required")
+      setErrorInput("Password is required")
     } else if (password.length <= 8) {
-      setError("Must be at least 8 character")
+      setErrorInput("Must be at least 8 character")
     } else if (!emailReg.test(email)) {
-      setError("Must be a valid email format")
+      setErrorInput("Must be a valid email format")
     }
     else {
       await loginUser({ email, password }).then((res: any) => {
-        if (res.data) {
-          console.log(res)
-        }
-        else {
-
-
           let errorMessage = res.error.data.error.message
           let errorName = res.error.data.error.name
           let error = errorName + ": " + errorMessage
-          setError(error)
+          setErrorInput(error)
           let errorArray: any = []
           let errors: any = res.error.data.error.details
           errors.forEach((err: any) => {
-
             errorArray.push(err.message)
           })
-          console.log(errorArray)
 
-        }
       })
 
     }
@@ -80,12 +75,12 @@ function Header() {
         isActive: loginData.data.isActive,
         id: loginData.data.id
       }))
-
       onBackdropClick()
     }
 
   }, [isLoginSuccess])
 
+  
   const handleLogout = () => {
     dispatch(logout())
     window.location.reload()
@@ -95,19 +90,13 @@ function Header() {
 
   const handleSubmit = (event: React.SyntheticEvent): void => {
     event.preventDefault()
-    
     dispatch(searchMovies(term)).then((res) => {
-      console.log(res);
+      setTerm("")
     })
-
-    dispatch(searcheActors(term)).then((res)=> {
-      console.log(res);
+    dispatch(searcheActors(term)).then((res) => {
+      setTerm("")
     })
-
-    setTerm("")
   }
-
-
 
 
   return (
@@ -142,56 +131,57 @@ function Header() {
             <img src={user} alt="user" />
           </div>
           <>
-            {permissions === "user" &&  (
-            <>
-            <div className="text-white name"> Hi {fullName} !</div>
-            <button className="btn btn-secondary" onClick={() => handleLogout()}  >Logout</button>
-            </>
+            {permissions === "user" && (
+              <>
+                <div className="text-white name"> Hi {fullName} !</div>
+                <button className="btn btn-secondary" onClick={() => handleLogout()}  >Logout</button>
+              </>
             )}
 
             {permissions === "admin" &&
               <>
-              <div className="text-white name"> Hi {fullName} !</div>
-              <div className="dropdown">
-                <Link className="btn btn-secondary dropdown-toggle" to="/" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-                  Admin
-                </Link>
+                <div className="text-white name"> Hi {fullName} !</div>
+                <div className="dropdown">
+                  <Link className="btn btn-secondary dropdown-toggle" to="/" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                    Admin
+                  </Link>
 
-                <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
 
-                  <>
-                    <Link to="/admin/movie/dash"><span className="dropdown-item" >Movies</span></Link>
-                    <Link to="/admin/actor/dash"><span className="dropdown-item" >Actors</span></Link>
-                    <Link to="/admin/review/dash"><span className="dropdown-item" >Reviews</span></Link>
-                    <Link to="/admin/user/dash"><span className="dropdown-item" >Users</span></Link>
-                    <Link to="/"><span className="dropdown-item" onClick={() => handleLogout()} >Logout</span></Link>
-                  </>
+                    <>
+                      <Link to="/admin/movie/dash"><span className="dropdown-item" >Movies</span></Link>
+                      <Link to="/admin/actor/dash"><span className="dropdown-item" >Actors</span></Link>
+                      <Link to="/admin/review/dash"><span className="dropdown-item" >Reviews</span></Link>
+                      <Link to="/admin/user/dash"><span className="dropdown-item" >Users</span></Link>
+                      <Link to="/"><span className="dropdown-item" onClick={() => handleLogout()} >Logout</span></Link>
+                    </>
 
-                </ul>
-              </div>
+                  </ul>
+                </div>
               </>
             }
 
           </>
 
-          <> 
-          {!fullName &&
           <>
-          
-          <div className="text-white name">Hi Guest!</div>
-          <button className="btn btn-secondary" onClick={toggleModal} >Login</button>      
-          </>   
-          
-          }
-           
+            {!fullName &&
+              <>
+
+                <div className="text-white name">Hi Guest!</div>
+                <button className="btn btn-secondary" onClick={toggleModal} >Login</button>
+              </>
+
+            }
+
           </>
 
         </div>
       </div>
       <ToastContainer />
       <LoginRegisterModal
-
+        loginErrorInput={errorInput}
         onClose={onBackdropClick}
+        onClear={onClear}
         onLoginRequested={onLoginRequest}
         isModalVisible={isModalVisible}
       />

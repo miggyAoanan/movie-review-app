@@ -15,13 +15,14 @@ export type LoginFunction = (args: LoginArgs) => Promise<void>;
 
 interface LoginModalProps {
   onClose: () => void;
+  onClear: () => void;
   isModalVisible: boolean;
   loginErrorInput?: string
   onLoginRequested: LoginFunction;
 
 }
 
-const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible, loginErrorInput, onLoginRequested }) => {
+const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, onClear,isModalVisible, loginErrorInput, onLoginRequested }) => {
   const errorRef = React.useRef<HTMLParagraphElement>(null)
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
@@ -89,16 +90,13 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
     }
   }
 
-  
-
-
   const clear = () => {
     input.fullName = ""
     input.email = ""
     input.password = ""
     input.confirm = ""
     setError("")
-    
+   
   }
  
 
@@ -191,7 +189,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
             <button
               className="btn btn-light btn-sm px-5 mt-4"
               type='button'
-              onClick={() => onLoginRequested({ email, password })}
+              onClick={() =>{ onLoginRequested({ email, password }) }}
             >
               Login
             </button>
@@ -218,7 +216,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
 
                 <p className='text-white mb-4 fs-6 text-center'
                   style={{ cursor: "pointer" }}
-                  onClick={() => { setShowRegister(true);  }}
+                  onClick={() => { setShowRegister(true); ; clear(); onClear() }}
                 > Register</p>
               </>
             ) : (
@@ -226,7 +224,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
                 Already have an account?
                 <p className='text-white mb-4 fs-6 text-center'
                   style={{ cursor: "pointer" }}
-                  onClick={() => {setShowRegister(false); clear() ;}}
+                  onClick={() => {setShowRegister(false); clear() ; onClear()}}
                 > Log in</p>
               </>
 

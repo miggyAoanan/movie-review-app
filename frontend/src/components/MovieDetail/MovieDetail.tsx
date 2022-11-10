@@ -116,7 +116,7 @@ function MovieDetail() {
                 <div className="movie-title">{movie?.title}</div>
                 <div className="movie-rating mb-5">             
                   <span>
-                    IMDB Rating <i className="fa fa-star"></i> : {small}
+                     Rating <i className="fa fa-star"></i> : {small}
                   </span>
                   <span>
                     Budget <i className="fa-light fa-sack-dollar"></i> : {movie?.cost}
