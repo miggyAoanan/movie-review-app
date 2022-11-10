@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '../store/store';
-import { ACTORS_URL } from '../API'
+import { ACTORS_URL, ACTORS_SEARCH_URL } from '../API'
 
 import { Actor, ActorDetails, ErrorI } from '../interfaces/index'
 
@@ -107,7 +107,7 @@ export const searcheActors = createAsyncThunk(
     "actors/searcheActors",
     async (name: string, thunkAPI) => {
         try {
-            const response = await axios.get(ACTORS_URL + name)
+            const response = await axios.get(ACTORS_SEARCH_URL + name)
             return response.data
 
         } catch (error) {

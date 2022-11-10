@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '../store/store';
 
-import { MOVIES_URL, MOVIE_ACTORS_URL } from '../API'
+import { MOVIES_URL, MOVIE_ACTORS_URL, MOVIE_SEARCH_URL } from '../API'
 
 import { MovieDetails, ErrorI } from '../interfaces/index'
 
@@ -119,11 +119,11 @@ export const deleteMovie = createAsyncThunk<{ id: string }, string>(
 )
 
 
-export const searcheMovies = createAsyncThunk(
+export const searchMovies = createAsyncThunk(
     "movies/searcheMovies",
     async (title: string, thunkAPI) => {
         try {
-            const response = await axios.get(MOVIES_URL + title)
+            const response = await axios.get(MOVIE_SEARCH_URL + title)
             return response.data
 
         } catch (error) {
@@ -241,18 +241,18 @@ export const movieSlice = createSlice({
             state.deleteMovieStatus = "rejected"
         });
 
-        builder.addCase(searcheMovies.pending, (state = initialState) => {
+        builder.addCase(searchMovies.pending, (state = initialState) => {
             state.loading = true;
             state.searchMovieStatus = "pending"
 
         });
-        builder.addCase(searcheMovies.fulfilled, (state, action) => {
+        builder.addCase(searchMovies.fulfilled, (state, action) => {
             state.movies = action.payload;
             state.loading = false;
-            state.searchMovieStatus = "fullfilled"
-
+            state.searchMovieStatus = "fullfilled";
+           
         });
-        builder.addCase(searcheMovies.rejected, (state, action) => {
+        builder.addCase(searchMovies.rejected, (state, action) => {
             state.errors = JSON.stringify(action.payload);
             state.loading = false;
             state.searchMovieStatus = "rejected"
