@@ -8,6 +8,7 @@ import { Movie } from "../../interfaces/movie"
 import UpdateMovieModal, { UpdateMovieFunction , UpdateArgs} from "./modal/UpdateMovieModal";
 import DeleteMovieModal, { DeleteMovieFunction } from "./modal/DeleteMovieModal";
 
+
 const MovieDashboard = () => {
 
   const movies = useAppSelector((state: RootState) => state.movies.movies)
@@ -47,8 +48,6 @@ const MovieDashboard = () => {
   const toggleDeleteModal = () => {
     setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
   }
-
-
 
   const onAddMovie: AddMovieFunction = async (args: Movie) => {
 
@@ -106,6 +105,8 @@ const MovieDashboard = () => {
   return (
     <div className="wrapper">
       <h2 className="h2 text-center text-white mb-5">Movie List </h2>
+
+    
       <table className='table table-dark '>
         <thead >
           <tr className='bg-dark'>

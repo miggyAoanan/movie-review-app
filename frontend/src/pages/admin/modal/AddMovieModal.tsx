@@ -82,6 +82,10 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
 
   };
 
+  const getActorName = (id: string) => {
+    let tempActor = dataActors?.find((actor) => actor.id === id.toString());
+    return `${tempActor?.firstName} ${tempActor?.lastName}`;
+  };
   
 
   return (
@@ -153,37 +157,28 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
             />
 
           </div>
-          <div className='form-outline form-white'>
-            <span className='fs-6 text-white'>Actors</span>
-            <input type="hidden"
-              placeholder='actors'
-              name='actorIds'
-              onChange={handleChange}
-              value={actorArray}
-              className="form-control form-control-sm"
-            />
-
-          </div>
+         
 
           <>
 
 
-            <FormControl sx={{ m: 1, width: 300 }}>
-              <InputLabel id="demo-multiple-chip-label" className='text-white'>Select Multiple</InputLabel>
+            <FormControl sx={{ m: 1, width: 300 }}  >
+            <span className='fs-6 text-white'>Select Actors</span>
+              <InputLabel id="demo-multiple-chip-label"></InputLabel>
               <Select
                 labelId="demo-multiple-chip-label"
                 id="demo-multiple-chip"
                 multiple
                 value={personName}
                 onChange={handleChangeActor}
-                input={<OutlinedInput id="select-multiple-chip" label="Select Multiple" className='text-white'/>}
+                input={<OutlinedInput id="select-multiple-chip" label="Select Multiple" />}
                 renderValue={(selected) => (
                   <>
 
                   
                     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}  >
                       {selected.map((value) => (
-                        <Chip key={value} label={value} className="text-white" />
+                        <Chip key={value} label={getActorName(value)} className="text-dark bg-light" />
                       ))}
                     </Box>
                   </>
