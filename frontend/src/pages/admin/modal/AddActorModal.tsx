@@ -1,6 +1,4 @@
 import React, { useState } from 'react'
-import {  useAppDispatch } from "../../../store/store"
-
 import { Actor } from "../../../interfaces"
 import ActorModalRWD from '../../../components/Modal/ActorModalRWD';
 
@@ -22,9 +20,6 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
 
   });
 
-
-
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setInput((prevState) => ({
       ...prevState,
@@ -32,7 +27,6 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
     }));
   }
 
-  
   return (
     <ActorModalRWD
       onBackdropClick={onClose}

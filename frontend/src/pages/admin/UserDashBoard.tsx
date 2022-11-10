@@ -5,7 +5,7 @@ import userIcon from "../../images/user.png"
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterAdminModal, { RegisterFunction, RegisterArgs } from "./modal/RegisterAdminModal";
 import UpdateUserModal, {UpdateFunction, UpdateArgs} from './modal/UpdateUserModal'
-import { User, ErrorI } from "../../interfaces";
+import { User } from "../../interfaces";
 import DeleteUserModal, {DeleteUserFunction} from "./modal/DeleteUserModal";
 import { toast,ToastContainer} from "react-toastify";
 

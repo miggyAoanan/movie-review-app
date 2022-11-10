@@ -9,7 +9,7 @@ interface DeleteMovieModalProps {
   isDeleteModalVisible: boolean;
   error?: string;
   onDeleteUser: DeleteUserFunction;
-  deleteId?: string;
+  deleteId: string;
 }
 
 const DeleteUserModal: React.FC<DeleteMovieModalProps> = ({ isDeleteModalVisible, onClose, error, onDeleteUser, deleteId }) => {
@@ -30,7 +30,7 @@ const DeleteUserModal: React.FC<DeleteMovieModalProps> = ({ isDeleteModalVisible
               type='button'
             > Cancel</button>
 
-            <button onClick={() => { onDeleteUser(deleteId!) }}
+            <button onClick={() => { onDeleteUser(deleteId) }}
               className="btn btn-danger btn-sm px-5"
               type='button'
             > Delete</button>

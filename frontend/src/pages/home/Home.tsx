@@ -3,7 +3,7 @@ import "./home.scss";
 import MovieList from "../../components/MovieList/MovieList";
 
 import { useAppDispatch} from '../../store/store'
-import { movieDetails, searchMovies , getMovies} from "../../redux/movieSlice";
+import { searchMovies , getMovies} from "../../redux/movieSlice";
 import { getActors, searcheActors } from "../../redux/actorSlice";
 import Actorlist from "../../components/Actor/ActorList";
 
