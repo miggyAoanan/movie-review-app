@@ -14,7 +14,7 @@ interface UserState {
     getUsersStatus: string,
     registerStatus: string,
     registerError: string,
-    loginStatus: string
+    deleteUserStatus: string
 }
 
 const initialState: UserState = {
@@ -26,7 +26,7 @@ const initialState: UserState = {
     getUsersStatus: "",
     registerStatus: "",
     registerError: "",
-    loginStatus: ""
+    deleteUserStatus: ""
 }
 
 interface Login {
@@ -107,17 +107,17 @@ export const registerAdmin = createAsyncThunk<Object, User>(
     }
 )
 
-export const login = createAsyncThunk<Login, Object>(
-    "users/login",
-    async (data, thunkAPI) => {
-        try {
-            const response = await axios.post(USERS_URL + "login", data)
-            return response.data
-        } catch (error) {
-            return thunkAPI.rejectWithValue(error)
-        }
-    }
-)
+// export const login = createAsyncThunk<Login, Object>(
+//     "users/login",
+//     async (data, thunkAPI) => {
+//         try {
+//             const response = await axios.post(USERS_URL + "login", data)
+//             return response.data
+//         } catch (error) {
+//             return thunkAPI.rejectWithValue(error)
+//         }
+//     }
+// )
 
 
 export const updateUser = createAsyncThunk<Object, UpdateArgs>(
@@ -192,22 +192,22 @@ export const usersSlice = createSlice({
             state.registerStatus = "rejected"
             state.errors = JSON.stringify(action.error.message)
         })
-        builder.addCase(login.pending, (state) => {
-            state.loading = true;
-            state.loginStatus = "pending"
-        })
-        builder.addCase(login.fulfilled, (state, action) => {
-            state.loading = false;
-            state.credential = action.payload;
-            state.loginStatus = "fullfilled"
-            localStorage.setItem("token", JSON.stringify(state.credential))
+        // builder.addCase(login.pending, (state) => {
+        //     state.loading = true;
+        //     state.loginStatus = "pending"
+        // })
+        // builder.addCase(login.fulfilled, (state, action) => {
+        //     state.loading = false;
+        //     state.credential = action.payload;
+        //     state.loginStatus = "fullfilled"
+        //     localStorage.setItem("token", JSON.stringify(state.credential))
 
-        })
-        builder.addCase(login.rejected, (state, action) => {
-            state.loading = false;
-            state.errors = JSON.stringify(action.error.message)
-            state.loginStatus = "rejected"
-        })
+        // })
+        // builder.addCase(login.rejected, (state, action) => {
+        //     state.loading = false;
+        //     state.errors = JSON.stringify(action.error.message)
+        //     state.loginStatus = "rejected"
+        // })
         builder.addCase(updateUser.pending, (state) => {
             state.loading = true;
         })
@@ -237,6 +237,21 @@ export const usersSlice = createSlice({
             state.registerError = JSON.stringify(action.payload);
             state.registerStatus = "rejected"
             state.errors = JSON.stringify(action.error.message)
+        })
+
+        builder.addCase(deleteUser.pending, (state) => {
+            state.loading = true
+            state.registerStatus = "pending"
+
+        });
+        builder.addCase(deleteUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.registerStatus = "fullfilled"
+
+
+        })
+        builder.addCase(deleteUser.rejected, (state, action) => {
+           state.errors = JSON.stringify(action.payload)
         })
 
     }
