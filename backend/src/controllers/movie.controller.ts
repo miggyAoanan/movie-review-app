@@ -2,7 +2,6 @@ import {
   Count,
   CountSchema,
   Filter,
-  FilterExcludingWhere,
   repository,
   Where,
 } from '@loopback/repository';
@@ -17,20 +16,19 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {Movie} from '../models';
-import {CustomResponse, CustomResponseSchema} from '../models'
-import {MovieRepository} from '../repositories';
+import { Movie } from '../models';
+import { MovieRepository } from '../repositories';
 
 export class MovieController {
   constructor(
     @repository(MovieRepository)
-    public movieRepository : MovieRepository,
-  ) {}
+    public movieRepository: MovieRepository,
+  ) { }
 
   @post('/movies')
   @response(200, {
     description: 'Movie model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Movie)}},
+    content: { 'application/json': { schema: getModelSchemaRef(Movie) } },
   })
   async create(
     @requestBody({
@@ -51,7 +49,7 @@ export class MovieController {
   @get('/movies/count')
   @response(200, {
     description: 'Movie model count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async count(
     @param.where(Movie) where?: Where<Movie>,
@@ -66,7 +64,7 @@ export class MovieController {
       'application/json': {
         schema: {
           type: 'array',
-          items: getModelSchemaRef(Movie, {includeRelations: true}),
+          items: getModelSchemaRef(Movie, { includeRelations: true }),
         },
       },
     },
@@ -74,60 +72,44 @@ export class MovieController {
   async searchByname(
     @param.filter(Movie) filter?: Filter<Movie>,
   ): Promise<Movie[]> {
-    return this.movieRepository.find({include :['actors', 'reviews']});
+    return this.movieRepository.find({ include: ['actors', 'reviews'] });
 
   }
 
   @get('search/movies/{term}')
   @response(200, {
-    description:
-      'Returns an array of all movies based on the find filter (provide movie title as the search key).',
-      content: {'application/json': {schema: CustomResponseSchema}},
+    description: 'Array of Movie model instances',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'array',
+          items: getModelSchemaRef(Movie, { includeRelations: true }),
+        },
+      },
+    },
   })
   async searchByName(
     @param.path.string('term') term: string,
-  ): Promise<CustomResponse<{}>> {
-
-      try {
-
-        const searchParam = term || '';
-        const searchParams = [{title: {like: term, options: 'i'}}];
-        const filterObject = {
-          where: {or: searchParams},
-          order: ['title ASC'],
-          include :['actors', 'reviews']
-          
-        };
-        const moviesList = await this.movieRepository.find(filterObject);
-
-        return {
-          status: 'success',
-          data: moviesList,
-          message: 'Successfully fetched movies.',
-        };
-        
-      } catch (error:any) {
-        return {
-          status: 'fail',
-          data: null,
-          message: 'Fetching movie data failed.',
-        };
-      }
-
-    // return this.movieRepository.find({include :['actors', 'reviews']});
-
+  ): Promise<Movie[]> {
+    const searchParams = [{ title: { like: term, options: 'i' } }];
+    const filterObject = {
+      where: { or: searchParams },
+      order: ['title ASC'],
+      include: ['actors', 'reviews']
+    }
+    return this.movieRepository.find(filterObject);
   }
 
   @patch('/movies')
   @response(200, {
     description: 'Movie PATCH success count',
-    content: {'application/json': {schema: CountSchema}},
+    content: { 'application/json': { schema: CountSchema } },
   })
   async updateAll(
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Movie, {partial: true}),
+          schema: getModelSchemaRef(Movie, { partial: true }),
         },
       },
     })
@@ -137,23 +119,23 @@ export class MovieController {
     return this.movieRepository.updateAll(movie, where);
   }
 
-  @get('/movies/{id}') // get reviews and actors
+  @get('/movies/{id}')
   @response(200, {
     description: 'Movie model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(Movie, {includeRelations: true}),
-        items: getModelSchemaRef(Movie, {includeRelations: true}),
+        schema: getModelSchemaRef(Movie, { includeRelations: true }),
+        items: getModelSchemaRef(Movie, { includeRelations: true }),
       },
     },
   })
   async findById(
     @param.path.string('id') id: string,
-   
+
     @param.filter(Movie) filter?: Filter<Movie>,
   ): Promise<Movie> {
-    return this.movieRepository.findById(id, {include :['reviews', 'actors']});
-    
+    return this.movieRepository.findById(id, { include: ['reviews', 'actors'] });
+
   }
 
 
@@ -162,18 +144,18 @@ export class MovieController {
     description: 'Movie model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(Movie, {includeRelations: true}),
-        items: getModelSchemaRef(Movie, {includeRelations: true}),
+        schema: getModelSchemaRef(Movie, { includeRelations: true }),
+        items: getModelSchemaRef(Movie, { includeRelations: true }),
       },
     },
   })
   async findActorById(
     @param.path.string('id') id: string,
-   
+
     @param.filter(Movie) filter?: Filter<Movie>,
   ): Promise<Movie> {
-    return this.movieRepository.findById(id, {include :['actors']});
-    
+    return this.movieRepository.findById(id, { include: ['actors'] });
+
   }
 
   @get('/actor-movies/{id}')
@@ -181,22 +163,20 @@ export class MovieController {
     description: 'Movie model instance',
     content: {
       'application/json': {
-        schema: getModelSchemaRef(Movie, {includeRelations: true}),
-        items: getModelSchemaRef(Movie, {includeRelations: true}),
+        schema: getModelSchemaRef(Movie, { includeRelations: true }),
+        items: getModelSchemaRef(Movie, { includeRelations: true }),
       },
     },
   })
   async findMovieByActorId(
     @param.path.string('id') id: string,
-   
+
     @param.filter(Movie) filter?: Filter<Movie>,
   ): Promise<Movie> {
 
-    return this.movieRepository.findById(id, {include :['actors']});
-    
+    return this.movieRepository.findById(id, { include: ['actors'] });
+
   }
-
-
 
   @patch('/movies/{id}')
   @response(204, {
@@ -207,7 +187,7 @@ export class MovieController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(Movie, {partial: true}),
+          schema: getModelSchemaRef(Movie, { partial: true }),
         },
       },
     })

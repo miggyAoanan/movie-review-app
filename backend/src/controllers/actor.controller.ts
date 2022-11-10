@@ -157,8 +157,7 @@ export class ActorController {
   })
   async searchByName(
     @param.path.string('term') term: string,
-  ): Promise<CustomResponse<{}>> {
-    try {
+  ):Promise<Actor[]> {
       const searchParam = term || '';
       const searchParams = [
         {firstName: {like: searchParam, options: 'i'}},
@@ -166,23 +165,11 @@ export class ActorController {
       ];
       const filterObject = {
         where: {or: searchParams},
-        order: ['firstName ASC'],
-       
+        order: ['firstName ASC'],      
       };
-      const actorsList = await this.actorRepository.find(filterObject);
-     
-      return {
-        status: 'success',
-        data: actorsList,
-        message: 'Successfully fetched actor data.',
-      };
-    } catch (error) {
-      return {
-        status: 'fail',
-        data: null,
-        message: error ? error.message : 'Fetching actor data failed.',
-      };
-    }
+     return this.actorRepository.find(filterObject);
+   
+    
   }
 
 }
