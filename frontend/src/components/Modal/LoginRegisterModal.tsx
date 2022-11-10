@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useLayoutEffect  } from 'react'
 import ModalRWD from './ModalRWD';
 import { useAppDispatch, useAppSelector, RootState } from "../../store/store"
 import { registerUser } from "../../redux/userSlice"
@@ -22,6 +22,7 @@ interface LoginModalProps {
 }
 
 const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible, loginErrorInput, onLoginRequested }) => {
+  const errorRef = React.useRef<HTMLParagraphElement>(null)
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
   const dispatch = useAppDispatch();
@@ -88,13 +89,19 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
     }
   }
 
+  
+
+
   const clear = () => {
     input.fullName = ""
     input.email = ""
     input.password = ""
     input.confirm = ""
-
+    setError("")
+    
   }
+ 
+
 
   return (
     <ModalRWD
@@ -105,12 +112,17 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
 
           <h2 className='fw-bold mb-2 text-uppercase text-white'> {!showRegister ? "Login" : "Register"}</h2>
           {
-            error ? <p className='text-danger fs-6'>{error}</p>
+            error ? <p className='text-danger fs-6 error' ref={errorRef}>{error}</p>
               : ""
           }
 
           {
-            message ? <p className='text-success fs-6'>{message}</p>
+            message ? <p className='text-success fs-6 error' ref={errorRef}>{message}</p>
+              : ""
+          }
+
+           {
+            loginErrorInput ? <p className='text-danger fs-6 error' ref={errorRef}>{loginErrorInput}</p>
               : ""
           }
 
@@ -206,7 +218,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
 
                 <p className='text-white mb-4 fs-6 text-center'
                   style={{ cursor: "pointer" }}
-                  onClick={() => { setShowRegister(true); clear() }}
+                  onClick={() => { setShowRegister(true);  }}
                 > Register</p>
               </>
             ) : (
@@ -214,7 +226,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
                 Already have an account?
                 <p className='text-white mb-4 fs-6 text-center'
                   style={{ cursor: "pointer" }}
-                  onClick={() => setShowRegister(false)}
+                  onClick={() => {setShowRegister(false); clear() ;}}
                 > Log in</p>
               </>
 
