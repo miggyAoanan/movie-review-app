@@ -1,101 +1,63 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import user from "../../images/user.png";
+import userIcon from "../../images/user.png";
 import logo from "../../images/logo.png"
 import "./Header.scss";
 
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import LoginRegisterModal, { LoginFunction } from "../Modal/LoginRegisterModal";
-import { useAppDispatch, useAppSelector } from "../../store/store"
-import { logout, selectAuth, setUser } from "../../redux/authSlice";
+import LoginRegisterModal from "../Modal/LoginRegisterModal";
+import { useAppDispatch } from "../../store/store"
+import { logout } from "../../redux/authSlice";
 import { searchMovies } from "../../redux/movieSlice";
-import { useLoginUserMutation } from '../../authServices/authApi'
+
 import { searcheActors } from "../../redux/actorSlice";
 
 
 function Header() {
   const dispatch = useAppDispatch();
-  const { fullName, permissions } = useAppSelector(selectAuth)
+  const userData = localStorage.getItem("user")
+  const user = JSON.parse(userData!)
+  const [fullName, setFullName] = useState("")
+  const [permissions, setPermissions] = useState("")
+
+  useEffect(() =>{
+    if(user){
+      setFullName(user.fullName)
+      setPermissions(user.permissions)
+    }
+
+  },[user])
+ 
+
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [errorInput, setErrorInput] = useState("")
-  const [loginUser,
-    { data: loginData,
-      error: error,
-      isSuccess: isLoginSuccess }
-  ] = useLoginUserMutation()
+  const [term, setTerm] = useState("")
+
 
   const toggleModal = () => {
     setIsModalVisible(wasModalVisible => !wasModalVisible)
   }
   const onBackdropClick = () => {
     setIsModalVisible(false)
-    setErrorInput("")
+
   }
   const onClear = () => {
     setErrorInput("")
   }
-  const onLoginRequest: LoginFunction = async ({ email, password }) => {
 
-    // eslint-disable-next-line
-    let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-
-    if (email === "") {
-      setErrorInput("Email is required")
-    } else if (password === "") {
-      setErrorInput("Password is required")
-    } else if (password.length <= 8) {
-      setErrorInput("Must be at least 8 character")
-    } else if (!emailReg.test(email)) {
-      setErrorInput("Must be a valid email format")
-    }
-    else {
-      await loginUser({ email, password }).then((res: any) => {
-          let errorMessage = res.error.data.error.message
-          let errorName = res.error.data.error.name
-          let error = errorName + ": " + errorMessage
-          setErrorInput(error)
-          let errorArray: any = []
-          let errors: any = res.error.data.error.details
-          errors.forEach((err: any) => {
-            errorArray.push(err.message)
-          })
-
-      })
-
-    }
-  }
-  useEffect(() => {
-    if (isLoginSuccess) {
-      toast.success("login successfull")
-      dispatch(setUser({
-        fullName: loginData.data.fullName,
-        token: loginData.data.token,
-        permissions: loginData.data.permissions,
-        isActive: loginData.data.isActive,
-        id: loginData.data.id
-      }))
-      onBackdropClick()
-    }
-
-  }, [isLoginSuccess])
-
-  
   const handleLogout = () => {
     dispatch(logout())
     window.location.reload()
   }
 
-  const [term, setTerm] = useState("")
-
-  const handleSubmit = (event: React.SyntheticEvent): void => {
+  const handleSearch = (event: React.SyntheticEvent): void => {
     event.preventDefault()
-    dispatch(searchMovies(term)).then((res) => {
-      setTerm("")
-    })
-    dispatch(searcheActors(term)).then((res) => {
-      setTerm("")
-    })
+    if(term ===""){
+      alert("Please enter search value")
+    }
+    dispatch(searchMovies(term))
+    dispatch(searcheActors(term))
+    
   }
 
 
@@ -118,7 +80,7 @@ function Header() {
 
       <div className="search-bar">
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSearch}>
           <input type="text" value={term} placeholder="Search" onChange={(e) => setTerm(e.target.value)} />
           <button type="submit"> <i className="fa fa-search"></i> </button>
         </form>
@@ -128,7 +90,7 @@ function Header() {
       <div className="user">
         <div className="userDetails">
           <div className="userimage">
-            <img src={user} alt="user" />
+            <img src={userIcon} alt="user" />
           </div>
           <>
             {permissions === "user" && (
@@ -164,7 +126,7 @@ function Header() {
           </>
 
           <>
-            {!fullName &&
+            {user === null &&
               <>
 
                 <div className="text-white name">Hi Guest!</div>
@@ -177,12 +139,10 @@ function Header() {
 
         </div>
       </div>
-      <ToastContainer />
+    
       <LoginRegisterModal
-        loginErrorInput={errorInput}
-        onClose={onBackdropClick}
         onClear={onClear}
-        onLoginRequested={onLoginRequest}
+        onClose={onBackdropClick}
         isModalVisible={isModalVisible}
       />
     </div>
