@@ -25,10 +25,10 @@ export class Movie extends Entity {
 
 
   @property({
-    type: 'string',
+    type: 'number',
     required: true,
   })
-  year: string;
+  yearReleased: number;
 
   @property({
     type: 'number',

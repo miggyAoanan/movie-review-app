@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom';
 import ModalRWD from '../../../components/Modal/ModalRWD';
 import { ButtonContainer } from '../../../components/Modal/ModalPopup.styled'
 import Box from '@mui/material/Box';
@@ -8,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Chip from '@mui/material/Chip';
-import { Movie } from "../../../interfaces"
+import { Movie, ActorDetails } from "../../../interfaces"
 import { useAppDispatch, useAppSelector, RootState } from '../../../store/store'
 import { getActors } from "../../../redux/actorSlice";
 
@@ -24,9 +25,10 @@ interface AddMovieModalProps {
 
 const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, error, onAddMovie }) => {
 
-  const actors = useAppSelector((state: RootState) => state.actors.actors)
+  const actors : ActorDetails[] | null = useAppSelector((state: RootState) => state.actors.actors)
   const dispatch = useAppDispatch();
   const [actorArray, setActorArray] = React.useState<string[] | string>([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (actors) {
@@ -37,11 +39,10 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
 
   const dataActors = useMemo(() => actors, [actors])
 
-
   const [input, setInput] = useState({
     title: "",
-    overview:"",
-    year: "",
+    overview: "",
+    yearReleased: 2022,
     cost: 0,
     imageURL: "",
 
@@ -86,7 +87,11 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
     let tempActor = dataActors?.find((actor) => actor.id === id.toString());
     return `${tempActor?.firstName} ${tempActor?.lastName}`;
   };
-  
+
+  const linktoActor = () => {
+    navigate("/admin/actor/dash")
+  }
+
 
   return (
     <ModalRWD
@@ -95,7 +100,7 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
       content={
         <>
           <p className='fs-5 text-white'>Please enter movie details</p>
-             {error  && <p className='text-danger fs-6'>{error}</p>}
+          {error && <p className='text-danger fs-6'>{error}</p>}
 
           <div className='form-outline form-white'>
             <span className='fs-6 text-white'>Movie Title</span>
@@ -125,11 +130,11 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
           <div className='form-outline form-white'>
             <span className='fs-6 text-white'>Year</span>
             <input
-              type="text"
+              type="number"
               placeholder='Year'
-              name='year'
+              name='yearReleased'
               onChange={handleChange}
-              value={input.year}
+              value={input.yearReleased}
               className="form-control form-control-sm"
             />
           </div>
@@ -157,58 +162,67 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
             />
 
           </div>
-         
+
 
           <>
+            {dataActors !== undefined ? (
+
+              <FormControl sx={{ m: 1, width: 300 }}  >
+                <span className='fs-6 text-white'>Select Actors</span>
+                <InputLabel id="demo-multiple-chip-label"></InputLabel>
+                <Select
+                  labelId="demo-multiple-chip-label"
+                  id="demo-multiple-chip"
+                  multiple
+                  value={personName}
+                  onChange={handleChangeActor}
+                  input={<OutlinedInput id="select-multiple-chip" label="Select Multiple" />}
+                  renderValue={(selected) => (
+                    <>
 
 
-            <FormControl sx={{ m: 1, width: 300 }}  >
-            <span className='fs-6 text-white'>Select Actors</span>
-              <InputLabel id="demo-multiple-chip-label"></InputLabel>
-              <Select
-                labelId="demo-multiple-chip-label"
-                id="demo-multiple-chip"
-                multiple
-                value={personName}
-                onChange={handleChangeActor}
-                input={<OutlinedInput id="select-multiple-chip" label="Select Multiple" />}
-                renderValue={(selected) => (
-                  <>
-
-                  
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}  >
-                      {selected.map((value) => (
-                        <Chip key={value} label={getActorName(value)} className="text-dark bg-light" />
-                      ))}
-                    </Box>
-                  </>
+                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}  >
+                        {selected.map((value) => (
+                          <Chip key={value} label={getActorName(value)} className="text-dark bg-light" />
+                        ))}
+                      </Box>
+                    </>
 
 
-                )}
-                MenuProps={MenuProps}
-              >
-                {dataActors?.map((actor:any, index:any) => (
-                  <MenuItem
-                    key={index}
-                    value={actor.id}
-                  
-                  >
-                    {actor.firstName + " " + actor.lastName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {dataActors?.map((actor: any, index: any) => (
+                    <MenuItem
+                      key={index}
+                      value={actor.id}
+
+                    >
+                      {actor.firstName + " " + actor.lastName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
 
 
+
+            ) : (<div>
+
+              <button
+                type="button"
+                className="btn btn-primary btn-sm px-5"
+                onClick={() => { linktoActor() }}
+              >Add</button>
+
+            </div>)}
 
           </>
-       
 
           <ButtonContainer>
             <button onClick={onClose}
               className="btn btn-light btn-sm px-5"
             >Cancel</button>
-            <button onClick={() => onAddMovie({...input, actorIds: actorArray })}
+            <button onClick={() => onAddMovie({ ...input, actorIds: actorArray })}
 
               className="btn btn-primary btn-sm px-5"
             >Add</button>

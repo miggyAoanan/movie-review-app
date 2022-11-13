@@ -21,6 +21,7 @@ import {Actor} from '../models';
 import {ActorRepository} from '../repositories';
 import {CustomResponse, CustomResponseSchema} from '../models'
 
+
 export class ActorController {
   constructor(
     @repository(ActorRepository)
@@ -145,8 +146,18 @@ export class ActorController {
   @response(204, {
     description: 'Actor DELETE success',
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.actorRepository.deleteById(id);
+  async deleteById(@param.path.string('id') id: string): Promise<string> {
+
+    const successDelete = "Actor deleted"
+    const errorDelete = "There is an error deleting the actor"
+    try {
+      await this.actorRepository.deleteById(id);
+      
+    } catch (error) {
+      return errorDelete
+    }
+
+    return successDelete
   }
 
   @get('/search/actors/{term}')

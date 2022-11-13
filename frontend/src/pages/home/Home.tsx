@@ -10,8 +10,8 @@ import Actorlist from "../../components/Actor/ActorList";
 const Home = () => {
 
   const dispatch = useAppDispatch()
-  const movieText =  "";
-  const actortext = ""
+  const movieText = "";
+  const actortext = "" 
 
   useEffect(() => {
     if(movieText || actortext){

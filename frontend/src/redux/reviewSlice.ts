@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { RootState } from '../store/store';
 import { REVIEWS_URL, MOVIE_REVIEWS_URL } from '../API'
@@ -17,6 +17,7 @@ export interface AddReviewArgs {
     userId:string |undefined, 
     userName:string | undefined,
     movieName:string |undefined
+    isActive: boolean
 }
 
 interface ReviewState {
@@ -91,8 +92,8 @@ export const addMovieReview = createAsyncThunk<Review, AddReviewArgs>(
     "reviews/addReview",
     async (data, { rejectWithValue }) => {
         try {
-            const {description, rating, movieId, userId, userName} = data;
-            const response = await axios.post(MOVIE_REVIEWS_URL+ movieId+ "/reviews", data)
+           
+            const response = await axios.post(MOVIE_REVIEWS_URL+ data.movieId+ "/reviews", data)
             return response.data
         } catch (error: unknown) {
             if (error) {
@@ -136,74 +137,30 @@ export const deleteReview = createAsyncThunk< {id: string}, string>(
 export const reviewSlice = createSlice({
     name: "reviews",
     initialState,
-    reducers: {
-        setReviews: (state = initialState, action: PayloadAction<Review[]>) => {
-            state.reviews = action.payload;
-        },
-
-        setReview: (state = initialState, action: PayloadAction<Review>) => {
-            state.review = action.payload;
-        },
-
-    },
+    reducers: {},
 
     extraReducers: (builder) => {
-        builder.addCase(getReviews.pending, (state = initialState, action) => {
-            state.loading = true;
-            state.getReviewStatus = "pending"
-
-        });
+       
         builder.addCase(getReviews.fulfilled, (state, action) => {
             state.reviews = action.payload;
             state.loading = false;
             state.getReviewStatus = "fullfilled"
         });
 
-        builder.addCase(getReviews.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
-            state.loading = false;
-            state.getReviewStatus = "rejected"
-        });
-
-        builder.addCase(getReview.pending, (state = initialState, action) => {
-            state.loading = true;
-            state.getReviewStatus = "pending"
-
-        });
         builder.addCase(getReview.fulfilled, (state, action) => {
             state.review = action.payload;
             state.loading = false;
             state.getReviewStatus = "fullfilled"
         });
-
-        builder.addCase(getReview.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
-            state.loading = false;
-            state.getReviewStatus = "rejected"
-        });
-
-        builder.addCase(updateReview.pending, (state = initialState, action) => {
-            state.loading = true;
-            state.updateReviewStatus = "pending"
-
-        });
+       
         builder.addCase(updateReview.fulfilled, (state, action) => {
            
             state.loading = false;
             state.updateReviewStatus = "fullfilled"
 
         });
-        builder.addCase(updateReview.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
-            state.loading = false;
-            state.updateReviewStatus = "rejected"
-        });
-
-        builder.addCase(deleteReview.pending, (state = initialState, action) => {
-            state.loading = true;
-            state.deleteReviewStatus = "pending"
-
-        });
+       
+      
         builder.addCase(deleteReview.fulfilled, (state, action) => {
             state.loading = false;
             state.deleteReviewStatus = "fullfilled"
@@ -224,5 +181,3 @@ export const reviewSlice = createSlice({
 export default reviewSlice.reducer;
 
 export const reviewDetails = (state:RootState) => state.reviews.reviews;
-export const reviewState = (state: RootState) => state.reviews
-export const {setReviews, setReview} = reviewSlice.actions

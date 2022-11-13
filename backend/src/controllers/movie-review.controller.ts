@@ -21,6 +21,7 @@ import {
 } from '../models';
 import {MovieRepository} from '../repositories';
 
+import { HttpErrors } from '@loopback/rest';
 
 export class MovieReviewController {
   constructor(
@@ -61,14 +62,25 @@ export class MovieReviewController {
         'application/json': {
           schema: getModelSchemaRef(Review, {
             title: 'NewReviewInMovie',
-            exclude: ['id'],
+            exclude: ['id', 'datePosted'],
             optional: ['movieId']
           }),
         },
       },
     }) review: Omit<Review, 'id'>,
-  ): Promise<Review> {
-    return this.movieRepository.reviews(id).create(review);
+  ): Promise<string> {
+    let reviewId = review.movieId
+   
+    const existingReview = "You have already reviewed this movie";
+    const pendingReview =  "Review is awaiting for moderation"
+    const findReview = await this.movieRepository.reviews(id).find({where:{userId: review.userId , movieId: reviewId}});
+    console.log(findReview.length);
+    if(findReview.length > 0){
+      throw new HttpErrors.Unauthorized(existingReview);
+    }
+    
+     await this.movieRepository.reviews(id).create(review)
+    return pendingReview
   }
 
   @patch('/movies/{id}/reviews', {

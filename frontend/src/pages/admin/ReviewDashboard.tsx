@@ -29,7 +29,7 @@ const ReviewDashboard = () => {
 
 
   //delete modal
-  const [deleteId, setDeleteId] = useState<string | undefined>("")
+  const [deleteId, setDeleteId] = useState<string>("")
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
   const toggleDeleteModal = () => {
     setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
@@ -129,7 +129,7 @@ const ReviewDashboard = () => {
                     <button
                       type="button"
                       className="btn btn-danger btn-sm"
-                      onClick={() => { toggleDeleteModal(); setDeleteId(review.id) }}
+                      onClick={() => { toggleDeleteModal(); setDeleteId(review.id!) }}
                     >Delete</button>
 
                   </td>

@@ -6,7 +6,7 @@ export interface Movie {
     id?: string;
     title: string | undefined;
     overview?: string;
-    year: string | undefined;
+    yearReleased: number;
     cost:number | undefined;
     imageURL?: string;
     actorIds?: string[] | string;
@@ -16,7 +16,7 @@ export interface MovieDetails {
     id?: string;
     title: string;
     overview: string;
-    year: string;
+    yearReleased: number;
     cost: number;
     imageURL?: string;
     actorIds?: string[];

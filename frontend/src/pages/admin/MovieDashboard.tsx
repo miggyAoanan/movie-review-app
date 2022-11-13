@@ -5,8 +5,9 @@ import './Dash.scss'
 
 import AddMovieModal, { AddMovieFunction } from "./modal/AddMovieModal";
 import { Movie } from "../../interfaces/movie"
-import UpdateMovieModal, { UpdateMovieFunction , UpdateArgs} from "./modal/UpdateMovieModal";
+import UpdateMovieModal, { UpdateMovieFunction, UpdateArgs } from "./modal/UpdateMovieModal";
 import DeleteMovieModal, { DeleteMovieFunction } from "./modal/DeleteMovieModal";
+import { toast, ToastContainer } from "react-toastify";
 
 
 const MovieDashboard = () => {
@@ -43,7 +44,7 @@ const MovieDashboard = () => {
   }
 
   //delete modal
-  const [deleteMovieId, setDeleteMovieId] = useState<string| undefined>("")
+  const [deleteMovieId, setDeleteMovieId] = useState<string | undefined>("")
   const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
   const toggleDeleteModal = () => {
     setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
@@ -52,22 +53,22 @@ const MovieDashboard = () => {
   const onAddMovie: AddMovieFunction = async (args: Movie) => {
 
     const movieData = { ...args }
-    const title = movieData.title   
+    const title = movieData.title
     const overview = movieData.overview
     const cost = Number(movieData.cost)
-    const year = movieData.year
+    const yearReleased = Number(movieData.yearReleased)
     const imageURL = movieData.imageURL
     const actorIds = args.actorIds
 
     // actorIds.push(movieData.actorIds)
 
-    const saveMoviedata = { title, overview, cost, year, imageURL, actorIds }
+    const saveMoviedata = { title, overview, cost, yearReleased, imageURL, actorIds }
 
 
     if (title === "") {
       setError("title is required");
-    } else if (year === "") {
-      setError("Year is required");
+    } else if (yearReleased < 0) {
+      setError("Year cannot be less than 0");
     } else if (cost === 0) {
       setError("Cost cannot be 0");
     } else if (imageURL === "") {
@@ -77,17 +78,17 @@ const MovieDashboard = () => {
       setError("Actor is required");
     }
     else {
-      dispatch(addMovie({ ...saveMoviedata })).then((res:any) => {
-         
-          dispatch(getMovies())
+      dispatch(addMovie({ ...saveMoviedata })).then((res: any) => {
+
+        dispatch(getMovies())
       })
-      
+
     }
   }
 
   const onUpdateMovie: UpdateMovieFunction = async (update: UpdateArgs) => {
-   
-    dispatch(updateMovie(update)).then((res:any) => {
+
+    dispatch(updateMovie(update)).then((res: any) => {
       dispatch(getMovies())
     })
 
@@ -95,8 +96,9 @@ const MovieDashboard = () => {
   }
 
   const onDeleteMovie: DeleteMovieFunction = async (id: string) => {
-   
-    dispatch(deleteMovie(id)).then((res:any) => {
+
+    dispatch(deleteMovie(id)).then((res: any) => {
+       toast.info(res.payload)
       dispatch(getMovies())
     })
   }
@@ -106,7 +108,7 @@ const MovieDashboard = () => {
     <div className="wrapper">
       <h2 className="h2 text-center text-white mb-5">Movie List </h2>
 
-    
+
       <table className='table table-dark '>
         <thead >
           <tr className='bg-dark'>
@@ -123,14 +125,14 @@ const MovieDashboard = () => {
 
           {
             movies ? (
-              movies.map((movie:Movie, index: number) => {
+              movies.map((movie: Movie, index: number) => {
                 return (
 
                   <tr key={movie.id}>
                     <td>{index + 1}</td>
                     <td><img src={movie.imageURL} alt={movie.title} className='imageDash' /></td>
                     <td>{movie.title}</td>
-                    <td>{movie.year}</td>
+                    <td>{movie.yearReleased}</td>
                     <td>{movie.cost}</td>
                     <td>
 
@@ -139,7 +141,7 @@ const MovieDashboard = () => {
                         <button
                           type="button"
                           className="btn btn-secondary btn-sm"
-                          onClick={() => { toggleEditModal(); setMovieDataforUpdate({id:movie.id, cost:movie.cost, imageURL: movie.imageURL}) }}
+                          onClick={() => { toggleEditModal(); setMovieDataforUpdate({ id: movie.id, cost: movie.cost, imageURL: movie.imageURL }) }}
                         >Edit</button>
                         &nbsp;
                         &nbsp;
@@ -189,6 +191,8 @@ const MovieDashboard = () => {
         onDeleteMovie={onDeleteMovie}
 
       />
+    <ToastContainer theme="dark"/>
+      
     </div>
   )
 }

@@ -17,7 +17,7 @@ function MovieCard(props: Movie) {
         <div className="card-bottom">
           <div className="card-info">
             <h4>{data.title}</h4>
-            <p>{data.year}</p>
+            <p>{data.yearReleased}</p>
           </div>
         </div>
       </Link>

@@ -87,3 +87,16 @@ For reference - https://loopback.io/getting-started.html
 Loopback4 Authentication
 Loopback4 Authorization
 https://github.com/HrithikMittal/Loopback4-authorization
+
+
+
+
+UNIT TESTING
+
+BACKEND
+
+JWT TOKEN
+https://github.com/loopbackio/loopback-next/blob/master/examples/todo-jwt/src/__tests__/acceptance/todo.acceptance.ts
+
+Service Unit Testing
+https://github.com/loopbackio/loopback-next/blob/master/examples/todo/src/__tests__/integration/services/geocoder.service.integration.ts

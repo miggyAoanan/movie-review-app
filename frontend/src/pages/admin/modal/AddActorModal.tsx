@@ -122,9 +122,7 @@ const AddActorModal: React.FC<AddActorModalProps> = ({ onClose, isModalVisible, 
               >
                 Save
               </button>
-            </>
-    
-          
+            </>     
         </>
       }
     />

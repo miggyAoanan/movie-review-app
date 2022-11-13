@@ -22,6 +22,13 @@ export class Review extends Entity {
   rating: number;
 
   @property({
+    type: 'date',
+    required: true,
+    default: new Date(),
+  })
+  datePosted: string;
+
+  @property({
     type: 'string',
     required: true,
   })

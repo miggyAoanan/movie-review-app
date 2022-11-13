@@ -30,7 +30,7 @@ function Header() {
  
 
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [errorInput, setErrorInput] = useState("")
+
   const [term, setTerm] = useState("")
 
 
@@ -40,9 +40,6 @@ function Header() {
   const onBackdropClick = () => {
     setIsModalVisible(false)
 
-  }
-  const onClear = () => {
-    setErrorInput("")
   }
 
   const handleLogout = () => {
@@ -141,9 +138,10 @@ function Header() {
       </div>
     
       <LoginRegisterModal
-        onClear={onClear}
+      
         onClose={onBackdropClick}
         isModalVisible={isModalVisible}
+      
       />
     </div>
   );

@@ -1,15 +1,36 @@
 import React, { useState } from 'react'
 import ModalRWD from '../../../components/Modal/ModalRWD';
 
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
-export interface RegisterArgs {
-  fullName: string,
-  email: string,
-  password: string,
-  confirm: string
-}
+type UserSubmitForm = {
+  fullName: string;
+  email: string;
+  password: string;
+  confirm: string;
 
-export type RegisterFunction = (args: RegisterArgs) => Promise<void>;
+};
+
+const validationSchema = Yup.object().shape({
+  fullName: Yup.string().required('Fullname is required'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Email is invalid'),
+  password: Yup.string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters')
+    .max(40, 'Password must not exceed 40 characters'),
+  confirm: Yup.string()
+    .required('Confirm Password is required')
+    .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
+
+});
+
+
+
+export type RegisterFunction = (args: UserSubmitForm) => Promise<void>;
 
 
 interface RegisterAdminModalProps {
@@ -20,23 +41,25 @@ interface RegisterAdminModalProps {
 }
 
 const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModalVisible, RegisterAdminErrorInput, onRegisterRequested }) => {
- 
-  const [input, setInput] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirm: ""
+
+  
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<UserSubmitForm>({
+    resolver: yupResolver(validationSchema)
   });
 
-  const { fullName, email, password, confirm } = input;
-  let error = RegisterAdminErrorInput;
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setInput((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
 
-  }
+
+
+  const onRegister = async (data: UserSubmitForm) => {
+    onRegisterRequested(data)
+  
+  };
+
 
   return (
     <ModalRWD
@@ -44,70 +67,66 @@ const RegisterAdminModal: React.FC<RegisterAdminModalProps> = ({ onClose, isModa
       isModalVisible={isModalVisible}
       content={
         <>
+          <div className="register-form">
+            <form >
+              <p className='fs-5 text-white'>Register Admin</p>
+             
+              <div className='form-outline form-white'>
+                <label className='fs-6 text-white'>Full Name</label>
+                <input
 
-          <p className='fs-5 text-white'>Register Admin</p>
-          {
-            error? <p className='text-danger fs-6'>{error}</p>
-            : ""
-          }
+                  type="text"
+                  {...register('fullName')}
+                  className={`form-control form-control-sm ${errors.fullName ? 'is-invalid' : ''}`}
+                />
+                <div className="invalid-feedback">{errors.fullName?.message}</div>
+              </div>
 
-          <div className='form-outline form-white'>
-          <span className='fs-6 text-white'>Full Name</span>
-            <input
-              type="text"
-              placeholder="Please enter fullname"
-              id="fullName"
-              name="fullName"
-              onChange={handleChange}
-              value={input.fullName}
-              className="form-control form-control-sm"
-            />
+              <div className='form-outline form-white'>
+                <label className='fs-6 text-white'>Email</label>
+                <input
+                  type="text"
+                  {...register('email')}
+                  className={`form-control form-control-sm ${errors.email ? 'is-invalid' : ''}`}
+                />
+                <div className="invalid-feedback">{errors.email?.message}</div>
+              </div>
+
+              <div className='form-outline form-white'>
+                <label className='fs-6 text-white'>Password</label>
+                <input
+                  type="password"
+                  {...register('password')}
+                  className={`form-control form-control-sm ${errors.password ? 'is-invalid' : ''}`}
+                />
+                <div className="invalid-feedback">{errors.password?.message}</div>
+              </div>
+
+              <div className='form-outline form-white'>
+                <label className='fs-6 text-white'>Confirm Password</label>
+                <input
+                  type="password"
+                  {...register('confirm')}
+                  className={`form-control form-control-sm ${errors.confirm ? 'is-invalid' : ''}`}
+                />
+                <div className="invalid-feedback">{errors.confirm?.message}</div>
+              </div>
+
+              <div className='form-outline form-white d-flex justify-content-between mt-4'>
+                <button type="submit" className="btn btn-primary" onClick={handleSubmit(onRegister)}>
+                  Register
+                </button>
+                <button
+                  type="button"
+                  onClick={() => reset()}
+                  className="btn btn-warning float-right"
+                >
+                  Reset
+                </button>
+              </div>
+
+            </form>
           </div>
-
-          <div className='form-outline form-white'>
-          <span className='fs-6 text-white'>Email</span>
-            <input
-              type="text"
-              placeholder="Please enter you email"
-              name="email"
-              onChange={handleChange}
-              value={input.email}
-              className="form-control form-control-sm"
-            />
-          </div>
-          <div className='form-outline form-white'>
-          <span className='fs-6 text-white'>Password</span>
-            <input
-              type="password"
-              placeholder="*********"
-              name="password"
-              onChange={handleChange}
-              value={input.password}
-              className="form-control form-control-sm"
-            />
-          </div>
-
-          <div className='form-outline form-white mb-4'>
-          <span className='fs-6 text-white'>Confirm Password</span>
-            <input
-              type="password"
-              placeholder="*********"
-              name="confirm"
-              onChange={handleChange}
-              value={input.confirm}
-              className="form-control form-control-sm"
-            />
-          </div>
-
-          <button
-            className="btn btn-primary btn-sm px-5"
-            type='button'
-
-            onClick={() => onRegisterRequested({ fullName, email, password, confirm })}
-          >
-            Register
-          </button>
-
         </>
       }
     />

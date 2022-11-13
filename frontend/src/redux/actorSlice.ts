@@ -121,95 +121,41 @@ export const searcheActors = createAsyncThunk(
 export const actorSlice = createSlice({
     name: "actors",
     initialState,
-    reducers: {
-        setActors: (state = initialState, action: PayloadAction<ActorDetails[]>) => {
-            state.actors = action.payload;
-        },
-
-        setActor: (state = initialState, action: PayloadAction<Actor>) => {
-            state.actor = action.payload;
-        },
-
-    },
+    reducers: {},
 
     extraReducers: (builder) => {
-        builder.addCase(getActors.pending, (state = initialState) => {
-            state.loading = true;
-            state.getActorStatus = "pending"
-
-        });
-        builder.addCase(getActors.fulfilled, (state = initialState, action: PayloadAction<ActorDetails[]>) => {
+       
+        builder.addCase(getActors.fulfilled, (state, action: PayloadAction<ActorDetails[]>) => {
             state.actors = action.payload;
             state.loading = false;
             state.getActorStatus = "fullfilled"
         });
 
-        builder.addCase(getActors.rejected, (state = initialState) => {
-            state.loading = false;
-            state.getActorStatus = "rejected"
-        });
-
-        builder.addCase(getActor.pending, (state = initialState) => {
-            state.loading = true;
-            state.getActorStatus = "pending"
-
-        });
-        builder.addCase(getActor.fulfilled, (state = initialState, action: PayloadAction<Actor>) => {
+       
+        builder.addCase(getActor.fulfilled, (state, action: PayloadAction<Actor>) => {
             state.actor = action.payload;
             state.loading = false;
             state.getActorStatus = "fullfilled"
         });
 
-        builder.addCase(getActor.rejected, (state = initialState) => {
-            state.loading = false;
-            state.getActorStatus = "rejected"
-        });
-
-        builder.addCase(updateActor.pending, (state = initialState) => {
-            state.loading = true;
-            state.updateActorStatus = "pending"
-
-        });
-        builder.addCase(updateActor.fulfilled, (state = initialState) => {  
+      
+        builder.addCase(updateActor.fulfilled, (state) => {  
              state.loading = false;
             state.updateActorStatus = "fullfilled"
 
         });
-        builder.addCase(updateActor.rejected, (state = initialState) => { 
-            state.loading = false;
-            state.updateActorStatus = "rejected"
-        });
-
-        builder.addCase(deleteActor.pending, (state = initialState) => {
-            state.loading = true;
-            state.deleteActorStatus = "pending"
-
-        });
-        builder.addCase(deleteActor.fulfilled, (state = initialState) => {
+       
+        builder.addCase(deleteActor.fulfilled, (state) => {
             state.loading = false;
             state.deleteActorStatus = "fullfilled"
         });
-        builder.addCase(deleteActor.rejected, (state = initialState) => {         
-            state.loading = false;
-            state.deleteActorStatus = "rejected"
-        });
-
-        builder.addCase(searcheActors.pending, (state = initialState) => {
-            state.loading = true;
-            state.searchActorStatus = "pending"
-
-        });
-        builder.addCase(searcheActors.fulfilled, (state = initialState,action) => {
+       
+        builder.addCase(searcheActors.fulfilled, (state,action) => {
             state.actors = action.payload;
             state.loading = false;
             state.searchActorStatus = "fullfilled"
         });
-        builder.addCase(searcheActors.rejected, (state = initialState, action) => {         
-            state.loading = false;
-            state.searchActorStatus = "rejected"
-            state.errors = action.payload
-        });
-
+       
 
     }
 })
@@ -217,5 +163,3 @@ export const actorSlice = createSlice({
 
 export default actorSlice.reducer;
 export const actorDetails = (state: RootState) => state.actors.actors;
-export const actorState = (state: RootState) => state.actors;
-export const { setActors, setActor } = actorSlice.actions // get actors and actor

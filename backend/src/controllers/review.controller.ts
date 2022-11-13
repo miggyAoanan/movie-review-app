@@ -19,7 +19,7 @@ import {
 } from '@loopback/rest';
 import { Review } from '../models';
 import { ReviewRepository } from '../repositories';
-import { HttpErrors } from '@loopback/rest';
+
 export class ReviewController {
   constructor(
     @repository(ReviewRepository)
@@ -45,15 +45,7 @@ export class ReviewController {
     review: Omit<Review, 'id'>,
   ): Promise<Review> {
 
-    // const findReview = await this.reviewRepository.findOne({
-    //   where: { userId: review.userId, movieId: review.movieId}
-    // });
 
-    // if(findReview){
-    //   throw new HttpErrors.Unauthorized("Please wait for the activation");
-    // }
-
-    // review.isActive = false
     return this.reviewRepository.create(review);
   }
 
@@ -84,7 +76,6 @@ export class ReviewController {
     @param.filter(Review) filter?: Filter<Review>,
   ): Promise<Review[]> {
     return this.reviewRepository.find(filter);
-    // return this.reviewRepository.find({include: ['users']});
 
   }
 

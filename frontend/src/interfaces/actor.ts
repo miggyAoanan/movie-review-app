@@ -16,7 +16,7 @@ export interface ActorDetails {
     lastName: string | undefined;
     gender: string | undefined;
     age: number| undefined;
-    imageURL?: string | undefined;
+    imageURL?: string;
     movies?: Movie[];
     
 }

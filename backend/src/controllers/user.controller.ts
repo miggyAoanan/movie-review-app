@@ -138,10 +138,8 @@ export class UserController {
       },
     })
     newUserRequest: NewUserRequest,
-  ): Promise<User> {
+  ): Promise<User | string> {
     const userAlreadyExistsError = 'User already exists.';
-    
-    //check if the email exist --> to avoid duplicates
     const dbCheckCount = await this.userRepository.count()
     const foundUser = await this.userRepository.findOne({
       where: { email: newUserRequest.email },
@@ -158,7 +156,7 @@ export class UserController {
       return savedUser;
     }
 
-    else if (dbCheckCount.count > 0 && !foundUser ) {
+    else if (dbCheckCount.count > 0 && !foundUser) {
 
       const password = await hash(newUserRequest.password, await genSalt());
       newUserRequest.isActive = false
@@ -205,7 +203,7 @@ export class UserController {
 
     //check if active
     const foundUser = await this.userRepository.findOne({
-      where: { email: credentials.email},
+      where: { email: credentials.email },
     });
 
     const isActive = foundUser?.isActive
@@ -216,7 +214,7 @@ export class UserController {
     const userProfile = this.userService.convertToUserProfile(user);
     // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
-    if(isActive === false){
+    if (isActive === false) {
       throw new HttpErrors.Unauthorized("Please wait for the activation");
     }
     let data = { ...user, token }
@@ -335,7 +333,7 @@ export class UserController {
     @param.filter(User) filter?: Filter<User>,
   ): Promise<User[]> {
     return this.userRepository.find(filter);
-   
+
   }
 
 
@@ -389,8 +387,21 @@ export class UserController {
       },
     })
     user: User,
-  ): Promise<void> {
-    await this.userRepository.updateById(id, user);
+  ): Promise<string> {
+
+    const emailDuplicateError = "Email is already taken"
+    const updateSuccess = "User update is successfull"
+
+    const foundUser = await this.userRepository.findOne({
+      where: { email: user.email }
+    });
+  
+    if (foundUser && foundUser.id !== id){
+      return emailDuplicateError
+    }
+
+     await this.userRepository.updateById(id, user);
+    return updateSuccess
   }
   @authenticate('jwt')
   @put('/users/{id}')
@@ -410,16 +421,16 @@ export class UserController {
   })
   async deleteById(@param.path.string('id') id: string): Promise<string> {
     const users = await this.userRepository.find()
-    const index = users.findIndex((user)=> user.id === id)
+    const index = users.findIndex((user) => user.id === id)
 
     const errorMessage = "You cannot delete the root admin";
     const successMessage = "Successfully deleted";
-    if(index === 0){
+    if (index === 0) {
       // throw new HttpErrors.Unauthorized("You cannot delete the root admin");
       return errorMessage
     }
-     await this.userRepository.deleteById(id);
-     return successMessage
+    await this.userRepository.deleteById(id);
+    return successMessage
   }
 
 

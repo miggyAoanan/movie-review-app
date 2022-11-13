@@ -7,5 +7,5 @@ export interface Review {
     movieName?: string;
     movieId?: string;
     isActive?: boolean;
- 
+    datePosted: string;
 }

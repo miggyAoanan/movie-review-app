@@ -17,7 +17,7 @@ interface UpdateAdminModalProps {
 const UpdateReviewModal: React.FC<UpdateAdminModalProps> = ({ onClose, isEditModalVisible, UpdateAdminErrorInput, onUpdateRequested, reviewId }) => {
 
  
-  const [isActive, setIsActive] = useState<boolean | undefined>(false)
+  const [isActive] = useState<boolean | undefined>(false)
   const [id, setId] = useState<string | undefined>("")
 
   useEffect(() => {

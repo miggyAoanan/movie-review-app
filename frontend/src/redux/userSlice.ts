@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 import { USERS_URL, ADMIN_URL } from '../API/index'
@@ -14,6 +14,8 @@ interface UserState {
     getUsersStatus: string,
     registerStatus: string,
     registerError: string,
+    updateUserStatus: string,
+    updateError: string,
     deleteUserStatus: string
 }
 
@@ -26,7 +28,9 @@ const initialState: UserState = {
     getUsersStatus: "",
     registerStatus: "",
     registerError: "",
-    deleteUserStatus: ""
+    deleteUserStatus: "",
+    updateUserStatus:"",
+    updateError:""
 }
 
 interface Login {
@@ -107,17 +111,6 @@ export const registerAdmin = createAsyncThunk<Object, User>(
     }
 )
 
-// export const login = createAsyncThunk<Login, Object>(
-//     "users/login",
-//     async (data, thunkAPI) => {
-//         try {
-//             const response = await axios.post(USERS_URL + "login", data)
-//             return response.data
-//         } catch (error) {
-//             return thunkAPI.rejectWithValue(error)
-//         }
-//     }
-// )
 
 
 export const updateUser = createAsyncThunk<Object, UpdateArgs>(
@@ -147,117 +140,54 @@ export const deleteUser = createAsyncThunk< {id: string}, string>(
 )
 
 
-//reducers -> reduce to a specific state -> changes state 
-
 export const usersSlice = createSlice({
     name: "users",
     initialState,
-    reducers: {
-        setUsers: (state = initialState, action: PayloadAction<User[]>) => {
-            state.users = action.payload;
-        }
-    },
+    reducers: {},
 
     extraReducers: (builder) => {
-        builder.addCase(getUsers.pending, (state = initialState, action) => {
-            state.loading = true;
-            state.getUsersStatus = "pending"
-
-        });
+       
         builder.addCase(getUsers.fulfilled, (state, action) => {
-            state.users = action.payload;
-            state.loading = false;
+            state.users = action.payload;         
             state.getUsersStatus = "fullfilled"
         });
-        builder.addCase(getUsers.rejected, (state, action) => {
-            state.errors = JSON.stringify(action.payload);
-            state.loading = false;
-            state.getUsersStatus = "rejected"
-        });
-        builder.addCase(registerUser.pending, (state) => {
-            state.loading = true
-            state.registerStatus = "pending"
-
-        });
-        builder.addCase(registerUser.fulfilled, (state, action) => {
-            state.loading = false;
+          
+        builder.addCase(registerUser.fulfilled, (state) => {           
             state.registerStatus = "fullfilled"
-
-
         })
-        builder.addCase(registerUser.rejected, (state, action) => {
-            state.loading = false;
-
+        builder.addCase(registerUser.rejected, (state, action) => {         
             state.registerError = JSON.stringify(action.payload);
-            state.registerStatus = "rejected"
+            state.registerStatus = "rejected";
             state.errors = JSON.stringify(action.error.message)
         })
-        // builder.addCase(login.pending, (state) => {
-        //     state.loading = true;
-        //     state.loginStatus = "pending"
-        // })
-        // builder.addCase(login.fulfilled, (state, action) => {
-        //     state.loading = false;
-        //     state.credential = action.payload;
-        //     state.loginStatus = "fullfilled"
-        //     localStorage.setItem("token", JSON.stringify(state.credential))
-
-        // })
-        // builder.addCase(login.rejected, (state, action) => {
-        //     state.loading = false;
-        //     state.errors = JSON.stringify(action.error.message)
-        //     state.loginStatus = "rejected"
-        // })
-        builder.addCase(updateUser.pending, (state) => {
-            state.loading = true;
+          
+        builder.addCase(updateUser.fulfilled, (state) => {          
+            state.updateUserStatus = "fullfilled"
+           
         })
-        builder.addCase(updateUser.fulfilled, (state) => {
-            state.loading = false;
-
-        })
-        builder.addCase(updateUser.rejected, (state, action) => {
-            state.loading = false;
-            state.errors = JSON.stringify(action.error.message)
+        builder.addCase(updateUser.rejected, (state, action) => {          
+            state.updateUserStatus = "rejected";
+            state.updateError = JSON.stringify(action.payload);
+           
         })
 
-        builder.addCase(registerAdmin.pending, (state) => {
-            state.loading = true
-            state.registerStatus = "pending"
-
-        });
-        builder.addCase(registerAdmin.fulfilled, (state, action) => {
-            state.loading = false;
+        builder.addCase(registerAdmin.fulfilled, (state) => {          
             state.registerStatus = "fullfilled"
-
-
         })
-        builder.addCase(registerAdmin.rejected, (state, action) => {
-            state.loading = false;
-
+        builder.addCase(registerAdmin.rejected, (state, action) => {          
+            state.registerStatus = "rejected";
             state.registerError = JSON.stringify(action.payload);
-            state.registerStatus = "rejected"
-            state.errors = JSON.stringify(action.error.message)
         })
-
-        builder.addCase(deleteUser.pending, (state) => {
-            state.loading = true
-            state.registerStatus = "pending"
-
-        });
-        builder.addCase(deleteUser.fulfilled, (state, action) => {
-            state.loading = false;
-            state.registerStatus = "fullfilled"
-
+           
+        builder.addCase(deleteUser.fulfilled, (state, action) => {          
+            state.deleteUserStatus = "fullfilled"
 
         })
-        builder.addCase(deleteUser.rejected, (state, action) => {
-           state.errors = JSON.stringify(action.payload)
-        })
+       
 
     }
 })
 
 export default usersSlice.reducer;
-export const { setUsers } = usersSlice.actions
+
 export const userDetails = (state: RootState) => state.users.users;
-export const userState = (state: RootState) => state.users;

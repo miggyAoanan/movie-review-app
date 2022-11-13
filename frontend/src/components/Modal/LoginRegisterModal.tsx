@@ -1,103 +1,138 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import ModalRWD from './ModalRWD';
 import { useAppDispatch, useAppSelector, RootState } from "../../store/store"
 import { registerUser } from "../../redux/userSlice"
-import { ToastContainer} from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useLoginUserMutation } from '../../authServices/authApi'
+import { setUser } from "../../redux/authSlice";
+
+
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 interface LoginArgs {
   email: string;
   password: string;
 }
 
-export type LoginFunction = (args: LoginArgs) => Promise<void>;
+type LoginFunction = (args: LoginArgs) => Promise<void>;
 
 interface LoginModalProps {
   onClose: () => void;
-  onClear: () => void;
   isModalVisible: boolean;
-  loginErrorInput?: string
-  onLoginRequested: LoginFunction;
 
 }
+type UserSubmitForm = {
+  fullName: string;
+  email: string;
+  password: string;
+  confirm: string;
 
-const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, onClear,isModalVisible, loginErrorInput, onLoginRequested }) => {
+};
 
-  const [error, setError] = useState("")
-  const [message, setMessage] = useState("")
+
+const validationSchema = Yup.object().shape({
+  fullName: Yup.string().required('Fullname is required'),
+  email: Yup.string()
+    .required('Email is required')
+    .email('Email is invalid'),
+  password: Yup.string()
+    .required('Password is required')
+    .min(8, 'Password must be at least 8 characters')
+    .max(40, 'Password must not exceed 40 characters'),
+  confirm: Yup.string()
+    .required('Confirm Password is required')
+    .oneOf([Yup.ref('password'), null], 'Confirm Password does not match'),
+
+});
+
+const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible }) => {
+
+  const [loginUser, { data: loginData, isSuccess: isLoginSuccess }] = useLoginUserMutation()
+
   const dispatch = useAppDispatch();
-  const registerStatus = useAppSelector((state: RootState) => state.users.getUsersStatus)
+  const registerStatus = useAppSelector((state: RootState) => state.users.registerStatus)
+  const registerError = useAppSelector((state: RootState) => state.users.registerError)
   const [showRegister, setShowRegister] = useState(false)
-  const [input, setInput] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirm: ""
+
+  const [email ,setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm<UserSubmitForm>({
+    resolver: yupResolver(validationSchema)
   });
 
-  const { fullName, email, password, confirm } = input;
+  const onRegister = async (data: UserSubmitForm) => {
+    
+    await dispatch(registerUser({ fullName: data.fullName, email:data.email, password:data.password })).then((res: any) => {
+      if (registerStatus === "fullfilled") {
+        toast.success("Registration successfull")
+      }
+    })
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setInput((prevState) => ({
-      ...prevState,
-      [event.target.name]: event.target.value,
-    }));
+  };
 
-  }
-  const handleSubmit = (event: React.SyntheticEvent): void => {
-    event.preventDefault()
-    // eslint-disable-next-line
-    let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    if (fullName === "") {
-      setError("Fullname is required");
-    } else if (email === "") {
-      setError("Email is required");
-    } else if (password === "") {
-      setError("Password is required");
-    } else if (confirm === "") {
-      setError("Confirm password is required");
-    } else if (password !== confirm) {
-      setError("Passwords do not match");
-    } else {
-      if (!emailReg.test(email)) {
-        setError("Please enter a valid email");
+  const handleLogin: LoginFunction = async ({ email, password }) => {
+    try {
+
+      if (!email) {
+        toast.warning("Email is required")
+      } else if (!password) {
+        toast.warning("Password is required")
       } else {
-        const userData = { fullName, email, password };
-        dispatch(registerUser(userData)).then((res: any) => {
+        await loginUser({email, password}).then((res: any) => {
 
-          if (registerStatus === "fullfilled") {
-            setMessage("Registration successfull")
-          } else {
-
-            console.log(res.error.data.error.message);
+          if (res.error) {
             let errorMessage = res.error.data.error.message
-            let errorName = res.error.data.error.name
-            let error = errorName + ": " + errorMessage
-            setError(error)
-            let errorArray: any = []
-            let errors: any = res.error.data.error.details
-            errors.forEach((err: any) => {
-              errorArray.push(err.message)
-            })
-            console.log(errorArray)
-
+            toast.error(errorMessage);
           }
 
         })
 
       }
+
+    } catch (error: any) {
+      toast.error(error)
+
     }
+
   }
 
+  useEffect(() => {
+    if (isLoginSuccess) {
+      toast.success("login successfull")
+      dispatch(setUser({
+        fullName: loginData.data.fullName,
+        token: loginData.data.token,
+        permissions: loginData.data.permissions,
+        isActive: loginData.data.isActive,
+        id: loginData.data.id
+      }))
+      onClose()
+    }
+
+  }, [isLoginSuccess])
+
+  useEffect(() => {
+    if (registerStatus === "rejected") {
+      toast.error(registerError)
+
+    }
+  }, [registerError])
+
+
   const clear = () => {
-    input.fullName = ""
-    input.email = ""
-    input.password = ""
-    input.confirm = ""
-    setError("")
-   
+  setEmail("")
+  setPassword("")
   }
- 
+
 
 
   return (
@@ -106,130 +141,153 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, onClear,isModa
       isModalVisible={isModalVisible}
       content={
         <>
+          <div className="register-form">
+            <form >
+              <h2 className='fw-bold mb-2 text-uppercase text-white'> {!showRegister ? "Login" : "Register"}</h2>
 
-          <h2 className='fw-bold mb-2 text-uppercase text-white'> {!showRegister ? "Login" : "Register"}</h2>
-          {
-            error ? <p className='text-danger fs-6 error' >{error}</p>
-              : ""
-          }
-
-          {
-            message ? <p className='text-success fs-6 error' >{message}</p>
-              : ""
-          }
-
-           {
-            loginErrorInput ? <p className='text-danger fs-6 error' >{loginErrorInput}</p>
-              : ""
-          }
-
-          {showRegister && (
-
-            <>
-              <div className='form-outline form-white'>
-                <span className='fs-6 text-white'>Full Name</span>
-                <input
-                  type="text"
-                  placeholder="Please enter fullname"
-                  id="fullName"
-                  name="fullName"
-                  onChange={handleChange}
-                  value={input.fullName}
-                  className="form-control form-control-sm"
-                />
-              </div>
+              {showRegister && (
+                <>
 
 
-            </>
+                  <div className='form-outline form-white'>
+                    <label className='fs-6 text-white'>Full Name</label>
+                    <input
 
-          )}
+                      type="text"
+                      {...register('fullName')}
+                      className={`form-control form-control-sm ${errors.fullName ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">{errors.fullName?.message}</div>
+                  </div>
 
-          <div className='form-outline form-white'>
-            <span className='fs-6 text-white'>Email</span>
-            <input
-              type="text"
-              placeholder="Please enter you email"
-              name="email"
-              onChange={handleChange}
-              value={input.email}
-              className="form-control form-control-sm"
-            />
-          </div>
-          <div className='form-outline form-white'>
-            <span className='fs-6 text-white'>Password</span>
-            <input
-              type="password"
-              placeholder="********"
-              name="password"
-              onChange={handleChange}
-              value={input.password}
-              className="form-control form-control-sm"
-            />
-          </div>
+                  <div className='form-outline form-white'>
+                    <label className='fs-6 text-white'>Email</label>
+                    <input
+                      type="text"
+                      {...register('email')}
+                      className={`form-control form-control-sm ${errors.email ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">{errors.email?.message}</div>
+                  </div>
+
+                  <div className='form-outline form-white'>
+                    <label className='fs-6 text-white'>Password</label>
+                    <input
+                      type="password"
+                      {...register('password')}
+                      className={`form-control form-control-sm ${errors.password ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">{errors.password?.message}</div>
+                  </div>
+
+                  <div className='form-outline form-white'>
+                    <label className='fs-6 text-white'>Confirm Password</label>
+                    <input
+                      type="password"
+                      {...register('confirm')}
+                      className={`form-control form-control-sm ${errors.confirm ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">{errors.confirm?.message}</div>
+                  </div>
 
 
-          {showRegister && (
-            <div className='form-outline form-white mb-4'>
-              <span className='fs-6 text-white'>Confirm password</span>
-              <input
-                type="password"
-                placeholder="********"
-                name="confirm"
-                onChange={handleChange}
-                value={input.confirm}
-                className="form-control form-control-sm"
+                </>
+
+              )}
+
+              {!showRegister && (
+                <>
+                  <div className='form-outline form-white'>
+                    <label className='fs-6 text-white'>Email</label>
+                    <input
+                      type="text"
+                      name='email'
+                      onChange={(e) => {setEmail(e.target.value)}}
+                      className={`form-control form-control-sm ${errors.email ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">{errors.email?.message}</div>
+                  </div>
+
+                  <div className='form-outline form-white'>
+                    <label className='fs-6 text-white'>Password</label>
+                    <input
+                      name='password'
+                      type="password"
+                      onChange={(e) => {setPassword(e.target.value)}}
+                      className={`form-control form-control-sm ${errors.password ? 'is-invalid' : ''}`}
+                    />
+                    <div className="invalid-feedback">{errors.password?.message}</div>
+                  </div>
+                </>
+
+              )
+
+              }
+
+
+
+              {!showRegister ? (
+                <div className='form-outline form-white d-flex justify-content-between mt-4'>
+                  <button
+                    className="btn btn-light"
+                    type='button'
+                    onClick={() => handleLogin({ email, password })}
+                  >
+                    Login
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => reset()}
+                    className="btn btn-warning float-right"
+                  >
+                    Reset
+                  </button>
+                </div>
+
+
+              ) :
+                (
+                  <div className='form-outline form-white d-flex justify-content-between mt-4'>
+                    <button type="submit" className="btn btn-primary" onClick={handleSubmit(onRegister)}>
+                      Register
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => reset()}
+                      className="btn btn-warning float-right"
+                    >
+                      Reset
+                    </button>
+                  </div>
+
+                )
+              }
+              <h5 className="mt-5 fs-6 text-white-50">
+                {!showRegister ? (
+                  <>
+                    Don't have an account ?
+
+                    <p className='text-white mb-4 fs-6 text-center'
+                      style={{ cursor: "pointer" }}
+                      onClick={() => { setShowRegister(true) }}
+                    > Register</p>
+                  </>
+                ) : (
+                  <>
+                    Already have an account?
+                    <p className='text-white mb-4 fs-6 text-center'
+                      style={{ cursor: "pointer" }}
+                      onClick={() => { setShowRegister(false); clear() }}
+                    > Log in</p>
+                  </>
+
+                )}
+              </h5>
+              <ToastContainer
+                theme="dark"
               />
-            </div>
-
-          )}
-
-
-          {!showRegister ? (
-            <button
-              className="btn btn-light btn-sm px-5 mt-4"
-              type='button'
-              onClick={() =>{ onLoginRequested({ email, password }) }}
-            >
-              Login
-            </button>
-
-          ) :
-            (
-              <button
-                className="btn btn-light btn-sm px-5"
-                type='button'
-                onClick={handleSubmit}
-              >
-                Register
-              </button>
-
-            )
-
-          }
-
-
-          <h5 className="mt-5 fs-6 text-white-50">
-            {!showRegister ? (
-              <>
-                Don't have an account ?
-
-                <p className='text-white mb-4 fs-6 text-center'
-                  style={{ cursor: "pointer" }}
-                  onClick={() => { setShowRegister(true);clear();onClear() }}
-                > Register</p>
-              </>
-            ) : (
-              <>
-                Already have an account?
-                <p className='text-white mb-4 fs-6 text-center'
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {setShowRegister(false);clear();onClear()}}
-                > Log in</p>
-              </>
-
-            )}
-          </h5>
-          <ToastContainer />
+            </form>
+          </div>
         </>
       }
     />

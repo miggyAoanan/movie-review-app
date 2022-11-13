@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from '../../store/store'
+import { useAppDispatch, useAppSelector, RootState } from '../../store/store'
 import { userDetails, getUsers, registerAdmin, updateUser, deleteUser } from "../../redux/userSlice";
 import userIcon from "../../images/user.png"
 import 'react-toastify/dist/ReactToastify.css';
-import RegisterAdminModal, { RegisterFunction, RegisterArgs } from "./modal/RegisterAdminModal";
+import RegisterAdminModal, { RegisterFunction } from "./modal/RegisterAdminModal";
 import UpdateUserModal, {UpdateFunction, UpdateArgs} from './modal/UpdateUserModal'
 import { User } from "../../interfaces";
 import DeleteUserModal, {DeleteUserFunction} from "./modal/DeleteUserModal";
@@ -13,19 +13,17 @@ const UserDashBoard = () => {
   const users = useAppSelector(userDetails)
   const [errorInput, setErrorInput] = useState("")
   const dispatch = useAppDispatch();
-  
+  const registerStatus = useAppSelector((state: RootState) => state.users.registerStatus)
+  const registerError = useAppSelector((state: RootState) => state.users.registerError)
+  const updateStatus =  useAppSelector((state: RootState) => state.users.updateUserStatus)
+  const updateError = useAppSelector((state: RootState) => state.users.updateError)
+
   useEffect(() => {
     if (users) {
       dispatch(getUsers())
     }
    
   }, [dispatch])
-
-        
-
-  //   console.log(registerState)
-
-  // }, [dispatch])
 
   const [isModalVisible, setIsModalVisible] = useState(false)// add
   const toggleModal = () => {
@@ -46,7 +44,7 @@ const UserDashBoard = () => {
   }
 
     //delete modal
-    const [deleteId, setDeleteId] = useState<string |undefined>("")
+    const [deleteId, setDeleteId] = useState<string>("")
     const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
     const toggleDeleteModal = () => {
       setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
@@ -54,57 +52,30 @@ const UserDashBoard = () => {
   
 
 
-  const onRegisterRequest: RegisterFunction = async (args: RegisterArgs) => {
-    console.log(args);
-    const { fullName, email, password, confirm } = args;
-    let emailReg = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
-    if (fullName === "") {
-      setErrorInput("Fullname is required");
-    } else if (email === "") {
-      setErrorInput("Email is required");
-    } else if (password === "") {
-      setErrorInput("Password is required");
-    } else if (confirm === "") {
-      setErrorInput("Confirm password is required");
-    } else if (password !== confirm) {
-      setErrorInput("Passwords do not match");
-    } else {
-      if (!emailReg.test(email)) {
-        setErrorInput("Please enter a valid email");
-      } else {
-        const userData = { fullName, email, password };
-        dispatch(registerAdmin(userData)).then((res:any)=>{
-          if (res.data) {
-            console.log(res)
-          }
-          else {
-            console.log(res)
-            console.log(res.error.data.error.message);// if thre is a single error
-            let errorMessage = res.error.data.error.message
-            setErrorInput(errorMessage)
-            let errorName = res.error.data.error.name
-            let error = errorName + ": " + errorMessage
-            setErrorInput(error)
-            let errorArray: any = []
-            let errors: any = res.error.data.error.details
-            errors.forEach((err: any) => {
-  
-              errorArray.push(err.message)
-            })
-            console.log(errorArray)
-  
-          }
-        })
+  const onRegisterRequest: RegisterFunction = async (data) => {
 
+    console.log(data);
+    const { fullName, email, password} = data
+     await dispatch(registerAdmin({fullName, email, password})).then((res)=> {
+      if (registerStatus === "fullfilled") {
+        toast.success("Registration successfull")
       }
-    }
+     })
+    
+
+    
   }
 
 
   const onUpdateUser : UpdateFunction = async (args: UpdateArgs) => {
     dispatch(updateUser(args)).then((res:any)=>{
-      dispatch(getUsers())
-      onBackdropClick()
+ 
+    if(res.payload === "Email is already taken"){
+      toast.error("Email is already taken")
+    }
+     else{
+      toast.success(res.payload)
+     }
     })
 
   }
@@ -120,6 +91,21 @@ const UserDashBoard = () => {
       // console.log(res.payload.message)
     })
   }
+  useEffect(() => {
+    if (registerStatus === "rejected") {
+      toast.error(registerError)
+
+    }
+  }, [registerError])
+
+  useEffect(() => {
+    if (updateStatus === "rejected") {
+      toast.error(updateError)
+
+    }
+  }, [updateError])
+
+
 
   const clear = () => {
    setDeleteId("")
@@ -167,7 +153,7 @@ const UserDashBoard = () => {
                     <button
                       type="button"
                       className="btn btn-danger btn-sm px-2"
-                    onClick={() => { toggleDeleteModal(); setDeleteId(user.id)}}
+                    onClick={() => { toggleDeleteModal(); setDeleteId(user.id!)}}
                     >Delete</button>
 
                   </td>
@@ -202,7 +188,8 @@ const UserDashBoard = () => {
        deleteId={deleteId}
        onDeleteUser={onDeleteUser}
       />
-       <ToastContainer />
+       <ToastContainer
+       theme="dark" />
     </div>
   )
 }

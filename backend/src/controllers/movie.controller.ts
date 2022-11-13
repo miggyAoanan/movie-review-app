@@ -69,7 +69,7 @@ export class MovieController {
       },
     },
   })
-  async searchByname(
+  async find(
     @param.filter(Movie) filter?: Filter<Movie>,
   ): Promise<Movie[]> {
     return this.movieRepository.find({ include: ['actors', 'reviews'] });
@@ -211,7 +211,31 @@ export class MovieController {
   @response(204, {
     description: 'Movie DELETE success',
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.movieRepository.deleteById(id);
+  async deleteById(@param.path.string('id') id: string): Promise<string> {
+
+    
+  const checkYearError = "Movies only 1 year older can be deleted"
+    const successDelete = "Movie Deleted"
+    
+    try {
+
+       const movieToDelete = await this.movieRepository.findById(id);
+       const checkYear =
+       new Date().getFullYear() - movieToDelete.yearReleased >= 1;
+
+       if (!checkYear){
+        return checkYearError
+       
+       }
+        else{
+          await this.movieRepository.deleteById(id);
+          await this.movieRepository.reviews(id).delete()
+          return successDelete
+        }     
+       
+    } catch (error) {
+      return error
+    }
+  
   }
 }
