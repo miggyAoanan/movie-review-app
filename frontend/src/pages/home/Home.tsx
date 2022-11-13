@@ -13,6 +13,7 @@ const Home = () => {
   const movieText = "";
   const actortext = "" 
 
+
   useEffect(() => {
     if(movieText || actortext){
       dispatch(searchMovies(movieText))
@@ -26,9 +27,9 @@ const Home = () => {
   
   return (
     <div >
-      <div className="banner-img"></div>
+      
     
-      <MovieList />
+      <MovieList  />
       <Actorlist />
 
     </div>

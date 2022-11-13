@@ -17,7 +17,7 @@ const ActorCard = (props : Actor) => {
         </div>
         <div className="card-bottom">
           <div className="card-info">
-            <h4>{data.firstName} {data.lastName}</h4>
+            <h4 data-testid="properName">{data.firstName} {data.lastName}</h4>
             <p>{data.age}</p>
             <p>{data.gender}</p>
            

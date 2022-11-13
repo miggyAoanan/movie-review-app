@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../store/store';
-import { REVIEWS_URL, MOVIE_REVIEWS_URL } from '../API'
+import { REVIEWS_URL, MOVIE_REVIEWS_URL } from '../API';
 
-import  { Review, ErrorI } from '../interfaces/index'
+import  { Review, ErrorI } from '../interfaces/index';
 
 export interface UpdateArgs {
     id?: string,

@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import MovieCard from "../MovieCard/MovieCard";
 import "./MovieList.scss";
-import { useAppSelector } from '../../store/store'
-import { movieDetails } from "../../redux/movieSlice";
+import { useAppSelector, useAppDispatch } from '../../store/store'
+import {  movieDetails } from "../../redux/movieSlice";
 import { Movie } from "../../interfaces";
 
 const MovieList = () => {
-
   const movies = useAppSelector(movieDetails)
+
   return (
     <div className="main-movie-wrapper">
       <div className="main-movie-list">

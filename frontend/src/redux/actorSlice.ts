@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../store/store';
-import { ACTORS_URL, ACTORS_SEARCH_URL } from '../API'
+import { ACTORS_URL, ACTORS_SEARCH_URL } from '../API';
 
-import { Actor, ActorDetails, ErrorI } from '../interfaces/index'
+import { Actor, ActorDetails, ErrorI } from '../interfaces/index';
 
 interface ActorState {
     actor: ActorDetails | null,

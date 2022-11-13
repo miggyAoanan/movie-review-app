@@ -12,17 +12,18 @@ export const ReviewCard = (props: Review) => {
     <div className="reviewCardContainer">
 
       <div className='topSection'>
-        <h2 className=''> A review by {data.userName} &nbsp; 
+        <h2>A review by {data.userName} &nbsp; 
         <Rating
+
         className='rate'
         size={22}
         initialValue={data.rating} />
-        <span> {data.rating}/5</span>
+        <span data-testid="rating">{data.rating}/5</span>
                     </h2>
         <p>Written by <span className='userName'>{data.userName}</span> on  {dayjs(data.datePosted).format("MM-DD-YYYY")}</p>
       </div>
       <div className='desc'>
-        <p> {data.description}</p>
+        <p data-testid="description">{data.description}</p>
       </div>
      
     </div>

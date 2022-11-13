@@ -11,7 +11,7 @@ function MovieCard(props: Movie) {
       <Link to={`/movie/${data.id}`}>
         <div className="card-inner">
           <div className="card-top">
-            <img src={data.imageURL} />
+            <img src={data.imageURL} alt={data.title}/>
           </div>
         </div>
         <div className="card-bottom">

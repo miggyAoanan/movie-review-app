@@ -27,6 +27,8 @@ function Header() {
     }
 
   },[user])
+
+ 
  
 
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -66,6 +68,12 @@ function Header() {
             <img src={logo} alt="logo" className="logo" />
           </div>
         </Link>
+
+        <Link to="/">
+          
+          <div className="">Home</div>
+         
+        </Link>
         <Link to="/movie">
           <div className="">Movies</div>
         </Link>
@@ -78,14 +86,14 @@ function Header() {
       <div className="search-bar">
 
         <form onSubmit={handleSearch}>
-          <input type="text" value={term} placeholder="Search" onChange={(e) => setTerm(e.target.value)} />
-          <button type="submit"> <i className="fa fa-search"></i> </button>
+          <input type="text" value={term} placeholder="Search" onChange={(e) => setTerm(e.target.value)} data-testid="searchBar"/>
+          <button type="submit"> <i className="fa fa-search" data-testid="searchButton"></i> </button>
         </form>
 
 
       </div>
       <div className="user">
-        <div className="userDetails">
+        <div className="userDetails" test-id="userDetails">
           <div className="userimage">
             <img src={userIcon} alt="user" />
           </div>

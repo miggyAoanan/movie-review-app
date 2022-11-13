@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-import { USERS_URL, ADMIN_URL } from '../API/index'
+import { USERS_URL, ADMIN_URL } from '../API/index';
 import { User } from '../interfaces/user';
 import { RootState } from '../store/store';
 

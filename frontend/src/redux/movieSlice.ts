@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../store/store';
 
-import { MOVIES_URL, MOVIE_ACTORS_URL, MOVIE_SEARCH_URL } from '../API'
+import { MOVIES_URL, MOVIE_ACTORS_URL, MOVIE_SEARCH_URL } from '../API';
 
-import { MovieDetails, ErrorI } from '../interfaces/index'
+import { MovieDetails, ErrorI } from '../interfaces/index';
 
 
 interface MovieState {
@@ -41,6 +41,7 @@ export const getMovies = createAsyncThunk<MovieDetails[]>(
     async (_, { rejectWithValue }) => {
         try {
             const response = await axios.get(MOVIES_URL)
+            
             return response.data
         } catch (error) {
             return rejectWithValue(error)
