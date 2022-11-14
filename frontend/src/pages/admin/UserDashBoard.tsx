@@ -50,18 +50,15 @@ const UserDashBoard = () => {
       setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
     }
   
-
-
   const onRegisterRequest: RegisterFunction = async (data) => {
 
-    console.log(data);
     const { fullName, email, password} = data
      await dispatch(registerAdmin({fullName, email, password})).then((res)=> {
       if (registerStatus === "fullfilled") {
         toast.success("Registration successfull")
+        dispatch(getUsers())
       }
      })
-    
 
     
   }
@@ -86,11 +83,25 @@ const UserDashBoard = () => {
       dispatch(getUsers())
       onBackdropClick()
      const messsage :string = res.payload
+     if(messsage === "You cannot delete the root admin"){
       toast.error(messsage)
+     }else{
+      toast.success(messsage)
+     }
+      
    
       // console.log(res.payload.message)
     })
   }
+
+  useEffect(() => {
+    if (registerStatus === "fullfilled") {
+     dispatch(getUsers())
+
+    }
+  }, [registerStatus])
+
+
   useEffect(() => {
     if (registerStatus === "rejected") {
       toast.error(registerError)
@@ -104,7 +115,6 @@ const UserDashBoard = () => {
 
     }
   }, [updateError])
-
 
 
   const clear = () => {

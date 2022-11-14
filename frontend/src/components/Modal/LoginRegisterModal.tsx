@@ -50,11 +50,12 @@ const validationSchema = Yup.object().shape({
 
 const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible }) => {
 
-  const [loginUser, { data: loginData, isSuccess: isLoginSuccess }] = useLoginUserMutation()
+  const [loginUser, { data: loginData, isSuccess: isLoginSuccess}] = useLoginUserMutation()
 
   const dispatch = useAppDispatch();
   const registerStatus = useAppSelector((state: RootState) => state.users.registerStatus)
   const registerError = useAppSelector((state: RootState) => state.users.registerError)
+ 
   const [showRegister, setShowRegister] = useState(false)
 
   const [email ,setEmail] = useState("")
@@ -70,13 +71,8 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
   });
 
   const onRegister = async (data: UserSubmitForm) => {
-    
-    await dispatch(registerUser({ fullName: data.fullName, email:data.email, password:data.password })).then((res: any) => {
-      if (registerStatus === "fullfilled") {
-        toast.success("Registration successfull")
-      }
-    })
-
+  
+    await dispatch(registerUser({ fullName: data.fullName, email:data.email, password:data.password }))
   };
 
   const handleLogin: LoginFunction = async ({ email, password }) => {
@@ -89,9 +85,13 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
       } else {
         await loginUser({email, password}).then((res: any) => {
 
-          if (res.error) {
-            let errorMessage = res.error.data.error.message
-            toast.error(errorMessage);
+          const messsage :string = res.error.data.error.message
+
+          if (messsage ==="Invalid email or password.") {
+           
+            toast.error(messsage);
+          }else{
+            toast.info(messsage);
           }
 
         })
@@ -99,7 +99,7 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
       }
 
     } catch (error: any) {
-      toast.error(error)
+      // toast.error(error)
 
     }
 
@@ -119,6 +119,15 @@ const LoginRegisterModal: React.FC<LoginModalProps> = ({ onClose, isModalVisible
     }
 
   }, [isLoginSuccess])
+
+
+  useEffect(() => {
+    if (registerStatus === "fullfilled") {
+      toast.success("Registration Successful")
+
+    }
+  }, [registerStatus])
+
 
   useEffect(() => {
     if (registerStatus === "rejected") {

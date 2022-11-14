@@ -20,7 +20,7 @@ import {
 
 } from '@loopback/rest';
 import { User } from '../models';
-import { UserRepository } from '../repositories';
+import { UserRepository , ReviewRepository} from '../repositories';
 import { HttpErrors } from '@loopback/rest';
 
 import { Credentials } from '../services/user.service'
@@ -116,6 +116,8 @@ export class UserController {
     public userRepository: UserRepository,
     @inject(RefreshTokenServiceBindings.REFRESH_TOKEN_SERVICE)
     public refreshService: RefreshTokenService,
+    @repository(ReviewRepository)
+    public reviewsRepository: ReviewRepository,
 
 
   ) { }
@@ -132,7 +134,7 @@ export class UserController {
         'application/json': {
           schema: getModelSchemaRef(NewUserRequest, {
             title: 'NewUser',
-            exclude: ['id', 'verificationToken', 'isActive', 'permissions', 'reviewId'],
+            exclude: ['id', 'verificationToken', 'isActive', 'permissions', 'reviewId', 'dateCreated'],
           }),
         },
       },
@@ -332,7 +334,9 @@ export class UserController {
   async find(
     @param.filter(User) filter?: Filter<User>,
   ): Promise<User[]> {
-    return this.userRepository.find(filter);
+    return this.userRepository.find({
+      order: ['dateCreated ASC'],
+    });
 
   }
 
@@ -425,11 +429,19 @@ export class UserController {
 
     const errorMessage = "You cannot delete the root admin";
     const successMessage = "Successfully deleted";
-    if (index === 0) {
+
+    const rootAdmin = await this.userRepository.find({
+      order: ['dateCreated ASC'],
+      limit: 1,
+    });
+
+    if (rootAdmin[0].id === id) {
       // throw new HttpErrors.Unauthorized("You cannot delete the root admin");
       return errorMessage
     }
     await this.userRepository.deleteById(id);
+    await this.userRepository.userCredentials(id).delete();
+    await this.reviewsRepository.deleteAll({userId: id});
     return successMessage
   }
 

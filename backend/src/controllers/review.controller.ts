@@ -15,7 +15,7 @@ import {
   put,
   del,
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import { Review } from '../models';
 import { ReviewRepository } from '../repositories';
@@ -148,6 +148,29 @@ export class ReviewController {
     description: 'Review DELETE success',
   })
   async deleteById(@param.path.string('id') id: string): Promise<void> {
+    
     await this.reviewRepository.deleteById(id);
   }
+
+  @del('/user-reviews/{id}')
+  @response(204, {
+    description: 'Review DELETE success',
+  })
+  async deleteAllReviews(@param.path.string('id') id: string): Promise<void> {
+
+    //check if active
+    const foundReviews = await this.reviewRepository.find({
+      where: { userId: id },
+    });
+
+    await this.reviewRepository.deleteAll()
+    
+    // await this.reviewRepository.deleteById(id);
+  }
+
+
+
+
+
 }
+

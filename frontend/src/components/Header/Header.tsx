@@ -46,7 +46,9 @@ function Header() {
 
   const handleLogout = () => {
     dispatch(logout())
-    window.location.reload()
+    setPermissions("")
+    setFullName("")
+    
   }
 
   const handleSearch = (event: React.SyntheticEvent): void => {
@@ -131,7 +133,7 @@ function Header() {
           </>
 
           <>
-            {user === null &&
+            {(!user || !permissions)  &&
               <>
 
                 <div className="text-white name">Hi Guest!</div>

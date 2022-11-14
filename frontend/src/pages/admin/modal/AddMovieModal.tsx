@@ -76,7 +76,6 @@ const AddMovieModal: React.FC<AddMovieModalProps> = ({ isModalVisible, onClose, 
       target: { value },
     } = event;
     setPersonName(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
     setActorArray(value)

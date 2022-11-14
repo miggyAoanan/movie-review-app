@@ -52,6 +52,12 @@ export class User extends Entity {
   })
   verificationToken?: string;
 
+  @property({
+    type: 'date',
+    default: new Date(),
+  })
+  dateCreated: string;
+
 
   @hasOne(() => UserCredentials)
   userCredentials: UserCredentials;

@@ -59,9 +59,6 @@ const MovieDashboard = () => {
     const yearReleased = Number(movieData.yearReleased)
     const imageURL = movieData.imageURL
     const actorIds = args.actorIds
-
-    // actorIds.push(movieData.actorIds)
-
     const saveMoviedata = { title, overview, cost, yearReleased, imageURL, actorIds }
 
 
@@ -79,7 +76,6 @@ const MovieDashboard = () => {
     }
     else {
       dispatch(addMovie({ ...saveMoviedata })).then((res: any) => {
-
         dispatch(getMovies())
       })
 
@@ -98,7 +94,14 @@ const MovieDashboard = () => {
   const onDeleteMovie: DeleteMovieFunction = async (id: string) => {
 
     dispatch(deleteMovie(id)).then((res: any) => {
-       toast.info(res.payload)
+
+      const messsage :string = res.payload
+      if(messsage ==="Movies only 1 year older can be deleted"){
+        toast.error(res.payload)
+      }else{
+        toast.success(res.payload)
+      }
+      
       dispatch(getMovies())
     })
   }

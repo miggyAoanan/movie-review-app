@@ -76,7 +76,7 @@ export class AdminController {
         'application/json': {
           schema: getModelSchemaRef(NewAdminUserRequest, {
             title: 'NewUser',
-            exclude: ['id','isActive','permissions', 'verificationToken'],
+            exclude: ['id', 'verificationToken', 'isActive', 'permissions', 'reviewId', 'dateCreated'],
           }),
         },
       },
@@ -93,7 +93,7 @@ export class AdminController {
 
     if (!foundUser) {
       const password = await hash(NewAdminUserRequest.password, await genSalt());
-      NewAdminUserRequest.isActive = false
+      NewAdminUserRequest.isActive = true
       NewAdminUserRequest.permissions = 'admin'
       delete (NewAdminUserRequest as Partial<NewAdminUserRequest>).password;
       const savedUser = await this.userRepository.create(NewAdminUserRequest);
