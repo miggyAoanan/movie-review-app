@@ -7,6 +7,7 @@
 
 # testing
 /coverage
+backend/.nyc_coverage
 
 # production
 /build
