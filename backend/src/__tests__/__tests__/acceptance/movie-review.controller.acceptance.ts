@@ -22,7 +22,7 @@ describe('Movie Routes', () => {
        movie1:{
         title: "test title for unit test",
         overview: "This is test for overview",
-        yearReleased: 2022,
+        yearReleased: 2018,
         cost: 980000,
         imageURL: "https://www.themoviedb.org/t/p/w300_and_h450_bestv2/AeyiuQUUs78bPkz18FY3AzNFF8b.jpg",
         actorIds: [
