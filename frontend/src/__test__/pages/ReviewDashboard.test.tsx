@@ -4,17 +4,20 @@ import { BrowserRouter, Router } from "react-router-dom";
 import configureStore from "redux-mock-store";
 import { Provider } from "react-redux";
 
-import { userList } from "../../utils/db.mocks"
+import { reviewList, review, movieList} from "../../utils/db.mocks"
 import thunk from "redux-thunk";
-import { createMemoryHistory } from "history";
-import UserDashBoard from "../../pages/admin/UserDashBoard";
-import {User} from '../../interfaces'
-import userIcon from '../../images/user.png'
 
 
-describe("<UserDashboard />", () => {
+import ReviewDashboard from "../../pages/admin/ReviewDashboard";
+
+
+
+describe("<ReviewDashboard />", () => {
     const initialState = {
-        users: userList
+        review: review,
+        reviews: reviewList,
+        movies: movieList,
+
     }
     const mockStore = configureStore([thunk]);
     let store = mockStore(initialState);
@@ -22,19 +25,17 @@ describe("<UserDashboard />", () => {
         return render(
             <Provider store={store}>
                 <BrowserRouter>
-                    <UserDashBoard />
+                    <ReviewDashboard />
                 </BrowserRouter>
             </Provider>
         );
     };
 
     beforeEach(() => renderApp());
-
-    test("renders the User Dashboard page with heading User List", () => {
-        expect(screen.getByText("User List")).not.toBeNull();
+    test("renders the Review Dashboard page with heading Review List", () => {
+        expect(screen.getByText("Review List")).not.toBeNull();
     });
 
     
-
 
 })

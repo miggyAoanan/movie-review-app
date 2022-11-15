@@ -2,6 +2,7 @@ import { Client, expect } from '@loopback/testlab';
 import _ from 'lodash';
 
 import { BackendApplication } from '../../../application'
+
 import { Movie } from '../../../models';
 
 import { givenEmptyDatabase } from '../helpers/database.helpers';

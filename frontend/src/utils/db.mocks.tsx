@@ -68,7 +68,7 @@ export const actorList =
 
 export const actor = {
   id: "636fa042cbde64e928721fc0",
-  firstName: "Ryosuke ",
+  firstName: "Ryosuke",
   lastName: "Yamada",
   gender: "male",
   age: 29,

@@ -83,7 +83,6 @@ const MovieDashboard = () => {
   }
 
   const onUpdateMovie: UpdateMovieFunction = async (update: UpdateArgs) => {
-
     dispatch(updateMovie(update)).then((res: any) => {
       dispatch(getMovies())
     })
@@ -92,26 +91,20 @@ const MovieDashboard = () => {
   }
 
   const onDeleteMovie: DeleteMovieFunction = async (id: string) => {
-
     dispatch(deleteMovie(id)).then((res: any) => {
-
-      const messsage :string = res.payload
-      if(messsage ==="Movies only 1 year older can be deleted"){
+      const messsage: string = res.payload
+      if (messsage === "Movies only 1 year older can be deleted") {
         toast.error(res.payload)
-      }else{
+      } else {
         toast.success(res.payload)
       }
-      
       dispatch(getMovies())
     })
   }
 
-
   return (
     <div className="wrapper">
       <h2 className="h2 text-center text-white mb-5">Movie List </h2>
-
-
       <table className='table table-dark '>
         <thead >
           <tr className='bg-dark'>
@@ -125,12 +118,9 @@ const MovieDashboard = () => {
           </tr>
         </thead>
         <tbody>
-
-          {
-            movies ? (
-              movies.map((movie: Movie, index: number) => {
+             {
+              movies?.map((movie: Movie, index: number) => {
                 return (
-
                   <tr key={movie.id}>
                     <td>{index + 1}</td>
                     <td><img src={movie.imageURL} alt={movie.title} className='imageDash' /></td>
@@ -138,35 +128,24 @@ const MovieDashboard = () => {
                     <td>{movie.yearReleased}</td>
                     <td>{movie.cost}</td>
                     <td>
-
-                      <div className="d-grid gap-2 d-md-block">
-
+                      <span className="d-grid gap-2 d-md-block">
                         <button
                           type="button"
                           className="btn btn-secondary btn-sm"
-                          onClick={() => { toggleEditModal(); setMovieDataforUpdate({ id: movie.id, cost: movie.cost, imageURL: movie.imageURL }) }}
+                          onClick={() => { toggleEditModal(); setMovieDataforUpdate({ id: movie.id, cost: movie.cost, imageURL: movie.imageURL })}}
                         >Edit</button>
                         &nbsp;
                         &nbsp;
                         <button
                           type="button"
                           className="btn btn-danger btn-sm"
-                          onClick={() => { toggleDeleteModal(); setDeleteMovieId(movie.id) }}
-                        >Delete</button>
-
-                      </div>
-
-
+                          onClick={() => { toggleDeleteModal(); setDeleteMovieId(movie.id)}}>Delete</button>
+                      </span>
                     </td>
                   </tr>
                 )
               })
-
-            ) : (
-              ""
-            )
-          }
-
+            }
         </tbody>
       </table>
 
@@ -194,8 +173,8 @@ const MovieDashboard = () => {
         onDeleteMovie={onDeleteMovie}
 
       />
-    <ToastContainer theme="dark"/>
-      
+      <ToastContainer theme="dark" />
+
     </div>
   )
 }

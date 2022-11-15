@@ -117,9 +117,9 @@ const ActorDashboard = () => {
 
   return (
     <div className="wrapper">
-      <h2 className="h2 text-center text-white mb-5">Actor List </h2>
+      <h2 className="h2 text-center text-white mb-5">Actor List</h2>
       <table className='table table-dark '>
-        <thead >
+        <thead>
           <tr className='bg-dark'>
             <th scope="col">#</th>
             <th scope="col">Image</th>
@@ -129,8 +129,8 @@ const ActorDashboard = () => {
           </tr>
         </thead>
         <tbody>
-          {actors ? (
-            actors.map((actor: Actor, index: number) => {
+          {
+            actors?.map((actor: Actor, index: number) => {
               return (
                 <tr key={actor.id}>
                   <td>{index + 1}</td>
@@ -138,28 +138,23 @@ const ActorDashboard = () => {
                   <td>{actor.firstName}&nbsp;{actor.lastName}</td>
                   <td>{actor.gender}</td>
                   <td>
-
                     <button
                       type="button"
                       className="btn btn-secondary btn-sm "
-
-                      onClick={() => { toggleEditModal(); setActorForUpdate(actor) }}
+                      onClick={() =>{toggleEditModal();setActorForUpdate(actor)}}
                     >Edit</button>
                     &nbsp;
                     <button
                       type="button"
                       className="btn btn-danger btn-sm"
-                      onClick={() => { toggleDeleteModal(); setDeleteId(actor.id!) }}
-                    >Delete</button>
-
+                      onClick={() => { toggleDeleteModal(); setDeleteId(actor.id!)}}>Delete</button>
                   </td>
                 </tr>
               )
             })
-          ) : ""}
+          }
         </tbody>
       </table>
-
       <button
         type="button"
         className="btn btn-primary btn-sm px-5"

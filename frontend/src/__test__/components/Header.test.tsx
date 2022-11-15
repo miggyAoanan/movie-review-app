@@ -1,5 +1,5 @@
 /* eslint-disable testing-library/no-render-in-setup */
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, cleanup } from "@testing-library/react";
 
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
@@ -7,14 +7,16 @@ import configureStore from "redux-mock-store";
 
 import { Provider } from "react-redux";
 
-import { user, users } from "../../utils/db.mocks"
+import { users, authUser } from "../../utils/db.mocks"
 import thunk from "redux-thunk";
 import Header from "../../components/Header/Header";
+import { BrowserRouter } from "react-router-dom";
+import { renderWithProviders } from "../../utils/test-utils";
 
 describe("<Header />", () => {
 
   const initialState = {
-    user: user,
+    user: authUser,
     users: users
   }
   const mockStore = configureStore([thunk]);
@@ -29,27 +31,31 @@ describe("<Header />", () => {
     );
   };
 
-  beforeEach(() => renderApp());
+  afterEach(cleanup);
 
   test("should render logo element", () => {
+    renderApp();
     const logoImgElement = screen.getByAltText("logo");
     expect(logoImgElement).toBeInTheDocument(); // Logo Image
 
   });
 
   test("Search Bar component", () => {
+    renderApp();
     const searchbar = screen.getByTestId("searchBar")
     expect(searchbar).toBeInTheDocument()
 
   });
 
   test("Search button submit component ", () => {
+    renderApp();
     const searchButton = screen.getByTestId("searchButton")
     expect(searchButton).toBeInTheDocument()
 
   });
 
   test("should render Navigation Links ", () => {
+    renderApp();
     const links: HTMLAnchorElement[] = screen.getAllByRole("link");
     expect(links[0].href).toContain("/")
     expect(links[1].textContent).toEqual("Home");
@@ -60,8 +66,18 @@ describe("<Header />", () => {
     expect(links[3].href).toContain("/actor")
   });
 
+  test("should Login button element present ", async () => {
+    renderApp();
+    const loginElement = screen.getByRole("button", {
+      name: "Login"
+    })
+    expect(loginElement).toBeInTheDocument()
 
+  })
 
 
 
 })
+
+
+

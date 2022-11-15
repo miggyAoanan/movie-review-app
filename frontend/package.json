@@ -49,7 +49,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
     "coverage": "npm test -- --coverage --watchAll",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:debug": "open -a \"Google Chrome\" chrome://inspect && node --nolazy --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --colors --verbose"
   },
   "eslintConfig": {
     "extends": [

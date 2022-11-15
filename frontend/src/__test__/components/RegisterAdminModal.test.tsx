@@ -9,11 +9,12 @@ import { actor, users } from "../../utils/db.mocks"
 import thunk from "redux-thunk";
 
 import LoginRegisterModal from "../../components/Modal/LoginRegisterModal";
-import { useLoginUserMutation } from '../../authServices/authApi'
+import RegisterAdminModal from "../../pages/admin/modal/RegisterAdminModal";
 
-describe("<LoginRegisterModal />", () => {
+
+describe("<RegisterAdminModal />", () => {
     const initialState = {
-        useLoginUserMutation,
+
         users
 
     }
@@ -26,12 +27,19 @@ describe("<LoginRegisterModal />", () => {
 
     }
 
+    type RegisterFunction = () => Promise<void>;
+    const onRegisterRequested: RegisterFunction = async () => {
+    }
+    let errorInput =""
+
     const renderApp = () => {
         return render(
             <Provider store={store}>
                 <BrowserRouter>
-                    <LoginRegisterModal onClose={onBackdropClick}
-                        isModalVisible={isModalVisible} />
+                    <RegisterAdminModal onClose={onBackdropClick}
+                        isModalVisible={isModalVisible}
+                        onRegisterRequested={onRegisterRequested}
+                        RegisterAdminErrorInput={errorInput} />
                 </BrowserRouter>
             </Provider>
         );
@@ -47,8 +55,10 @@ describe("<LoginRegisterModal />", () => {
             const { getByText } = render(
                 <Provider store={store}>
                     <BrowserRouter>
-                        <LoginRegisterModal onClose={onBackdropClick}
-                            isModalVisible={isModalVisible} />
+                    <RegisterAdminModal onClose={onBackdropClick}
+                        isModalVisible={isModalVisible}
+                        onRegisterRequested={onRegisterRequested}
+                        RegisterAdminErrorInput={errorInput} />
                     </BrowserRouter>
                 </Provider>
             )
@@ -57,8 +67,6 @@ describe("<LoginRegisterModal />", () => {
 
         expect(setStateMock).toHaveBeenCalledTimes(0);
 
-        console.log(getByText);
-    
     })
 
 
