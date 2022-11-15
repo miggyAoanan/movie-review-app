@@ -39,6 +39,7 @@
     "redux-thunk": "^2.4.1",
     "sass": "^1.55.0",
     "styled-components": "^5.3.6",
+    "testing-library-table-queries": "^0.2.0",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4",
     "yup": "^0.32.11"
@@ -46,7 +47,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --transformIgnorePatterns \"node_modules/(?!axios)/\"",
+    "test": "react-scripts test --transformIgnorePatterns --allow-console-logs \"node_modules/(?!axios)/\"",
     "coverage": "npm test -- --coverage --watchAll",
     "eject": "react-scripts eject"
   },

@@ -5,7 +5,7 @@ import { USERS_URL, ADMIN_URL } from '../API/index';
 import { User } from '../interfaces/user';
 import { RootState } from '../store/store';
 
-interface UserState {
+export interface UserState {
     user: User | null,
     users: User[] | null,
     loading: boolean,
@@ -19,7 +19,7 @@ interface UserState {
     deleteUserStatus: string
 }
 
-const initialState: UserState = {
+export const initialState: UserState = {
     users: [],
     user: null,
     loading: false,
@@ -148,39 +148,81 @@ export const usersSlice = createSlice({
     extraReducers: (builder) => {
        
         builder.addCase(getUsers.fulfilled, (state, action) => {
-            state.users = action.payload;         
+            state.users = action.payload; 
+            state.loading =false;        
             state.getUsersStatus = "fullfilled"
         });
+        builder.addCase(getUsers.rejected, (state) => {   
+            state.loading = false;         
+            state.getUsersStatus = "rejected"
+        });
+        builder.addCase(getUsers.pending, (state) => {   
+            state.loading = true;         
+            state.getUsersStatus = "pending"
+        });
           
-        builder.addCase(registerUser.fulfilled, (state) => {           
+        builder.addCase(registerUser.fulfilled, (state) => {   
+            state.loading =false;         
             state.registerStatus = "fullfilled"
         })
-        builder.addCase(registerUser.rejected, (state, action) => {         
+        
+        builder.addCase(registerUser.pending, (state) => {   
+            state.loading = true;         
+            state.registerStatus = "pending"
+        })
+        builder.addCase(registerUser.rejected, (state, action) => { 
+            state.loading =false;            
             state.registerError = JSON.stringify(action.payload);
             state.registerStatus = "rejected";
-            state.errors = JSON.stringify(action.error.message)
+            
         })
           
-        builder.addCase(updateUser.fulfilled, (state) => {          
+        builder.addCase(updateUser.fulfilled, (state) => {     
+            state.loading =false;        
             state.updateUserStatus = "fullfilled"
            
         })
-        builder.addCase(updateUser.rejected, (state, action) => {          
+        builder.addCase(updateUser.pending, (state) => {     
+            state.loading =true;        
+            state.updateUserStatus = "pending"
+           
+        })
+        builder.addCase(updateUser.rejected, (state, action) => {  
+            state.loading =false;          
             state.updateUserStatus = "rejected";
             state.updateError = JSON.stringify(action.payload);
            
         })
 
-        builder.addCase(registerAdmin.fulfilled, (state) => {          
+        builder.addCase(registerAdmin.fulfilled, (state) => { 
+            state.loading =false;           
             state.registerStatus = "fullfilled"
         })
-        builder.addCase(registerAdmin.rejected, (state, action) => {          
+       
+        builder.addCase(registerAdmin.rejected, (state, action) => {         
+            state.loading =false;    
             state.registerStatus = "rejected";
             state.registerError = JSON.stringify(action.payload);
         })
+        builder.addCase(registerAdmin.pending, (state) => {         
+            state.loading =true;    
+            state.registerStatus = "pending";
            
-        builder.addCase(deleteUser.fulfilled, (state, action) => {          
+        })
+           
+        builder.addCase(deleteUser.fulfilled, (state) => {      
+            state.loading =false;         
             state.deleteUserStatus = "fullfilled"
+
+        })
+        builder.addCase(deleteUser.rejected, (state) => {   
+            state.loading =false;       
+            state.deleteUserStatus = "rejected"
+
+        })
+        builder.addCase(deleteUser.pending, (state) => {   
+            state.loading =true;       
+            state.deleteUserStatus = "pending"
 
         })
        

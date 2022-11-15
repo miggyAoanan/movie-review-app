@@ -7,7 +7,7 @@ import { MOVIES_URL, MOVIE_ACTORS_URL, MOVIE_SEARCH_URL } from '../API';
 import { MovieDetails, ErrorI } from '../interfaces/index';
 
 
-interface MovieState {
+export interface MovieState {
     movie: MovieDetails | null,
     movies: MovieDetails[] | null,
     loading: boolean,
@@ -21,7 +21,7 @@ interface MovieState {
 
 }
 
-const initialState: MovieState = {
+export const initialState: MovieState = {
     movies: [],
     movie: null,
     loading: false,
@@ -148,13 +148,27 @@ export const movieSlice = createSlice({
             state.loading = false;
             state.getMovieStatus = "fullfilled"
         });
-       
-
-       
+        builder.addCase(getMovies.rejected, (state) => {
+           
+            state.loading = false;
+            state.getMovieStatus = "rejected"
+        });
+        builder.addCase(getMovies.pending, (state) => {
+            state.loading = true;
+            state.getMovieStatus = "pending"
+        });
         builder.addCase(getMovie.fulfilled, (state, action) => {
             state.movie = action.payload;
             state.loading = false;
             state.getMovieStatus = "fullfilled"
+        });
+        builder.addCase(getMovie.rejected, (state) => {
+            state.loading = false;
+            state.getMovieStatus = "rejected"
+        });
+        builder.addCase(getMovie.pending, (state) => {
+            state.loading = true;
+            state.getMovieStatus = "pending"
         });
        
         builder.addCase(getMovieActors.fulfilled, (state, action) => {
@@ -162,21 +176,46 @@ export const movieSlice = createSlice({
             state.loading = false;
             state.getMovieActorsStatus = "fullfilled"
         });
+        builder.addCase(getMovieActors.rejected, (state) => {
+            state.loading = false;
+            state.getMovieActorsStatus = "rejected"
+        });
+        builder.addCase(getMovieActors.pending, (state) => {
+            state.loading = true;
+            state.getMovieActorsStatus = "pending"
+        });
            
         builder.addCase(addMovie.fulfilled, (state, action) => {
             state.movie = action.payload;
             state.loading = false;
             state.addMovieStatus = "fullfilled"
         });
-        
-        builder.addCase(updateMovie.fulfilled, (state, action) => {
+
+        builder.addCase(addMovie.rejected, (state) => {
             state.loading = false;
-            state.addMovieStatus = "fullfilled"
+            state.addMovieStatus = "rejected"
         });
+
+        builder.addCase(addMovie.pending, (state) => {
+            state.loading = true;
+            state.addMovieStatus = "pending"
+        });
+        
+        builder.addCase(updateMovie.fulfilled, (state) => {
+            state.loading = false;
+            state.updateMovieStatus = "fullfilled"
+        });
+       
+
+        builder.addCase(updateMovie.pending, (state) => {
+            state.loading = true;
+            state.updateMovieStatus = "pending"
+        });
+
         builder.addCase(updateMovie.rejected, (state, action) => {
             state.errors = JSON.stringify(action.payload);
             state.loading = false;
-            state.addMovieStatus = "rejected"
+            state.updateMovieStatus = "rejected"
         });
 
       
@@ -185,11 +224,31 @@ export const movieSlice = createSlice({
             state.deleteMovieStatus = "fullfilled"
 
         });
+        builder.addCase(deleteMovie.rejected, (state, action) => {
+            state.loading = false;
+            state.deleteMovieStatus = "rejected"
+
+        });
+        builder.addCase(deleteMovie.pending, (state, action) => {
+            state.loading = true;
+            state.deleteMovieStatus = "pending"
+
+        });
       
         builder.addCase(searchMovies.fulfilled, (state, action) => {
             state.movies = action.payload;
             state.loading = false;
             state.searchMovieStatus = "fullfilled";
+           
+        });
+        builder.addCase(searchMovies.pending, (state) => {
+            state.loading = true;
+            state.searchMovieStatus = "pending";
+           
+        });
+        builder.addCase(searchMovies.rejected, (state) => {
+            state.loading = false;
+            state.searchMovieStatus = "rejected";
            
         });
        

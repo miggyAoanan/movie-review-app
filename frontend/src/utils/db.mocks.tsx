@@ -198,7 +198,31 @@ export const review =
 
 export const reviewList = []
 
-export const userList = []
+export const userList = [
+
+  {
+    id: "fb8c6e27-6119-4e1b-9ac3-ab8c6ef01ce6",
+    fullName: "admin",
+    email: "admin@mail.com",
+    isActive: true,
+    permissions: "admin",
+    dateCreated: "2022-11-14T01:36:52.926Z"
+  },
+  {
+    id: "daab9a33-ffef-4b6f-897e-c74121f0d321",
+    fullName: "admin",
+    email: "admin2@mail.com",
+    isActive: false,
+    permissions: "user",
+    dateCreated: "2022-11-14T01:36:52.926Z"
+  },
+]
+
+export const error = {
+  statusCode: 401,
+  name: 'UnauthorizedError',
+  message: 'Generic Error Messages'
+}
 
 
 

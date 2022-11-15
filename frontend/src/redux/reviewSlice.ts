@@ -20,25 +20,27 @@ export interface AddReviewArgs {
     isActive: boolean
 }
 
-interface ReviewState {
+export interface ReviewState {
     review: Review | null,
     reviews: Review[],
     loading: boolean,
     errors: string,
     getReviewStatus: string,
     addReviewStatus: string,
+    addMovieReviewStatus:string,
     updateReviewStatus: string,
     deleteReviewStatus: string,
 
 }
 
-const initialState: ReviewState = {
+export const initialState: ReviewState = {
     review: null,
     reviews: [],
     loading: false,
     errors: "",
     getReviewStatus: "",
     addReviewStatus: "",
+    addMovieReviewStatus: "",
     updateReviewStatus: "",
     deleteReviewStatus:""
 }
@@ -146,31 +148,78 @@ export const reviewSlice = createSlice({
             state.loading = false;
             state.getReviewStatus = "fullfilled"
         });
+        builder.addCase(getReviews.rejected, (state) => {
+            state.loading = false;
+            state.getReviewStatus = "rejected"
+        });
+        builder.addCase(getReviews.pending, (state) => {
+            state.loading = true;
+            state.getReviewStatus = "pending"
+        });
 
         builder.addCase(getReview.fulfilled, (state, action) => {
             state.review = action.payload;
             state.loading = false;
             state.getReviewStatus = "fullfilled"
         });
+        builder.addCase(getReview.rejected, (state) => {
+            state.loading = false;
+            state.getReviewStatus = "rejected"
+        });
+        builder.addCase(getReview.pending, (state) => {
+            state.loading = true;
+            state.getReviewStatus = "pending"
+        });
        
-        builder.addCase(updateReview.fulfilled, (state, action) => {
-           
+        builder.addCase(updateReview.fulfilled, (state) => {
             state.loading = false;
             state.updateReviewStatus = "fullfilled"
 
         });
+        builder.addCase(updateReview.rejected, (state) => {
+            state.loading = false;
+            state.updateReviewStatus = "rejected"
+
+        });
+        builder.addCase(updateReview.pending, (state) => {
+            state.loading = true;
+            state.updateReviewStatus = "pending"
+
+        });
        
       
-        builder.addCase(deleteReview.fulfilled, (state, action) => {
+        builder.addCase(deleteReview.fulfilled, (state) => {
             state.loading = false;
             state.deleteReviewStatus = "fullfilled"
 
         });
+       
         builder.addCase(deleteReview.rejected, (state, action) => {
             state.errors = JSON.stringify(action.payload);
             state.loading = false;
             state.deleteReviewStatus = "rejected"
         });
+        builder.addCase(deleteReview.pending, (state) => {
+            state.loading = true;
+            state.deleteReviewStatus = "pending"
+
+        });
+
+        builder.addCase(addReview.fulfilled, (state, action) => {
+            state.review = action.payload;
+            state.loading = false;
+            state.addReviewStatus = "fullfilled"
+        });
+        builder.addCase(addReview.rejected, (state) => {
+            state.loading = false;
+            state.addReviewStatus = "rejected"
+        });
+        builder.addCase(addReview.pending, (state) => {
+            state.loading = true;
+            state.addReviewStatus = "pending"
+        });
+        
+
 
 
 

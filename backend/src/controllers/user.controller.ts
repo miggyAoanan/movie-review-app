@@ -202,19 +202,12 @@ export class UserController {
   async login(
     @requestBody(CredentialsRequestBody) credentials: Credentials,
   ): Promise<{ data: Object }> {
-
-    //check if active
     const foundUser = await this.userRepository.findOne({
       where: { email: credentials.email },
     });
-
     const isActive = foundUser?.isActive
-    // Promise<{ token: string }>
-    // ensure the user exists, and the password is correct
     const user = await this.userService.verifyCredentials(credentials);
-    // convert a User object into a UserProfile object (reduced set of properties)
     const userProfile = this.userService.convertToUserProfile(user);
-    // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
     if (isActive === false) {
       throw new HttpErrors.Unauthorized("Please wait for the activation");
@@ -223,100 +216,7 @@ export class UserController {
     return { data };
   }
 
-  @authenticate('jwt')
-  @get('/whoAmI', {
-    responses: {
-      '200': {
-        description: '',
-        schema: {
-          type: 'string',
-        },
-      },
-    },
-  })
-  async whoAmI(): Promise<string> {
-    return this.user[securityId];
-  }
 
-
-  /**
-  * A login function that returns refresh token and access token.
-  * @param credentials User email and password
-  */
-  @post('/users/refresh-login', {
-    responses: {
-      '200': {
-        description: 'Token',
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                accessToken: {
-                  type: 'string',
-                },
-                refreshToken: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-  async refreshLogin(
-    @requestBody(CredentialsRequestBody) credentials: Credentials,
-  ): Promise<TokenObject> {
-    // ensure the user exists, and the password is correct
-    const user = await this.userService.verifyCredentials(credentials);
-    // convert a User object into a UserProfile object (reduced set of properties)
-    const userProfile: UserProfile =
-      this.userService.convertToUserProfile(user);
-    const accessToken = await this.jwtService.generateToken(userProfile);
-    const tokens = await this.refreshService.generateToken(
-      userProfile,
-      accessToken,
-    );
-    return tokens;
-  }
-
-  @post('/refresh', {
-    responses: {
-      '200': {
-        description: 'Token',
-        content: {
-          'application/json': {
-            schema: {
-              type: 'object',
-              properties: {
-                accessToken: {
-                  type: 'object',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-  async refresh(
-    @requestBody(RefreshGrantRequestBody) refreshGrant: RefreshGrant,
-  ): Promise<TokenObject> {
-    return this.refreshService.refreshToken(refreshGrant.refreshToken);
-  }
-
-  @authenticate('jwt')
-  @get('/users/count')
-  @response(200, {
-    description: 'User model count',
-    content: { 'application/json': { schema: CountSchema } },
-  })
-  async count(
-    @param.where(User) where?: Where<User>,
-  ): Promise<Count> {
-    return this.userRepository.count(where);
-  }
 
   // @authenticate('jwt')
   @get('/users')
@@ -341,25 +241,6 @@ export class UserController {
   }
 
 
-  @authenticate('jwt')
-  @patch('/users')
-  @response(200, {
-    description: 'User PATCH success count',
-    content: { 'application/json': { schema: CountSchema } },
-  })
-  async updateAll(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(User, { partial: true }),
-        },
-      },
-    })
-    user: User,
-    @param.where(User) where?: Where<User>,
-  ): Promise<Count> {
-    return this.userRepository.updateAll(user, where);
-  }
   @authenticate('jwt')
   @get('/users/{id}')
   @response(200, {
@@ -399,7 +280,7 @@ export class UserController {
     const foundUser = await this.userRepository.findOne({
       where: { email: user.email }
     });
-  
+
     if (foundUser && foundUser.id !== id){
       return emailDuplicateError
     }

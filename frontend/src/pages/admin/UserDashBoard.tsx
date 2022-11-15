@@ -72,6 +72,7 @@ const UserDashBoard = () => {
     }
      else{
       toast.success(res.payload)
+      dispatch(getUsers())
      }
     })
 
@@ -126,9 +127,9 @@ const UserDashBoard = () => {
 
   return (
     <div className="wrapper">
-      <h2 className="h2 text-center text-white mb-5">User List </h2>
+      <h2 className="h2 text-center text-white mb-5">User List</h2>
       <table className='table table-dark '>
-        <thead >
+        <thead>
           <tr className='bg-dark'>
             <th scope="col">#</th>
             <th scope="col">Avatar</th>
@@ -139,24 +140,19 @@ const UserDashBoard = () => {
           </tr>
         </thead>
         <tbody>
-          {users ? (
-            users.map((user: User, index:number) => {
+          {
+            users?.map((user: User, index:number) => {
               return (
-                <tr key={user.id}>
+                <tr key={user.id} data-testid="userDash">
                   <td>{index + 1}</td>
-
-                  <td> <img src={userIcon} alt="user" className='imageDash' /></td>
+                  <td><img src={userIcon} alt="user" className='imageDash' /></td>
                   <td>{user.fullName}</td>                
                   <td>{user.permissions}</td>
-                  <td>{
-                  user.isActive === true ? "Active" : "Inactive"
-                 }</td>
+                  <td>{user.isActive === true ? "Active" : "Inactive"}</td>
                   <td>
-
                     <button
                       type="button"
                       className="btn btn-secondary btn-sm px-2"
-
                     onClick={() => { toggleEditModal(); setUserForUpdate(user)}}
                     >Edit</button>
                     &nbsp;
@@ -165,12 +161,11 @@ const UserDashBoard = () => {
                       className="btn btn-danger btn-sm px-2"
                     onClick={() => { toggleDeleteModal(); setDeleteId(user.id!)}}
                     >Delete</button>
-
                   </td>
                 </tr>
               )
             })
-          ) : ""}
+          }
         </tbody>
       </table>
 
