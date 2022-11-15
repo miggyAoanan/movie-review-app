@@ -106,23 +106,23 @@
 <div align="left">
 <h2 align="left">Controllers</h2>
 <p align="left">Controllers expose API endpoints for interacting with the models and more.</p>
-<ul>
-<li>user - controller for creating users, fetching user info, updating user info, deleting users, and logging in.</li>
-<li>movies - controller for creating movies, fetching movie info, searching movies, updating movie info, and deleting movies</li>
-<li>actors - controller for creating actors, fetching actor info, searching actors, updating actor info, and deleting actors</li>
-<li>reviews - controller for creating, updating (approval), deleting movie reviews</li>
-</ul>
+In this app, there are four controllers:
+
+1. `user` - controller for creating users, fetching user info, updating user info, deleting users, and logging in.
+2. `movies` - controller for creating movies, fetching movie info, searching movies, updating movie info, and deleting movies.
+3. `actors` - controller for creating actors, fetching actor info, searching actors, updating actor info, and deleting actors.
+4. `reviews` - controller for creating, updating (approval), deleting movie reviews.
+
 
 </div>
 
 <div align="left">
 <h2 align="left">Services</h2>
 <p align="left">Services are modular components that can be plugged into a LoopBack application in various locations to contribute additional capabilities and features to the application.</p>
-<ul>
-<li>services/user.service - responsible for verifying if user exists and the submitted credentials matches that of an existing user. It is also responsible for creating a profile to be used for the generation of JWT.</li>
-<li>services/jwt.service - responsible for generating and verifying JSON Web Token with additional role field for authorization.</li>
+This app has two services:
 
-</ul>
+1. `services/user.service` - responsible for verifying if user exists and the submitted credentials matches that of an existing user. It is also responsible for creating a profile to be used for the generation of JWT.
+2. `services/jwt.service` - responsible for generating and verifying JSON Web Token with additional `role` field for authorization.
 
 </div>
 
@@ -131,12 +131,30 @@
 <p align="left">Note: This app contains a login endpoint ('users/login') for the authentication</p>
 <p align="left">The endpoint for logging in a user is a POST request to /users/login.</p>
 <p align="left">Once the credentials are extracted, the logging-in implementation at the controller level is just a four step process. This level of simplicity is made possible by the use of the UserService service provided by @loopback/authentication. In this app, these services are customized to cater the needed implementation.</p>
-<ul>
-<li>const user = await this.userService.verifyCredentials(credentials) - verify the credentials.</li>
-<li>const userProfile = this.userService.convertToUserProfile(user) - generate user profile object.</li>
-<li>const token = await this.jwtService.generateToken(userProfile) - generate JWT based on the user profile object.</li>
-<li>return token - send JWT.</li>
-</ul>
+
+1. `const user = await this.userService.verifyCredentials(credentials)` - verify the credentials.
+2. `const userProfile = this.userService.convertToUserProfile(user)` - generate user profile object.
+3. `const token = await this.jwtService.generateToken(userProfile)` - generate JWT based on the user profile object.
+4. `return token and user` - send JWT and minimal user data.
+
+</div>
+
+
+
+<div align="left">
+<h2 align="left">Tests</h2>
+<p align="left">The frontend app has Unit test with backend API mocks using Mock Service Worker integrated to it. The backend controllers are unit tested with loopback testlab's stub implementation to the respective repositories to isolate and test controllers.</p>
+<p align="left">To execute the test, both frontend and backend must run simultaneously. Open another two terminals for frontend and backend respectively and run:.</p>
+
+```sh
+$ npm test
+```
+
+To see the test coverage, run:
+
+```sh
+$ npm run coverage
+```
 </div>
 
 
