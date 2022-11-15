@@ -1,5 +1,5 @@
 <h1 align="center">Movie Review App</h1>
-<h3 align="center">This app allow users to find the best film to watch base on the user ratings and reviews.Also, it allows administrators to manage the movie catalogue information about the movies, actors, movie reviews (like Netflix or Amazon Prime)</h3>
+<h3 align="center">This app allow users to find the best film to watch base on the user ratings and reviews. Also, it allows administrators to manage the movie catalogue information about the movies, actors, movie reviews (like Netflix or Amazon Prime)</h3>
 
 <img src="https://github.com/miggyAoanan/movie-review-app/blob/main/homepage%20.jpg?raw=true" alt="screenhot"/>
 
@@ -9,7 +9,8 @@
 
 
 
-<h3 align="left">Features:</h3>
+<h2 align="left">Features:</h2>
+
 <div align="left">
 <h3>View Movies (Users)</h3>
 <ul>
@@ -19,3 +20,78 @@
 <li>View admin approved user reviews.</li>
 </ul>
 </div>
+
+<div align="left">
+<h3>Give Movie Reviews (Users)</h3>
+<ul>
+<li>Submit a review of a movie.</li>
+<li>Requires account login and activation from the admin.</li>
+<li>Created review will be subjected for admin approval.</li>
+
+</ul>
+</div>
+
+<div align="left">
+<h3>View Actors (Users)</h3>
+<ul>
+<li>With actor details such as name, link, etc.</li>
+<li>Search for actors.</li>
+<li>View the movies that the actor is part of.</li>
+
+</ul>
+</div>
+
+
+<div align="left">
+<h3>Admin Dashboards</h3>
+<ul>
+<li>Movie Dashboard</li>
+<li>Actor Dashboard</li>
+<li>Review Dashboard</li>
+<li>User Dashboard</li>
+</ul>
+<p align="left">Perform CRUD operations on all table management</p>
+<p align="left">Activate/ Deactivate user</p>
+<p align="left">Approve/ Disapprove movie reviews done by users</p>
+</div>
+
+<h2 align="left">Installation and Setup:</h2>
+
+<div align="left">
+<h3>STEP 1</h3>
+<p align="left">Do the following to clone and start the project. Install all dependencies, both frontend and backend.</p>
+<ul>
+<li>git clone https://github.com/miggyAoanan/movie-review-app2.giting-system.git</li>
+<li>$ cd digital-streaming-app</li>
+<li>$ cd frontend</li>
+<li>$ npm install</li>
+<li>$ cd ../backend</li>
+<li>$ npm install</li>
+</ul>
+
+</div>
+
+<div align="left">
+<h3>STEP 2</h3>
+<p align="left">Open two terminals and cd to frontend and backend folders respectively and start them</p>
+<ul>
+<li>git clone https://github.com/miggyAoanan/movie-review-app2.giting-system.git</li>
+<li>$ $ cd backend</li>
+<li>$ npm start</li>
+<li>$ cd frontend</li>
+<li>$ npm start</li>
+<li>$ For the GUI propmt:  Choose Yes to run at port 3001</li>
+</ul>
+<p align="left">The backend together with the API Explorer will be at http://localhost:3000/explorer/.</p>
+<p align="left">The frontend app will be running at http://localhost:3001</p>
+<p align="left">The first user who will register will be treated as the root admin. This admin cannot be deleted or edited.</p>
+</div>
+
+<h2 align="left">Entity Relational Diagram</h2>
+
+<img src="#" alt="Entity Relational Diagram"/>
+
+<h2 align="left">Sonarqube Scanner Results</h2>
+<p>Both frontend and backend are connected to sonarqube for scanning of code smells, bugs, security risks, vulnerabilities as well as see the test coverage. Below are the results for frontend (former) and backend (latter).</p>
+<img src="https://github.com/miggyAoanan/movie-review-app/blob/main/sonarqubebackend.png?raw=true" alt="backend sonar scanner results"/>
+<img src="https://github.com/miggyAoanan/movie-review-app/blob/main/sonarqubefrontend.png?raw=true" alt="frontend sonar scanner results"/>
