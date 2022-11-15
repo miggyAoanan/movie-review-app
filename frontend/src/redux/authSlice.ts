@@ -12,7 +12,7 @@ export interface AuthState {
 }
 
 
-const initialState: AuthState = {
+export const initialState: AuthState = {
     fullName: null,
     token: null,
     permissions: null,

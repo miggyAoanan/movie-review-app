@@ -3,7 +3,6 @@ import _ from 'lodash';
 
 import { BackendApplication } from '../../../application'
 import { Review } from '../../../models';
-// import {TResponse} from '../../utils';
 import { givenEmptyDatabase } from '../helpers/database.helpers';
 import { setupApplication } from './test-helper';
 
@@ -26,6 +25,7 @@ describe('Review Routes', () => {
         userName: "John",
         movieName : "Avengers: Infinity War (2018)",
         movieId: "636fa26fcbde64e928721fc9",
+        isActive: false
   
        }
         

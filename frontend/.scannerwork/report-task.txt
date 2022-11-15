@@ -2,5 +2,5 @@ projectKey=movieapp-frontend
 serverUrl=http://localhost:9000
 serverVersion=8.9.10.61524
 dashboardUrl=http://localhost:9000/dashboard?id=movieapp-frontend
-ceTaskId=AYR4p3RTgbmsNMocoVt-
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AYR4p3RTgbmsNMocoVt-
+ceTaskId=AYR5kH4vgbmsNMocoVt_
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYR5kH4vgbmsNMocoVt_

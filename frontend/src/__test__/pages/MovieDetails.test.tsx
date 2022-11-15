@@ -40,7 +40,7 @@ describe("<MovieDetail />", () => {
     });
 
     test("should render Container for Rating ", () => {
-        // const textRating = screen.getByText("Rating")
+      
         const { container } = render(<div className="movie-rating mb-5">
             <span>
             </span>
@@ -51,24 +51,6 @@ describe("<MovieDetail />", () => {
         
     });
 
-    // test("should render Image ", () => {
-
-    //     console.log();
-    //     // const textRating = screen.getByText("Rating")
-    //     const { container } = render(<div className="imageSection"></div>)
-    //     const movieImage = container.firstChild
-    //     // expect(movieImage).toHaveAttribute(
-    //     //     "src",
-    //     //     "https://www.themoviedb.org/t/p/w300_and_h450_bestv2/AeyiuQUUs78bPkz18FY3AzNFF8b.jpg"
-    //     //   );
-    //     //   expect(movieImage).toHaveAttribute("alt", "Fullmetal Alchemist: The Final Alchemy (2022)");
-
-    //     expect(movieImage).toBeInTheDocument();
-    // });
-
-    // test("should render header Overview", () => {
-    //     const Overviewheader = screen.getByRole("heading", { name: /Overview/i });
-    // });
-
+   
 
 })   

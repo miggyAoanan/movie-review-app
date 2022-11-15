@@ -224,5 +224,13 @@ export const error = {
   message: 'Generic Error Messages'
 }
 
+export const authUser = {
+  id: "0b30f1b6-9296-40e4-bd88-be7ffe34b6da",
+  fullName: "Mighty Aoanan",
+  email: "mighty.aoanan7@gmail.com",
+  isActive: true,
+  permissions: "admin",
+  token: "randomtoken"
+}
 
 
