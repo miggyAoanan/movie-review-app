@@ -61,7 +61,7 @@
 <h3>STEP 1</h3>
 <p align="left">Do the following to clone and start the project. Install all dependencies, both frontend and backend.</p>
 <ul>
-<li>git clone https://github.com/miggyAoanan/movie-review-app2.giting-system.git</li>
+<li>git clone https://github.com/miggyAoanan/movie-review-app.git</li>
 <li>$ cd digital-streaming-app</li>
 <li>$ cd frontend</li>
 <li>$ npm install</li>
@@ -75,7 +75,7 @@
 <h3>STEP 2</h3>
 <p align="left">Open two terminals and cd to frontend and backend folders respectively and start them</p>
 <ul>
-<li>git clone https://github.com/miggyAoanan/movie-review-app2.giting-system.git</li>
+<li>git clone https://github.com/miggyAoanan/movie-review-app.git</li>
 <li>$ $ cd backend</li>
 <li>$ npm start</li>
 <li>$ cd frontend</li>
