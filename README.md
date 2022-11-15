@@ -87,11 +87,63 @@
 <p align="left">The first user who will register will be treated as the root admin. This admin cannot be deleted or edited.</p>
 </div>
 
-<h2 align="left">Entity Relational Diagram</h2>
+<div align="left">
+<h2 align="left">Model</h2>
 
 <img src="https://github.com/miggyAoanan/movie-review-app/blob/main/ERD_Digital_StreamingApp.png?raw=true" alt="Entity Relational Diagram"/>
 
+<p align="left">This app has the following models:</p>
+<ul>
+<li>User - a model representing the users of the app.</li>
+<li>UserCredentials - a model representing sensitive credentials like a password of the users.</li>
+<li>Movies - a model representing the movies of the app.</li>
+<li>Actors - a model representing the actors of the app.</li>
+<li>Reviews - a model representing the reviews of a user to a movie.</li>
+</ul>
+
+</div>
+
+<div align="left">
+<h2 align="left">Controllers</h2>
+<p align="left">Controllers expose API endpoints for interacting with the models and more.</p>
+<ul>
+<li>user - controller for creating users, fetching user info, updating user info, deleting users, and logging in.</li>
+<li>movies - controller for creating movies, fetching movie info, searching movies, updating movie info, and deleting movies</li>
+<li>actors - controller for creating actors, fetching actor info, searching actors, updating actor info, and deleting actors</li>
+<li>reviews - controller for creating, updating (approval), deleting movie reviews</li>
+</ul>
+
+</div>
+
+<div align="left">
+<h2 align="left">Services</h2>
+<p align="left">Services are modular components that can be plugged into a LoopBack application in various locations to contribute additional capabilities and features to the application.</p>
+<ul>
+<li>services/user.service - responsible for verifying if user exists and the submitted credentials matches that of an existing user. It is also responsible for creating a profile to be used for the generation of JWT.</li>
+<li>services/jwt.service - responsible for generating and verifying JSON Web Token with additional role field for authorization.</li>
+
+</ul>
+
+</div>
+
+<div align="left">
+<h2 align="left">Authentication</h2>
+<p align="left">Note: This app contains a login endpoint ('users/login') for the authentication</p>
+<p align="left">The endpoint for logging in a user is a POST request to /users/login.</p>
+<p align="left">Once the credentials are extracted, the logging-in implementation at the controller level is just a four step process. This level of simplicity is made possible by the use of the UserService service provided by @loopback/authentication. In this app, these services are customized to cater the needed implementation.</p>
+<ul>
+<li>const user = await this.userService.verifyCredentials(credentials) - verify the credentials.</li>
+<li>const userProfile = this.userService.convertToUserProfile(user) - generate user profile object.</li>
+<li>const token = await this.jwtService.generateToken(userProfile) - generate JWT based on the user profile object.</li>
+<li>return token - send JWT.</li>
+</ul>
+</div>
+
+
+
+<div align="left">
 <h2 align="left">Sonarqube Scanner Results</h2>
 <p>Both frontend and backend are connected to sonarqube for scanning of code smells, bugs, security risks, vulnerabilities as well as see the test coverage. Below are the results for frontend (former) and backend (latter).</p>
 <img src="https://github.com/miggyAoanan/movie-review-app/blob/main/sonarqubebackend.png?raw=true" alt="backend sonar scanner results"/>
 <img src="https://github.com/miggyAoanan/movie-review-app/blob/main/sonarqubefrontend.png?raw=true" alt="frontend sonar scanner results"/>
+</div>
