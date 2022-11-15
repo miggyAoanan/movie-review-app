@@ -89,7 +89,7 @@
 
 <h2 align="left">Entity Relational Diagram</h2>
 
-<img src="#" alt="Entity Relational Diagram"/>
+<img src="https://github.com/miggyAoanan/movie-review-app/blob/main/ERD_Digital_StreamingApp.png?raw=true" alt="Entity Relational Diagram"/>
 
 <h2 align="left">Sonarqube Scanner Results</h2>
 <p>Both frontend and backend are connected to sonarqube for scanning of code smells, bugs, security risks, vulnerabilities as well as see the test coverage. Below are the results for frontend (former) and backend (latter).</p>
