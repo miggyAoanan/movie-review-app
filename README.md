@@ -1,5 +1,5 @@
-<h1 align="center">App Name: Movie Review App</h1>
-<h3 align="center">Movie Review is a movie review website which is focussed on various aspects of films and help people find the best film to watch next.Also, it allows administrators to manage the movie catalogue information about the movies,  actors, movie reviews (like Netflix or Amazon Prime)</h3>
+<h1 align="center">Movie Review App</h1>
+<h3 align="center">Movie Review is website which is help users to find the best film to watch base on the user ratings and reviews.Also, it allows administrators to manage the movie catalogue information about the movies, actors, movie reviews (like Netflix or Amazon Prime)</h3>
 
 <img src="https://github.com/miggyAoanan/movie-review-app/blob/main/homepage%20.jpg?raw=true" alt="screenhot"/>
 
