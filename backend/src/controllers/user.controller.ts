@@ -20,7 +20,7 @@ import {
 
 } from '@loopback/rest';
 import { User } from '../models';
-import { UserRepository , ReviewRepository} from '../repositories';
+import { UserRepository, ReviewRepository } from '../repositories';
 import { HttpErrors } from '@loopback/rest';
 
 import { Credentials } from '../services/user.service'
@@ -217,7 +217,6 @@ export class UserController {
   }
 
 
-
   // @authenticate('jwt')
   @get('/users')
   @response(200, {
@@ -276,17 +275,29 @@ export class UserController {
 
     const emailDuplicateError = "Email is already taken"
     const updateSuccess = "User update is successfull"
+    const errorMessage = "You cannot update the root admin";
 
     const foundUser = await this.userRepository.findOne({
       where: { email: user.email }
     });
-
-    if (foundUser && foundUser.id !== id){
-      return emailDuplicateError
+    const rootAdmin = await this.userRepository.find({
+      order: ['dateCreated ASC'],
+      limit: 1,
+    });
+    if (rootAdmin[0].id === id) {
+      return errorMessage
     }
 
-     await this.userRepository.updateById(id, user);
-    return updateSuccess
+    else if (foundUser && foundUser.id !== id) {
+      return emailDuplicateError
+    }
+    else{
+      await this.userRepository.updateById(id, user);
+      return updateSuccess
+    }
+
+
+   
   }
   @authenticate('jwt')
   @put('/users/{id}')
@@ -305,9 +316,7 @@ export class UserController {
     description: 'User DELETE success',
   })
   async deleteById(@param.path.string('id') id: string): Promise<string> {
-    const users = await this.userRepository.find()
-    const index = users.findIndex((user) => user.id === id)
-
+   
     const errorMessage = "You cannot delete the root admin";
     const successMessage = "Successfully deleted";
 
@@ -317,12 +326,11 @@ export class UserController {
     });
 
     if (rootAdmin[0].id === id) {
-      // throw new HttpErrors.Unauthorized("You cannot delete the root admin");
       return errorMessage
     }
     await this.userRepository.deleteById(id);
     await this.userRepository.userCredentials(id).delete();
-    await this.reviewsRepository.deleteAll({userId: id});
+    await this.reviewsRepository.deleteAll({ userId: id });
     return successMessage
   }
 

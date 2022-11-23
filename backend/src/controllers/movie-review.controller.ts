@@ -74,7 +74,7 @@ export class MovieReviewController {
     const existingReview = "You have already reviewed this movie";
     const pendingReview =  "Review is awaiting for moderation"
     const findReview = await this.movieRepository.reviews(id).find({where:{userId: review.userId , movieId: reviewId}});
-    console.log(findReview.length);
+   
     if(findReview.length > 0){
       throw new HttpErrors.Unauthorized(existingReview);
     }

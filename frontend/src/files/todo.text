@@ -25,10 +25,9 @@ Notes:
 
 
 5 sonarqube test backednd
-11a61465f497b9e49e68be2e0aef05961df30096
+dc06a7734260ffe3bdc17e8a52551d69a897c375
 
-sonar-scanner.bat -D"sonar.projectKey=movieapp-backend" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=11a61465f497b9e49e68be2e0aef05961df30096"
-
+sonar-scanner.bat -D"sonar.projectKey=movieapp-backend" -D"sonar.sources=." -D"sonar.host.url=http://localhost:9000" -D"sonar.login=dc06a7734260ffe3bdc17e8a52551d69a897c375"
 
 movie review API
 https://www.themoviedb.org/

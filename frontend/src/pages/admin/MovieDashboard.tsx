@@ -77,6 +77,7 @@ const MovieDashboard = () => {
     else {
       dispatch(addMovie({ ...saveMoviedata })).then((res: any) => {
         dispatch(getMovies())
+        onBackdropClick()
       })
 
     }
@@ -84,7 +85,9 @@ const MovieDashboard = () => {
 
   const onUpdateMovie: UpdateMovieFunction = async (update: UpdateArgs) => {
     dispatch(updateMovie(update)).then((res: any) => {
+      toast.success("Movie has been edited")
       dispatch(getMovies())
+      onBackdropClick()
     })
 
 
@@ -99,6 +102,7 @@ const MovieDashboard = () => {
         toast.success(res.payload)
       }
       dispatch(getMovies())
+      onBackdropClick()
     })
   }
 

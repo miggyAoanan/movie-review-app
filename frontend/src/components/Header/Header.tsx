@@ -102,14 +102,14 @@ function Header() {
           <>
             {permissions === "user" && (
               <>
-                <div className="text-white name"> Hi {fullName} !</div>
+                <div className="text-white name"> Hi {fullName}!</div>
                 <button className="btn btn-secondary" onClick={() => handleLogout()}  >Logout</button>
               </>
             )}
 
             {permissions === "admin" &&
               <>
-                <div className="text-white name"> Hi {fullName} !</div>
+                <div className="text-white name"> Hi {fullName}!</div>
                 <div className="dropdown">
                   <Link className="btn btn-secondary dropdown-toggle" to="/" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     Admin

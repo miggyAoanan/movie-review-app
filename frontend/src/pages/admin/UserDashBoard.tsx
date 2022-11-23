@@ -4,10 +4,10 @@ import { userDetails, getUsers, registerAdmin, updateUser, deleteUser } from "..
 import userIcon from "../../images/user.png"
 import 'react-toastify/dist/ReactToastify.css';
 import RegisterAdminModal, { RegisterFunction } from "./modal/RegisterAdminModal";
-import UpdateUserModal, {UpdateFunction, UpdateArgs} from './modal/UpdateUserModal'
+import UpdateUserModal, { UpdateFunction, UpdateArgs } from './modal/UpdateUserModal'
 import { User } from "../../interfaces";
-import DeleteUserModal, {DeleteUserFunction} from "./modal/DeleteUserModal";
-import { toast,ToastContainer} from "react-toastify";
+import DeleteUserModal, { DeleteUserFunction } from "./modal/DeleteUserModal";
+import { toast, ToastContainer } from "react-toastify";
 
 const UserDashBoard = () => {
   const users = useAppSelector(userDetails)
@@ -15,14 +15,26 @@ const UserDashBoard = () => {
   const dispatch = useAppDispatch();
   const registerStatus = useAppSelector((state: RootState) => state.users.registerStatus)
   const registerError = useAppSelector((state: RootState) => state.users.registerError)
-  const updateStatus =  useAppSelector((state: RootState) => state.users.updateUserStatus)
+  const updateStatus = useAppSelector((state: RootState) => state.users.updateUserStatus)
   const updateError = useAppSelector((state: RootState) => state.users.updateError)
+  const userData = localStorage.getItem("user")
+  const userLogged = JSON.parse(userData!)
+  const [loggedId, setloggedId] = useState("")
+
+
+  useEffect(() => {
+    if (userLogged) {
+      setloggedId(userLogged.id)
+
+    }
+
+  }, [userLogged])
 
   useEffect(() => {
     if (users) {
       dispatch(getUsers())
     }
-   
+
   }, [dispatch])
 
   const [isModalVisible, setIsModalVisible] = useState(false)// add
@@ -43,61 +55,61 @@ const UserDashBoard = () => {
     setIsEditModalVisible(wasEditModalVisible => !wasEditModalVisible)
   }
 
-    //delete modal
-    const [deleteId, setDeleteId] = useState<string>("")
-    const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
-    const toggleDeleteModal = () => {
-      setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
-    }
-  
+  //delete modal
+  const [deleteId, setDeleteId] = useState<string>("")
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false)
+  const toggleDeleteModal = () => {
+    setDeleteModalVisible(wasDeleteModalVisible => !wasDeleteModalVisible)
+  }
+
   const onRegisterRequest: RegisterFunction = async (data) => {
 
-    const { fullName, email, password} = data
-     await dispatch(registerAdmin({fullName, email, password})).then((res)=> {
+    const { fullName, email, password } = data
+    await dispatch(registerAdmin({ fullName, email, password })).then((res) => {
       if (registerStatus === "fullfilled") {
         toast.success("Registration successfull")
         dispatch(getUsers())
       }
-     })
+    })
 
-    
+
   }
 
 
-  const onUpdateUser : UpdateFunction = async (args: UpdateArgs) => {
-    dispatch(updateUser(args)).then((res:any)=>{
- 
-    if(res.payload === "Email is already taken"){
-      toast.error("Email is already taken")
-    }
-     else{
-      toast.success(res.payload)
-      dispatch(getUsers())
-     }
+  const onUpdateUser: UpdateFunction = async (args: UpdateArgs) => {
+    dispatch(updateUser(args)).then((res: any) => {
+
+      if (res.payload === "Email is already taken") {
+        toast.error("Email is already taken")
+      }
+      else {
+        toast.success(res.payload)
+        dispatch(getUsers())
+      }
     })
 
   }
 
-  const onDeleteUser : DeleteUserFunction = async (id: string) => {
-   
-      dispatch(deleteUser(id)).then((res:any) =>{
+  const onDeleteUser: DeleteUserFunction = async (id: string) => {
+
+    dispatch(deleteUser(id)).then((res: any) => {
       dispatch(getUsers())
       onBackdropClick()
-     const messsage :string = res.payload
-     if(messsage === "You cannot delete the root admin"){
-      toast.error(messsage)
-     }else{
-      toast.success(messsage)
-     }
-      
-   
+      const messsage: string = res.payload
+      if (messsage === "You cannot delete the root admin") {
+        toast.error(messsage)
+      } else {
+        toast.success(messsage)
+      }
+
+
       // console.log(res.payload.message)
     })
   }
 
   useEffect(() => {
     if (registerStatus === "fullfilled") {
-     dispatch(getUsers())
+      dispatch(getUsers())
 
     }
   }, [registerStatus])
@@ -119,8 +131,8 @@ const UserDashBoard = () => {
 
 
   const clear = () => {
-   setDeleteId("")
-   setErrorInput("")
+    setDeleteId("")
+    setErrorInput("")
 
 
   }
@@ -133,7 +145,7 @@ const UserDashBoard = () => {
           <tr className='bg-dark'>
             <th scope="col">#</th>
             <th scope="col">Avatar</th>
-            <th scope="col">Fullname</th>  
+            <th scope="col">Fullname</th>
             <th scope="col">Permission</th>
             <th scope="col">Status</th>
             <th scope="col">Action</th>
@@ -141,26 +153,51 @@ const UserDashBoard = () => {
         </thead>
         <tbody>
           {
-            users?.map((user: User, index:number) => {
+            users?.map((user: User, index: number) => {
               return (
                 <tr key={user.id} data-testid="userDash">
                   <td>{index + 1}</td>
                   <td><img src={userIcon} alt="user" className='imageDash' /></td>
-                  <td>{user.fullName}</td>                
+                  <td>{user.fullName}</td>
                   <td>{user.permissions}</td>
                   <td>{user.isActive === true ? "Active" : "Inactive"}</td>
                   <td>
-                    <button
-                      type="button"
-                      className="btn btn-secondary btn-sm px-2"
-                    onClick={() => { toggleEditModal(); setUserForUpdate(user)}}
-                    >Edit</button>
-                    &nbsp;
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-sm px-2"
-                    onClick={() => { toggleDeleteModal(); setDeleteId(user.id!)}}
-                    >Delete</button>
+                    {loggedId === user.id ? (
+                      <>
+                        <button
+                          disabled
+                          type="button"
+                          className="btn btn-secondary btn-sm px-2"
+                        >Edit</button>
+                        &nbsp;
+                        <button
+                          disabled
+                          type="button"
+                          className="btn btn-danger btn-sm px-2"
+                          onClick={() => { toggleDeleteModal(); setDeleteId(user.id!) }}
+                        >Delete</button>
+                      </>
+
+
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className="btn btn-secondary btn-sm px-2"
+                          onClick={() => { toggleEditModal(); setUserForUpdate(user) }}
+                        >Edit</button>
+                        &nbsp;
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm px-2"
+                          onClick={() => { toggleDeleteModal(); setDeleteId(user.id!) }}
+                        >Delete</button>
+                      </>
+
+
+                    )}
+
+
                   </td>
                 </tr>
               )
@@ -171,7 +208,7 @@ const UserDashBoard = () => {
 
       <button
         type="button"
-        className="btn btn-primary btn-sm px-2" 
+        className="btn btn-primary btn-sm px-2"
         onClick={() => { toggleModal() }}
       >Register Admin</button>
       <RegisterAdminModal
@@ -181,20 +218,20 @@ const UserDashBoard = () => {
         RegisterAdminErrorInput={errorInput}
       />
       <UpdateUserModal
-       onClose={onBackdropClick}
-       isEditModalVisible={isEditModalVisible}
-       onUpdateRequested={onUpdateUser}
-       userForUpdate={userForUpdate}
-      
+        onClose={onBackdropClick}
+        isEditModalVisible={isEditModalVisible}
+        onUpdateRequested={onUpdateUser}
+        userForUpdate={userForUpdate}
+
       />
       <DeleteUserModal
-       onClose={onBackdropClick}
-       isDeleteModalVisible={isDeleteModalVisible}
-       deleteId={deleteId}
-       onDeleteUser={onDeleteUser}
+        onClose={onBackdropClick}
+        isDeleteModalVisible={isDeleteModalVisible}
+        deleteId={deleteId}
+        onDeleteUser={onDeleteUser}
       />
-       <ToastContainer
-       theme="dark" />
+      <ToastContainer
+        theme="dark" />
     </div>
   )
 }

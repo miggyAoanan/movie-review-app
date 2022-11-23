@@ -8,7 +8,8 @@
 # testing
 /coverage
 backend/.nyc_coverage
-/.nyc_coverage
+/.nyc_coverage/
+.nyc_coverage/
 
 # production
 /build

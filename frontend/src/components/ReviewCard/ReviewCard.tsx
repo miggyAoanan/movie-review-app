@@ -9,7 +9,7 @@ export const ReviewCard = (props: Review) => {
     const data = props
    
   return (
-    <div className="reviewCardContainer">
+    <div className="reviewCardContainer mb-4">
 
       <div className='topSection'>
         <h2>A review by {data.userName} &nbsp; 
